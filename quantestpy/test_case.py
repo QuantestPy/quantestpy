@@ -4,7 +4,7 @@ from typing import Union
 from quantestpy import state_vector
 
 
-class TestCase(unittest.TestCase):
+class QuantestPyTestCase(unittest.TestCase):
     """Add custom assertion methods
     """
 
