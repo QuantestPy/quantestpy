@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import qiskit
 from typing import Union
 from quantestpy import state_vector
 
@@ -10,28 +11,35 @@ class QuantestPyTestCase(unittest.TestCase):
 
     def assert_is_normalized(
             self,
-            state_vector_subject_to_test: Union[np.ndarray, list],
-            torelance: int = 5,
+            state_vector_subject_to_test: Union[
+                np.ndarray,
+                list,
+                qiskit.quantum_info.states.statevector.Statevector],
+            significant_figure: int = 5,
             msg=None):
 
         state_vector.assert_is_normalized(
             state_vector_subject_to_test,
-            torelance,
+            significant_figure,
             msg
         )
 
     def assert_equal(
             self,
-            state_vector_subject_to_test: Union[np.ndarray, list],
-            state_vector_expected: Union[np.ndarray, list],
-            absolute_torelance_decimals: int = 8,
-            determine_torelance_from_state_vector_expected: bool = False,
+            state_vector_a: Union[
+                np.ndarray,
+                list,
+                qiskit.quantum_info.states.statevector.Statevector],
+            state_vector_b: Union[
+                np.ndarray,
+                list,
+                qiskit.quantum_info.states.statevector.Statevector],
+            significant_figure: int = 5,
             msg=None):
 
         state_vector.assert_equal(
-            state_vector_subject_to_test,
-            state_vector_expected,
-            absolute_torelance_decimals,
-            determine_torelance_from_state_vector_expected,
+            state_vector_a,
+            state_vector_b,
+            significant_figure,
             msg
         )

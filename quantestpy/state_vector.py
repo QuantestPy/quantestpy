@@ -46,50 +46,75 @@ def assert_is_normalized(
 
 
 def assert_equal(
-        state_vector_subject_to_test: Union[np.ndarray, list],
-        state_vector_expected: Union[np.ndarray, list],
-        significant_figure: int = 8,
+        state_vector_a: Union[
+            np.ndarray,
+            list,
+            qiskit.quantum_info.states.statevector.Statevector],
+        state_vector_b: Union[
+            np.ndarray,
+            list,
+            qiskit.quantum_info.states.statevector.Statevector],
+        significant_figure: int = 5,
         msg=None):
 
-    a = state_vector_subject_to_test
-    b = state_vector_expected
+    a = state_vector_a
+    b = state_vector_b
 
     # check type
-    if not isinstance(a, np.ndarray) and not isinstance(a, list):
+    if not isinstance(a, np.ndarray) and not isinstance(a, list) and not \
+            isinstance(a, qiskit.quantum_info.states.statevector.Statevector):
         raise TypeError(
-            "The type of state_vector_subject_to_test must be either "
-            "numpy.ndarray or list."
+            "The type of state_vector must be either numpy.ndarray, list or "
+            "qiskit.quantum_info.states.statevector.Statevector."
         )
 
-    if not isinstance(b, np.ndarray) and not isinstance(b, list):
+    if not isinstance(b, np.ndarray) and not isinstance(b, list) and not \
+            isinstance(b, qiskit.quantum_info.states.statevector.Statevector):
         raise TypeError(
-            "The type of state_vector_expected must be either"
-            "numpy.ndarray or list."
+            "The type of state_vector must be either numpy.ndarray. list or "
+            "qiskit.quantum_info.states.statevector.Statevector."
         )
 
     # conv. list to ndarray
-    if isinstance(a, list):
+    if not isinstance(a, np.ndarray):
         a = np.array(a)
 
-    if isinstance(b, list):
+    if not isinstance(b, np.ndarray):
         b = np.array(b)
 
     # check shape
     if a.shape != b.shape:
         raise QuantestPyError(
-            "The shape of state_vector_subject_to_test must be "
-            "identical to that of state_vector_expected."
+            "The shapes of the state_vectors must be the same."
         )
 
     #
-    if not np.allclose(
-            a, b, rtol=0., atol=10**(-absolute_torelance_decimals)):
-        error_msg = shape_message(
-            ["The two vectors are not equal:\n",
-             f"Actual: {a}\n",
-             f"Expected: {b}"]
-        )
-        msg = ut_test_case._formatMessage(msg, error_msg)
-        raise ut_test_case.failureException(msg)
+    decimal.getcontext().prec = significant_figure
+    for i, a_element in enumerate(a):
+        b_element = b[i]
+
+        a_element_real = +decimal.Decimal(a_element.real)
+        b_element_real = +decimal.Decimal(b_element.real)
+
+        if a_element_real != b_element_real:
+            error_msg = (
+                f"Real part of {i} th element are not equal:\n"
+                f"{a_element_real}\n"
+                f"{b_element_real}"
+            )
+            msg = ut_test_case._formatMessage(msg, error_msg)
+            raise QuantestPyAssertionError(msg)
+
+        a_element_imag = +decimal.Decimal(a_element.imag)
+        b_element_imag = +decimal.Decimal(b_element.imag)
+
+        if a_element_imag != b_element_imag:
+            error_msg = (
+                f"Imaginary part of {i} th element are not equal:\n"
+                f"{a_element_imag}\n"
+                f"{b_element_imag}"
+            )
+            msg = ut_test_case._formatMessage(msg, error_msg)
+            raise QuantestPyAssertionError(msg)
 
     return
