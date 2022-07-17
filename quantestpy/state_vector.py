@@ -109,31 +109,18 @@ def assert_equal(
     b = np.round(b, decimals=number_of_decimal_places)
 
     # assert equal
-    for i, a_element in enumerate(a):
-        b_element = b[i]
+    equals = a == b
+    if np.all(equals):
+        return
 
-        a_element_real = a_element.real
-        b_element_real = b_element.real
-
-        if a_element_real != b_element_real:
-            error_msg = (
-                f"Real part of {i} th element are not equal:\n"
-                f"{a_element_real}\n"
-                f"{b_element_real}"
-            )
-            msg = ut_test_case._formatMessage(msg, error_msg)
-            raise QuantestPyAssertionError(msg)
-
-        a_element_imag = a_element.imag
-        b_element_imag = b_element.imag
-
-        if a_element_imag != b_element_imag:
-            error_msg = (
-                f"Imaginary part of {i} th element are not equal:\n"
-                f"{a_element_imag}\n"
-                f"{b_element_imag}"
-            )
-            msg = ut_test_case._formatMessage(msg, error_msg)
-            raise QuantestPyAssertionError(msg)
-
-    return
+    error_msgs = list()
+    for i, equal in enumerate(equals):
+        if not equal:
+            error_msgs.append((
+                f"\n{i}th element:\n"
+                f"a: {a[i]}\n"
+                f"b: {b[i]}"
+            ))
+    error_msg = "".join(error_msgs)
+    msg = ut_test_case._formatMessage(msg, error_msg)
+    raise QuantestPyAssertionError(msg)
