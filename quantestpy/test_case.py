@@ -35,11 +35,13 @@ class QuantestPyTestCase(unittest.TestCase):
                 list,
                 qiskit.quantum_info.states.statevector.Statevector],
             number_of_decimal_places: int = 5,
+            check_including_global_phase: bool = True,
             msg=None):
 
         state_vector.assert_equal(
             state_vector_a,
             state_vector_b,
             number_of_decimal_places,
+            check_including_global_phase,
             msg
         )

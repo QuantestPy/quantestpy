@@ -2,8 +2,6 @@ import unittest
 import numpy as np
 import qiskit
 from typing import Union
-import decimal
-from decimal import Decimal
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 
 ut_test_case = unittest.TestCase()
@@ -34,10 +32,7 @@ def assert_is_normalized(
 
     # calc. norm
     norm = np.sqrt(np.dot(a, a.conj()).real)
-
-    decimal.getcontext().prec = 28
-    twoplaces = Decimal(10) ** (-number_of_decimal_places)
-    norm_round = Decimal(norm).quantize(twoplaces)
+    norm_round = np.round(norm, decimals=number_of_decimal_places)
 
     if norm_round == 1.:
         return
@@ -101,14 +96,14 @@ def assert_equal(
         b = b * b_global_phase.conj()
 
     #
-    decimal.getcontext().prec = 28
-    twoplaces = Decimal(10) ** (-number_of_decimal_places)
+    a = np.round(a, decimals=number_of_decimal_places)
+    b = np.round(b, decimals=number_of_decimal_places)
 
     for i, a_element in enumerate(a):
         b_element = b[i]
 
-        a_element_real = Decimal(a_element.real).quantize(twoplaces)
-        b_element_real = Decimal(b_element.real).quantize(twoplaces)
+        a_element_real = a_element.real
+        b_element_real = b_element.real
 
         if a_element_real != b_element_real:
             error_msg = (
@@ -119,8 +114,8 @@ def assert_equal(
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)
 
-        a_element_imag = Decimal(a_element.imag).quantize(twoplaces)
-        b_element_imag = Decimal(b_element.imag).quantize(twoplaces)
+        a_element_imag = a_element.imag
+        b_element_imag = b_element.imag
 
         if a_element_imag != b_element_imag:
             error_msg = (
