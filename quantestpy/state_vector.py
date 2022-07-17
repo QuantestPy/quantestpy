@@ -87,18 +87,28 @@ def assert_equal(
             "The shapes of the state_vectors must be the same."
         )
 
-    #
+    # remove global phase
     if not check_including_global_phase:
-        a_global_phase = a[0] / abs(a[0])
+
+        for i in range(len(a)):
+            if abs(a[i]) > 0.:
+                a_global_phase = a[i] / abs(a[i])
+                break
+
         a = a * a_global_phase.conj()
 
-        b_global_phase = b[0] / abs(b[0])
+        for i in range(len(b)):
+            if abs(b[i]) > 0.:
+                b_global_phase = b[i] / abs(b[i])
+                break
+
         b = b * b_global_phase.conj()
 
-    #
+    # round
     a = np.round(a, decimals=number_of_decimal_places)
     b = np.round(b, decimals=number_of_decimal_places)
 
+    # assert equal
     for i, a_element in enumerate(a):
         b_element = b[i]
 
