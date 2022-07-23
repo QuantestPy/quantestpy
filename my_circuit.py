@@ -1,5 +1,5 @@
 import numpy as np
-
+import qiskit
 # my original circuit class
 
 
@@ -61,7 +61,7 @@ class MyCircuit:
         return tmp
 
     @staticmethod
-    def tensor_prod_matrix(a, b):
+    def tensor_prod_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
         m = a.shape[0]
         n = a.shape[1]
         for i in range(m):
@@ -98,3 +98,16 @@ class MyCircuit:
             f.write(s)
 
         return s
+
+    def cvt_my_circuit_to_qiskit_circuit(self,) -> qiskit.QuantumCircuit:
+
+        qiskit_circ = qiskit.QuantumCircuit(len(self.qubits))
+        for gate in self.gates:
+            if gate["name"] == "x":
+                qiskit_circ.x(gate["target"])
+            elif gate["name"] == "cx":
+                qiskit_circ.cx(gate["control"], gate["target"])
+            else:
+                raise
+
+        return qiskit_circ
