@@ -7,3 +7,7 @@ class QuantestPyError(unittest.TestCase.failureException):
 
 class QuantestPyAssertionError(QuantestPyError):
     pass
+
+
+class QuantestPyTestCircuitError(Exception):
+    pass

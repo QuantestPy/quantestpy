@@ -1,32 +1,48 @@
 import numpy as np
 import qiskit
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Statevector
-from qiskit.quantum_info.operators import Operator
 from typing import Union
 
 from quantestpy import matrix
+from quantestpy import TestCircuit
+from quantestpy.exceptions import QuantestPyError
 
 
 def assert_equal_to_operator(
-        qasm: str,
         operator: Union[
             np.ndarray,
             np.matrix,
             qiskit.quantum_info.operators.operator.Operator],
+        qasm: str = None,
+        test_circuit: TestCircuit = None,
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         msg=None) -> None:
 
-    # check type
-    if not isinstance(qasm, str):
-        raise TypeError("The type of qasm must be string.")
+    #
+    if qasm is None and test_circuit is None:
+        raise QuantestPyError(
+            "Missing qasm or test circuit."
+        )
 
-    qc = QuantumCircuit.from_qasm_str(qasm)
-    operator_from_qc = Operator(qc)
+    if qasm is not None and test_circuit is not None:
+        raise QuantestPyError(
+            "Qasm and test circuit must not both be given."
+        )
+
+    if qasm is not None:
+        raise QuantestPyError(
+            "Loading qasm is not yet implemented."
+        )
+
+    # check type
+    # if not isinstance(qasm, str):
+    #    raise TypeError("The type of qasm must be string.")
+
+    _ = test_circuit._get_state_vector()
+    operator_from_test_circuit = test_circuit._circuit_op
 
     matrix.assert_equal(
-        operator_from_qc,
+        operator_from_test_circuit,
         operator,
         number_of_decimal_places,
         check_including_global_phase,
