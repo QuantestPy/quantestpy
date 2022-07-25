@@ -1,10 +1,12 @@
 import numpy as np
 import qiskit
 from quantestpy import TestCircuit
-# my original circuit class
 
 
 class MyCircuit:
+    """My original circuit class
+    """
+
     def __init__(self, n_qubit: int):
         self.gates = []
         # Example:

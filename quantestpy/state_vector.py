@@ -1,6 +1,5 @@
 import unittest
 import numpy as np
-import qiskit
 from typing import Union
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 
@@ -8,22 +7,17 @@ ut_test_case = unittest.TestCase()
 
 
 def assert_is_normalized(
-        state_vector_subject_to_test: Union[
-            np.ndarray,
-            list,
-            qiskit.quantum_info.states.statevector.Statevector],
+        state_vector_subject_to_test: Union[np.ndarray, list],
         number_of_decimal_places: int = 5,
         msg=None) -> None:
 
     a = state_vector_subject_to_test
 
     # check type
-    if not isinstance(a, np.ndarray) and not isinstance(a, list) and not \
-            isinstance(a, qiskit.quantum_info.states.statevector.Statevector):
+    if not isinstance(a, np.ndarray) and not isinstance(a, list):
         raise TypeError(
             "The type of state_vector_subject_to_test must be "
-            "either numpy.ndarray, list or "
-            "qiskit.quantum_info.states.statevector.Statevector."
+            "either numpy.ndarray or list."
         )
 
     # conv. list to ndarray
@@ -44,14 +38,8 @@ def assert_is_normalized(
 
 
 def assert_equal(
-        state_vector_a: Union[
-            np.ndarray,
-            list,
-            qiskit.quantum_info.states.statevector.Statevector],
-        state_vector_b: Union[
-            np.ndarray,
-            list,
-            qiskit.quantum_info.states.statevector.Statevector],
+        state_vector_a: Union[np.ndarray, list],
+        state_vector_b: Union[np.ndarray, list],
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         msg=None):
@@ -60,21 +48,17 @@ def assert_equal(
     b = state_vector_b
 
     # check type
-    if not isinstance(a, np.ndarray) and not isinstance(a, list) and not \
-            isinstance(a, qiskit.quantum_info.states.statevector.Statevector):
+    if not isinstance(a, np.ndarray) and not isinstance(a, list):
         raise TypeError(
-            "The type of state_vector must be either numpy.ndarray, list or "
-            "qiskit.quantum_info.states.statevector.Statevector."
+            "The type of state_vector must be either numpy.ndarray or list."
         )
 
-    if not isinstance(b, np.ndarray) and not isinstance(b, list) and not \
-            isinstance(b, qiskit.quantum_info.states.statevector.Statevector):
+    if not isinstance(b, np.ndarray) and not isinstance(b, list):
         raise TypeError(
-            "The type of state_vector must be either numpy.ndarray. list or "
-            "qiskit.quantum_info.states.statevector.Statevector."
+            "The type of state_vector must be either numpy.ndarray or list."
         )
 
-    # conv. list to ndarray
+    # cvt. list to ndarray
     if not isinstance(a, np.ndarray):
         a = np.array(a)
 

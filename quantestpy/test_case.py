@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-import qiskit
 from typing import Union
-from quantestpy import state_vector, matrix
+
+from quantestpy import state_vector, operator
 
 
 class QuantestPyTestCase(unittest.TestCase):
@@ -11,10 +11,7 @@ class QuantestPyTestCase(unittest.TestCase):
 
     def state_vector_assert_is_normalized(
             self,
-            state_vector_subject_to_test: Union[
-                np.ndarray,
-                list,
-                qiskit.quantum_info.states.statevector.Statevector],
+            state_vector_subject_to_test: Union[np.ndarray, list],
             number_of_decimal_places: int = 5,
             msg=None):
 
@@ -26,14 +23,8 @@ class QuantestPyTestCase(unittest.TestCase):
 
     def state_vector_assert_equal(
             self,
-            state_vector_a: Union[
-                np.ndarray,
-                list,
-                qiskit.quantum_info.states.statevector.Statevector],
-            state_vector_b: Union[
-                np.ndarray,
-                list,
-                qiskit.quantum_info.states.statevector.Statevector],
+            state_vector_a: Union[np.ndarray, list],
+            state_vector_b: Union[np.ndarray, list],
             number_of_decimal_places: int = 5,
             check_including_global_phase: bool = True,
             msg=None):
@@ -48,35 +39,27 @@ class QuantestPyTestCase(unittest.TestCase):
 
     def operator_assert_is_unitary(
             self,
-            matrix_subject_to_test: Union[
-                np.ndarray,
-                np.matrix,
-                qiskit.quantum_info.operators.operator.Operator],
+            operator_subject_to_test: Union[np.ndarray, np.matrix],
             number_of_decimal_places: int = 5,
             msg=None):
 
-        matrix.assert_is_unitary(
-            matrix_subject_to_test,
+        operator.assert_is_unitary(
+            operator_subject_to_test,
             number_of_decimal_places,
             msg
         )
 
     def operator_assert_equal(
             self,
-            matrix_a: Union[
-                np.ndarray,
-                qiskit.quantum_info.operators.operator.Operator],
-            matrix_b: Union[
-                np.ndarray,
-                list,
-                qiskit.quantum_info.operators.operator.Operator],
+            operator_a: Union[np.ndarray, np.matrix],
+            operator_b: Union[np.ndarray, np.matrix],
             number_of_decimal_places: int = 5,
             check_including_global_phase: bool = True,
             msg=None):
 
-        matrix.assert_equal(
-            matrix_a,
-            matrix_b,
+        operator.assert_equal(
+            operator_a,
+            operator_b,
             number_of_decimal_places,
             check_including_global_phase,
             msg

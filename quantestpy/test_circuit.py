@@ -12,17 +12,10 @@ _IMPLEMENTED_GATES = ["x", "h", "s", "t", "cx", "cnot"]
 
 
 class TestCircuit:
-    """これは何だ？？
-    これを具体化しないと、下のcvtを書けない。
-    このCircuitクラスの中で定義される演算メソッドを使ってテストが行われることを想定してい
-    るのだと思う。
-    だから、もしQiskitのStatevectorとかOperatorを使ってテストするのであれば
-    このクラスは必要なくて、代わりにqiskit.QuantumCircuitを使うことになる。
-    鈴木さんは、「シミュレータのテストをするためにもう一つシミュレータを作らされるはめにな
-    る。最適化されていないから遅いが、明らかに正しいものを用意する。」
-    といっていたがそれはまさにこのTestCircuitクラスを作ることなのだろう。
-    ユーザーがqasmを入力することにも対応する。その場合には、qasmをTestCircuitクラスに
-    変換してからテストのための演算をする。
+    """
+    This circuit class will be always used as an input to assert methods
+    which deal with circuits. Mathematical operations such as applying gates
+    will be executed using the methods of this class.
     """
 
     def __init__(self, num_qubit: int):
@@ -70,15 +63,6 @@ class TestCircuit:
             )
 
         self._gates.append(gate)
-
-    @staticmethod
-    def _calculate_vec_tensor_prod(vec1: np.ndarray, vec2: np.ndarray) \
-            -> np.ndarray:
-        vec_tensor_prod = np.array([])
-        for i in vec1:
-            c = i * vec2
-            vec_tensor_prod = np.append(vec_tensor_prod, c)
-        return vec_tensor_prod
 
     @staticmethod
     def _calculate_matrix_tensor_prod(mat1: np.ndarray, mat2: np.ndarray) \
@@ -190,6 +174,7 @@ def cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
 
 
 if __name__ == "__main__":
+    """Example showing how to use TestCircuit class."""
 
     test_circ = TestCircuit(3)
     test_circ.add_gate({"name": "x", "target_qubit": 0})

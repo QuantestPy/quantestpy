@@ -1,6 +1,5 @@
 import unittest
 import numpy as np
-import qiskit
 from typing import Union
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy import state_vector
@@ -9,14 +8,11 @@ ut_test_case = unittest.TestCase()
 
 
 def assert_is_unitary(
-        matrix_subject_to_test: Union[
-            np.ndarray,
-            np.matrix,
-            qiskit.quantum_info.operators.operator.Operator],
+        operator_subject_to_test: Union[np.ndarray, np.matrix],
         number_of_decimal_places: int = 5,
         msg=None) -> None:
 
-    m = matrix_subject_to_test
+    m = operator_subject_to_test
 
     # conv. list to matrix
     if not isinstance(m, np.matrix):
@@ -29,26 +25,21 @@ def assert_is_unitary(
         return
 
     else:
-        error_msg = ("Matrix is not unitary.\n"
+        error_msg = ("Operator is not unitary.\n"
                      f"m * m^+:\n{a}")
         msg = ut_test_case._formatMessage(msg, error_msg)
         raise QuantestPyAssertionError(msg)
 
 
 def assert_equal(
-        matrix_a: Union[
-            np.ndarray,
-            qiskit.quantum_info.operators.operator.Operator],
-        matrix_b: Union[
-            np.ndarray,
-            list,
-            qiskit.quantum_info.operators.operator.Operator],
+        operator_a: Union[np.ndarray, np.matrix],
+        operator_b: Union[np.ndarray, np.matrix],
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         msg=None) -> None:
 
-    a = matrix_a
-    b = matrix_b
+    a = operator_a
+    b = operator_b
 
     # conv. list to ndarray
     if not isinstance(a, np.ndarray):
@@ -60,10 +51,10 @@ def assert_equal(
     # check shape
     if a.shape != b.shape:
         raise QuantestPyError(
-            "The shapes of the matrices must be the same."
+            "The shapes of the operators must be the same."
         )
 
-    # conv. to vector
+    # cvt. to vector
     a = np.ravel(a)
     b = np.ravel(b)
 
