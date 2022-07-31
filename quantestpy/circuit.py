@@ -4,6 +4,7 @@ from typing import Union
 from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError
+from quantestpy.test_circuit import cvt_openqasm_to_test_circuit
 
 
 def assert_equal_to_operator(
@@ -26,6 +27,7 @@ def assert_equal_to_operator(
         )
 
     if qasm is not None:
+        test_circuit = cvt_openqasm_to_test_circuit(qasm)
         raise QuantestPyError(
             "Loading qasm is not yet implemented."
         )
