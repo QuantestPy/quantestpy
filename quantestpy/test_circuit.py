@@ -170,7 +170,7 @@ class TestCircuit:
 
 def cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
     """Needs implemantation"""
-    return "Not implemented yet..."
+    return None
 
 
 if __name__ == "__main__":
