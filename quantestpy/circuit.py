@@ -32,8 +32,7 @@ def assert_equal_to_operator(
             "Loading qasm is not yet implemented."
         )
 
-    _ = test_circuit._get_state_vector()
-    operator_from_test_circuit = test_circuit._circuit_op
+    operator_from_test_circuit = test_circuit._get_circuit_operator()
 
     operator.assert_equal(
         operator_from_test_circuit,
