@@ -168,7 +168,7 @@ class TestCircuit:
         return state_vec
 
 
-    def _cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
+    def _cvt_openqasm_to_test_circuit(self, qasm: str) -> TestCircuit:
         """Needs implemantation"""
         return "Not implemented yet..."
 
