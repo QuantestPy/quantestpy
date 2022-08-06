@@ -7,9 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.8
-      env:
-        PIPENV_VENV_IN_PROJECT: true
+      image: python:3.8-alpine
 
     steps:
       - name: Checkout
@@ -21,7 +19,7 @@ jobs:
 
       - name: Run flake8
         run: |
-          flake8 ./quantestpy/circuit.py
+          flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
 
 
 
