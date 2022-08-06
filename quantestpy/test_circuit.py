@@ -18,10 +18,14 @@ class TestCircuit:
     will be executed using the methods of this class.
     """
 
-    def __init__(self, num_qubit: int):
+    def __init__(self,
+                 num_qubit: int,
+                 from_right_to_left_for_qubit_ids: bool = False):
         self._gates = []
         self._qubits = [0 for _ in range(num_qubit)]
         self._num_qubit = num_qubit
+        self._from_right_to_left_for_qubit_ids = \
+            from_right_to_left_for_qubit_ids
 
     def add_gate(self, gate: dict) -> None:
         """
@@ -101,11 +105,22 @@ class TestCircuit:
 
             else:
                 if qubit_id == target:
-                    all_qubit_op = self._calculate_matrix_tensor_prod(
-                        all_qubit_op, single_qubit_op)
+                    if self._from_right_to_left_for_qubit_ids:
+                        all_qubit_op = self._calculate_matrix_tensor_prod(
+                            single_qubit_op, all_qubit_op)
+
+                    else:
+                        all_qubit_op = self._calculate_matrix_tensor_prod(
+                            all_qubit_op, single_qubit_op)
+
                 else:
-                    all_qubit_op = self._calculate_matrix_tensor_prod(
-                        all_qubit_op, _ID)
+                    if self._from_right_to_left_for_qubit_ids:
+                        all_qubit_op = self._calculate_matrix_tensor_prod(
+                            _ID, all_qubit_op)
+
+                    else:
+                        all_qubit_op = self._calculate_matrix_tensor_prod(
+                            all_qubit_op, _ID)
 
         return all_qubit_op
 
@@ -118,6 +133,7 @@ class TestCircuit:
 
         # initialize circuit operator
         self._circuit_op = np.eye(2**self._num_qubit)
+        binary_to_vector = None
 
         # apply each gate to state vector
         for gate in self._gates:
@@ -138,26 +154,38 @@ class TestCircuit:
                     _T, gate["target_qubit"])
 
             elif gate["name"] == "cx" or gate["name"] == "cnot":
-                trans = dict()
-                for i in range(2**self._num_qubit):
-                    i_bin = bin(i)[2:].zfill(self._num_qubit)
-                    i_bin = list(i_bin)
-                    if i_bin[gate["control_qubit"]] == "1":
-                        if i_bin[gate["target_qubit"]] == "1":
-                            i_bin[gate["target_qubit"]] = "0"
-                        elif i_bin[gate["target_qubit"]] == "0":
-                            i_bin[gate["target_qubit"]] = "1"
-                        else:
-                            raise
 
-                    j_bin = "".join(i_bin)
-                    j = int(j_bin, 2)
-                    trans[i] = j
+                if binary_to_vector is None:
+                    binary_to_vector = {}
+                    for i in range(2**self._num_qubit):
+                        i_binary = bin(i)[2:].zfill(self._num_qubit)
+
+                        if self._from_right_to_left_for_qubit_ids:
+                            i_binary = "".join(list(reversed(i_binary)))
+
+                        i_vector = np.zeros(2**self._num_qubit)
+                        i_vector[i] = 1.
+                        binary_to_vector[i_binary] = i_vector
 
                 all_qubit_op = np.zeros(
                     (2**self._num_qubit, 2**self._num_qubit))
-                for i in range(2**self._num_qubit):
-                    all_qubit_op[trans[i], i] = 1.
+                for binary_before_cnot in binary_to_vector.keys():
+
+                    binary_tmp = list(binary_before_cnot)
+                    if binary_tmp[gate["control_qubit"]] == "1":
+                        if binary_tmp[gate["target_qubit"]] == "1":
+                            binary_tmp[gate["target_qubit"]] = "0"
+                        elif binary_tmp[gate["target_qubit"]] == "0":
+                            binary_tmp[gate["target_qubit"]] = "1"
+                        else:
+                            raise
+
+                    binary_after_cnot = "".join(binary_tmp)
+
+                    vector_after_cnot = binary_to_vector[binary_after_cnot]
+                    vector_before_cnot = binary_to_vector[binary_before_cnot]
+                    all_qubit_op += \
+                        vector_after_cnot.reshape(-1, 1) * vector_before_cnot
 
             else:
                 raise
