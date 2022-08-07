@@ -30,6 +30,7 @@ jobs:
 
       - name: Run flake8
         run: |
+          cd ./test/
           pipenv run flake8 --exclude ../quantestpy/__init__.py ../quantestpy/*.py
 
 
