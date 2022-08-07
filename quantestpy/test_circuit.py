@@ -170,8 +170,15 @@ class TestCircuit:
         state_vec += [0 for _ in range(2**self._num_qubit-2)]
         state_vec = np.array(state_vec)
 
+        whole_gates = self._get_circuit_operator()
+        state_vec = np.matmul(whole_gates, state_vec)
+
+        return state_vec
+
+    def _get_circuit_operator(self,) -> np.ndarray:
+
         # initialize circuit operator
-        self._whole_gates = np.eye(2**self._num_qubit)
+        whole_gates = np.eye(2**self._num_qubit)
 
         # apply each gate to state vector
         for gate in self._gates:
@@ -203,10 +210,9 @@ class TestCircuit:
             else:
                 raise
 
-            state_vec = np.matmul(all_qubit_gate, state_vec)
-            self._whole_gates = np.matmul(self._whole_gates, all_qubit_gate)
+            whole_gates = np.matmul(whole_gates, all_qubit_gate)
 
-        return state_vec
+        return whole_gates
 
 
 def cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
