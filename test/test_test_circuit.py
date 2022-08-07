@@ -48,8 +48,8 @@ class TestTestCircuit(unittest.TestCase):
     def test__create_all_qubit_op_from_single_qubit_op_1(self,):
         h = test_circuit._H
         circ = TestCircuit(2)
-        actual_gate = circ._create_all_qubit_op_from_single_qubit_op(
-            single_qubit_op=h, target=0
+        actual_gate = circ._create_all_qubit_gate_from_single_qubit_gate(
+            single_qubit_gate=h, target=0
         )
 
         expected_gate = np.array([[1, 0, 1, 0],
@@ -63,8 +63,8 @@ class TestTestCircuit(unittest.TestCase):
     def test__create_all_qubit_op_from_single_qubit_op_2(self,):
         h = test_circuit._H
         circ = TestCircuit(2)
-        actual_gate = circ._create_all_qubit_op_from_single_qubit_op(
-            single_qubit_op=h, target=1
+        actual_gate = circ._create_all_qubit_gate_from_single_qubit_gate(
+            single_qubit_gate=h, target=1
         )
 
         expected_gate = np.array([[1, 1, 0, 0],
