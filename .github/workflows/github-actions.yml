@@ -1,0 +1,25 @@
+name: github-actions
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.8-alpine
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install
+        run: |
+          python3 -m pip install flake8
+
+      - name: Run flake8
+        run: |
+          flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
+
+
+
