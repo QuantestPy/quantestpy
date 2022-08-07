@@ -6,36 +6,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    container:
-      image: python:3.8
-      env:
-        PIPENV_VENV_IN_PROJECT: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache pipenv library
-        uses: actions/cache@v3
+      - name: Setup Python3.8
+        uses: actions/setup-python@v4
         with:
-          path: ./test/.venv
-          key: v1-dependencies-${{ hashFiles('./test/Pipfile.lock') }}
-          restore-keys: v1-dependencies-
+          python-version: '3.8'
+          cache: 'pip'
+          cache-dependency-path: './test/requirements.txt'
 
-      - name: Install
+      - name: Install library
         run: |
-          cd ./test/
-          python3 -m pip install pipenv
-          python3 -m pipenv install
+          pip install -r ./test/requirements.txt
 
       - name: Run flake8
         run: |
-          cd ./test/
-          pipenv run flake8 --exclude ../quantestpy/__init__.py ../quantestpy/*.py
+          python3 -m flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
 
       - name: Run unit test
         run: |
-          ./test/.venv/bin/python3 -m unittest test.test_test_circuit
-
-
-
+          python3 -m unittest test.test_test_circuit
