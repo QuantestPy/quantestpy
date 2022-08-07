@@ -33,5 +33,9 @@ jobs:
           cd ./test/
           pipenv run flake8 --exclude ../quantestpy/__init__.py ../quantestpy/*.py
 
+      - name: Run unit test
+        run: |
+          ./test/.venv/bin/python3 -m unittest test.test_test_circuit
+
 
 
