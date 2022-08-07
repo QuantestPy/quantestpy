@@ -26,6 +26,7 @@ class TestCircuit:
         self._num_qubit = num_qubit
         self._from_right_to_left_for_qubit_ids = \
             from_right_to_left_for_qubit_ids
+        self._binary_to_vector = None
 
     def add_gate(self, gate: dict) -> None:
         """
@@ -93,36 +94,74 @@ class TestCircuit:
 
         return row
 
-    def _create_all_qubit_op_from_single_qubit_op(
-            self, single_qubit_op: np.ndarray, target: int) -> np.ndarray:
+    def _create_all_qubit_gate_from_single_qubit_gate(
+            self, single_qubit_gate: np.ndarray, target: int) -> np.ndarray:
 
         for qubit_id in range(self._num_qubit):
             if qubit_id == 0:
                 if qubit_id == target:
-                    all_qubit_op = single_qubit_op
+                    all_qubit_gate = single_qubit_gate
                 else:
-                    all_qubit_op = _ID
+                    all_qubit_gate = _ID
 
             else:
                 if qubit_id == target:
                     if self._from_right_to_left_for_qubit_ids:
-                        all_qubit_op = self._calculate_matrix_tensor_prod(
-                            single_qubit_op, all_qubit_op)
+                        all_qubit_gate = self._calculate_matrix_tensor_prod(
+                            single_qubit_gate, all_qubit_gate)
 
                     else:
-                        all_qubit_op = self._calculate_matrix_tensor_prod(
-                            all_qubit_op, single_qubit_op)
+                        all_qubit_gate = self._calculate_matrix_tensor_prod(
+                            all_qubit_gate, single_qubit_gate)
 
                 else:
                     if self._from_right_to_left_for_qubit_ids:
-                        all_qubit_op = self._calculate_matrix_tensor_prod(
-                            _ID, all_qubit_op)
+                        all_qubit_gate = self._calculate_matrix_tensor_prod(
+                            _ID, all_qubit_gate)
 
                     else:
-                        all_qubit_op = self._calculate_matrix_tensor_prod(
-                            all_qubit_op, _ID)
+                        all_qubit_gate = self._calculate_matrix_tensor_prod(
+                            all_qubit_gate, _ID)
 
-        return all_qubit_op
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_cnot_gate(
+            self, control: int, target: int) -> np.ndarray:
+
+        if self._binary_to_vector is None:
+            self._binary_to_vector = {}
+            for i in range(2**self._num_qubit):
+                i_binary = bin(i)[2:].zfill(self._num_qubit)
+
+                if self._from_right_to_left_for_qubit_ids:
+                    i_binary = "".join(list(reversed(i_binary)))
+
+                i_vector = np.zeros(2**self._num_qubit)
+                i_vector[i] = 1.
+                self._binary_to_vector[i_binary] = i_vector
+
+        all_qubit_gate = np.zeros(
+            (2**self._num_qubit, 2**self._num_qubit))
+
+        for binary_before_cnot in self._binary_to_vector.keys():
+
+            binary_tmp = list(binary_before_cnot)
+            if binary_tmp[control] == "1":
+                if binary_tmp[target] == "1":
+                    binary_tmp[target] = "0"
+                elif binary_tmp[target] == "0":
+                    binary_tmp[target] = "1"
+                else:
+                    raise
+
+            binary_after_cnot = "".join(binary_tmp)
+
+            vector_after_cnot = self._binary_to_vector[binary_after_cnot]
+            vector_before_cnot = self._binary_to_vector[binary_before_cnot]
+            all_qubit_gate += \
+                vector_after_cnot.reshape(-1, 1) * vector_before_cnot
+
+        return all_qubit_gate
 
     def _get_state_vector(self,) -> np.ndarray:
 
@@ -132,66 +171,40 @@ class TestCircuit:
         state_vec = np.array(state_vec)
 
         # initialize circuit operator
-        self._circuit_op = np.eye(2**self._num_qubit)
-        binary_to_vector = None
+        self._whole_gates = np.eye(2**self._num_qubit)
 
         # apply each gate to state vector
         for gate in self._gates:
             if gate["name"] == "x":
-                all_qubit_op = self._create_all_qubit_op_from_single_qubit_op(
-                    _X, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _X, gate["target_qubit"])
 
             elif gate["name"] == "h":
-                all_qubit_op = self._create_all_qubit_op_from_single_qubit_op(
-                    _H, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _H, gate["target_qubit"])
 
             elif gate["name"] == "s":
-                all_qubit_op = self._create_all_qubit_op_from_single_qubit_op(
-                    _S, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _S, gate["target_qubit"])
 
             elif gate["name"] == "t":
-                all_qubit_op = self._create_all_qubit_op_from_single_qubit_op(
-                    _T, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _T, gate["target_qubit"])
 
             elif gate["name"] == "cx" or gate["name"] == "cnot":
-
-                if binary_to_vector is None:
-                    binary_to_vector = {}
-                    for i in range(2**self._num_qubit):
-                        i_binary = bin(i)[2:].zfill(self._num_qubit)
-
-                        if self._from_right_to_left_for_qubit_ids:
-                            i_binary = "".join(list(reversed(i_binary)))
-
-                        i_vector = np.zeros(2**self._num_qubit)
-                        i_vector[i] = 1.
-                        binary_to_vector[i_binary] = i_vector
-
-                all_qubit_op = np.zeros(
-                    (2**self._num_qubit, 2**self._num_qubit))
-                for binary_before_cnot in binary_to_vector.keys():
-
-                    binary_tmp = list(binary_before_cnot)
-                    if binary_tmp[gate["control_qubit"]] == "1":
-                        if binary_tmp[gate["target_qubit"]] == "1":
-                            binary_tmp[gate["target_qubit"]] = "0"
-                        elif binary_tmp[gate["target_qubit"]] == "0":
-                            binary_tmp[gate["target_qubit"]] = "1"
-                        else:
-                            raise
-
-                    binary_after_cnot = "".join(binary_tmp)
-
-                    vector_after_cnot = binary_to_vector[binary_after_cnot]
-                    vector_before_cnot = binary_to_vector[binary_before_cnot]
-                    all_qubit_op += \
-                        vector_after_cnot.reshape(-1, 1) * vector_before_cnot
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cnot_gate(
+                        gate["control_qubit"], gate["target_qubit"])
 
             else:
                 raise
 
-            state_vec = np.matmul(all_qubit_op, state_vec)
-            self._circuit_op = np.matmul(self._circuit_op, all_qubit_op)
+            state_vec = np.matmul(all_qubit_gate, state_vec)
+            self._whole_gates = np.matmul(self._whole_gates, all_qubit_gate)
 
         return state_vec
 
