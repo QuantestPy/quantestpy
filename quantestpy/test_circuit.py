@@ -210,7 +210,7 @@ class TestCircuit:
             else:
                 raise
 
-            whole_gates = np.matmul(whole_gates, all_qubit_gate)
+            whole_gates = np.matmul(all_qubit_gate, whole_gates)
 
         return whole_gates
 
