@@ -8,18 +8,29 @@ jobs:
 
     container:
       image: python:3.8-alpine
+      env:
+        PIPENV_VENV_IN_PROJECT: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Cache pipenv library
+        uses: actions/cache@v3
+        with:
+          path: ./test/.venv
+          key: v1-dependencies-${{ hashFiles('./test/Pipfile.lock') }}
+          restore-keys: v1-dependencies-
+
       - name: Install
         run: |
-          python3 -m pip install flake8
+          cd ./test/
+          python3 -m pip install pipenv
+          python3 -m pipenv install
 
       - name: Run flake8
         run: |
-          flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
+          pipenv run flake8 --exclude ../quantestpy/__init__.py ../quantestpy/*.py
 
 
 
