@@ -11,6 +11,7 @@ def assert_equal_to_operator(
         operator_: Union[np.ndarray, np.matrix],
         qasm: str = None,
         test_circuit: TestCircuit = None,
+        from_right_to_left_for_qubit_ids: bool = None,
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         msg=None) -> None:
@@ -31,6 +32,10 @@ def assert_equal_to_operator(
         raise QuantestPyError(
             "Loading qasm is not yet implemented."
         )
+
+    if from_right_to_left_for_qubit_ids is not None:
+        test_circuit._from_right_to_left_for_qubit_ids = \
+            from_right_to_left_for_qubit_ids
 
     operator_from_test_circuit = test_circuit._get_circuit_operator()
 

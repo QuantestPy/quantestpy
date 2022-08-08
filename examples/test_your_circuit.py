@@ -62,6 +62,7 @@ my_circuit.gates.append({"name": "H", "target": 0})
 my_circuit.gates.append({"name": "CNOT", "target": 1, "control": 0})
 
 # here I want to test my circuit
+# CX (H@I) |q0>@|q1>
 test_circuit = cvt_my_circuit_to_test_circuit(my_circuit)
 expected_operator = np.array(
     [[1, 0, 1, 0],
@@ -75,4 +76,22 @@ quantestpy.circuit.assert_equal_to_operator(
     test_circuit=test_circuit,
     check_including_global_phase=False,
     number_of_decimal_places=5
+)
+
+# here I want to test my circuit
+# CX (I@H) |q1>@|q0>; Qiskit convention
+test_circuit = cvt_my_circuit_to_test_circuit(my_circuit)
+expected_operator = np.array(
+    [[1, 1, 0, 0],
+     [0, 0, 1, -1],
+     [0, 0, 1, 1],
+     [1, -1, 0, 0]]
+)/np.sqrt(2.)
+
+quantestpy.circuit.assert_equal_to_operator(
+    expected_operator,
+    test_circuit=test_circuit,
+    check_including_global_phase=False,
+    number_of_decimal_places=5,
+    from_right_to_left_for_qubit_ids=True
 )
