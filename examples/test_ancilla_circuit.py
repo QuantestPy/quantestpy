@@ -1,9 +1,6 @@
 """
-Example showing how to test your own circuit class using TestCircuit class.
+Example showing how to check ancilla qubits to be zero in your own circuit.
 """
-
-import numpy as np
-
 import quantestpy
 from quantestpy import TestCircuit
 
@@ -56,23 +53,49 @@ def cvt_my_circuit_to_test_circuit(my_circuit: MyCircuit) -> TestCircuit:
     return test_circuit
 
 
-# build my circuit
+# build my circuit no.1
 my_circuit = MyCircuit(n_qubit=2)
-my_circuit.gates.append({"name": "H", "target": 0})
-my_circuit.gates.append({"name": "CNOT", "target": 1, "control": 0})
+my_circuit.gates.append({"name": "X", "target": 0})
+my_circuit.gates.append({"name": "CNOT", "control": 0, "target": 1})
+
+my_circuit.gates.append({"name": "CNOT", "control": 0, "target": 1})
+my_circuit.gates.append({"name": "X", "target": 0})
 
 # here I want to test my circuit
 test_circuit = cvt_my_circuit_to_test_circuit(my_circuit)
-expected_operator = np.array(
-    [[1, 0, 1, 0],
-     [0, 1, 0, 1],
-     [0, 1, 0, -1],
-     [1, 0, -1, 0]]
-)/np.sqrt(2.) * np.exp(0.4j)
 
-quantestpy.circuit.assert_equal_to_operator(
-    expected_operator,
+quantestpy.circuit.assert_is_zero(
     test_circuit=test_circuit,
-    check_including_global_phase=False,
+    qubits=[0, 1],
+    number_of_decimal_places=5
+)
+
+
+# build my circuit no.2
+my_circuit = MyCircuit(n_qubit=2)
+my_circuit.gates.append({"name": "X", "target": 0})
+my_circuit.gates.append({"name": "CNOT", "control": 0, "target": 1})
+
+# here I want to test my circuit
+test_circuit = cvt_my_circuit_to_test_circuit(my_circuit)
+
+quantestpy.circuit.assert_is_zero(
+    test_circuit=test_circuit,
+    qubits=[0, 1],
+    number_of_decimal_places=5
+)
+
+
+# build my circuit no.3
+my_circuit = MyCircuit(n_qubit=2)
+my_circuit.gates.append({"name": "H", "target": 0})
+my_circuit.gates.append({"name": "CNOT", "control": 0, "target": 1})
+
+# here I want to test my circuit
+test_circuit = cvt_my_circuit_to_test_circuit(my_circuit)
+
+quantestpy.circuit.assert_is_zero(
+    test_circuit=test_circuit,
+    qubits=[0, 1],
     number_of_decimal_places=5
 )

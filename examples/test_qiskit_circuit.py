@@ -24,5 +24,6 @@ expected_operator = np.array(
 quantestpy.circuit.assert_equal_to_operator(
     expected_operator,
     qasm=qasm,  # Does not work yet.
-    check_including_global_phase=False
+    check_including_global_phase=False,
+    number_of_decimal_places=5
 )
