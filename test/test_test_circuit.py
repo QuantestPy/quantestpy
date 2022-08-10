@@ -134,7 +134,8 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__create_all_qubit_gate_from_cnot_gate_2(self,):
-        circ = TestCircuit(2, from_right_to_left_for_qubit_ids=True)
+        circ = TestCircuit(2)
+        circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
             control=0, target=1
         )
@@ -162,7 +163,8 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__create_all_qubit_gate_from_cnot_gate_4(self,):
-        circ = TestCircuit(3, from_right_to_left_for_qubit_ids=True)
+        circ = TestCircuit(3)
+        circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
             control=0, target=2
         )
