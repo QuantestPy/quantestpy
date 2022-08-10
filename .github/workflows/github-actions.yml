@@ -25,7 +25,9 @@ jobs:
         run: |
           python3 -m flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
           python3 -m flake8 --exclude ./test/__init__.py ./test/*.py
+          python3 -m flake8 ./example/*.py
 
       - name: Run unit test
         run: |
           python3 -m unittest test.test_test_circuit
+          python3 -m unittest test.test_circuit_assert_equal_to_operator
