@@ -31,7 +31,8 @@ class TestCircuit:
     def add_gate(self, gate: dict) -> None:
         """
         Example
-        gate = {"name": "x", "target_qubit": 1, "control_qubit": 0}
+        gate = {"name": "x", "target_qubit": [1], "control_qubit": []}
+        gate = {"name": "cx", "target_qubit": [1], "control_qubit": [0]}
         """
         if not isinstance(gate, dict):
             raise QuantestPyTestCircuitError(
@@ -49,22 +50,25 @@ class TestCircuit:
                 "gate must contain 'target_qubit' as a key."
             )
 
+        if "control_qubit" not in gate.keys():
+            raise QuantestPyTestCircuitError(
+                "gate must contain 'control_qubit' as a key."
+            )
+
         if gate["name"] not in _IMPLEMENTED_GATES:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} is not implemented.'
                 f'Implemented gates: {_IMPLEMENTED_GATES}'
             )
 
-        if not isinstance(gate["target_qubit"], int):
+        if not isinstance(gate["target_qubit"], list):
             raise QuantestPyTestCircuitError(
-                'gate["target_qubit"]s type must be integer'
+                'gate["target_qubit"] must be a list'
             )
 
-        if gate["name"] in ["cx", "cnot"] \
-                and "control_qubit" not in gate.keys():
+        if not isinstance(gate["control_qubit"], list):
             raise QuantestPyTestCircuitError(
-                "gate must contain 'control_qubit' as a key "
-                f'when using {gate["name"]}.'
+                'gate["control_qubit"] must be a list'
             )
 
         self._gates.append(gate)
@@ -185,27 +189,27 @@ class TestCircuit:
             if gate["name"] == "x":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _X, gate["target_qubit"])
+                        _X, gate["target_qubit"][0])
 
             elif gate["name"] == "h":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _H, gate["target_qubit"])
+                        _H, gate["target_qubit"][0])
 
             elif gate["name"] == "s":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _S, gate["target_qubit"])
+                        _S, gate["target_qubit"][0])
 
             elif gate["name"] == "t":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _T, gate["target_qubit"])
+                        _T, gate["target_qubit"][0])
 
             elif gate["name"] == "cx" or gate["name"] == "cnot":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cnot_gate(
-                        gate["control_qubit"], gate["target_qubit"])
+                        gate["control_qubit"][0], gate["target_qubit"][0])
 
             else:
                 raise
@@ -224,8 +228,9 @@ if __name__ == "__main__":
     """Example showing how to use TestCircuit class."""
 
     test_circ = TestCircuit(3)
-    test_circ.add_gate({"name": "x", "target_qubit": 0})
-    test_circ.add_gate({"name": "cx", "target_qubit": 2, "control_qubit": 0})
-    test_circ.add_gate({"name": "h", "target_qubit": 0})
+    test_circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": []})
+    test_circ.add_gate(
+        {"name": "cx", "target_qubit": [2], "control_qubit": [0]})
+    test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": []})
 
     state_vector = test_circ._get_state_vector()
