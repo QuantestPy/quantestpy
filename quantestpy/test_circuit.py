@@ -18,14 +18,11 @@ class TestCircuit:
     will be executed using the methods of this class.
     """
 
-    def __init__(self,
-                 num_qubit: int,
-                 from_right_to_left_for_qubit_ids: bool = False):
+    def __init__(self, num_qubit: int):
         self._gates = []
         self._qubits = [0 for _ in range(num_qubit)]
         self._num_qubit = num_qubit
-        self._from_right_to_left_for_qubit_ids = \
-            from_right_to_left_for_qubit_ids
+        self._from_right_to_left_for_qubit_ids = False
         self._binary_to_vector = None
 
     def add_gate(self, gate: dict) -> None:
