@@ -86,8 +86,9 @@ class TestTestCircuit(unittest.TestCase):
 
     def test__get_state_vector_2(self,):
         circ = TestCircuit(2)
-        circ.add_gate({"name": "h", "target_qubit": 0})
-        circ.add_gate({"name": "cnot", "control_qubit": 0, "target_qubit": 1})
+        circ.add_gate({"name": "h", "target_qubit": 0, "control_value": []})
+        circ.add_gate({"name": "cnot", "control_qubit": 0, "target_qubit": 1,
+                       "control_value": [1]})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([1, 0, 0, 1]) / np.sqrt(2.)
@@ -97,9 +98,10 @@ class TestTestCircuit(unittest.TestCase):
 
     def test__get_state_vector_3(self,):
         circ = TestCircuit(2)
-        circ.add_gate({"name": "x", "target_qubit": 0})
-        circ.add_gate({"name": "x", "target_qubit": 1})
-        circ.add_gate({"name": "cnot", "control_qubit": 0, "target_qubit": 1})
+        circ.add_gate({"name": "x", "target_qubit": 0, "control_value": []})
+        circ.add_gate({"name": "x", "target_qubit": 1, "control_value": []})
+        circ.add_gate({"name": "cnot", "control_qubit": 0, "target_qubit": 1,
+                       "control_value": [1]})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([0, 0, 1, 0])
@@ -109,9 +111,10 @@ class TestTestCircuit(unittest.TestCase):
 
     def test__get_state_vector_4(self,):
         circ = TestCircuit(3)
-        circ.add_gate({"name": "x", "target_qubit": 0})
-        circ.add_gate({"name": "cx", "control_qubit": 0, "target_qubit": 2})
-        circ.add_gate({"name": "h", "target_qubit": 0})
+        circ.add_gate({"name": "x", "target_qubit": 0, "control_value": []})
+        circ.add_gate({"name": "cx", "control_qubit": 0, "target_qubit": 2,
+                       "control_value": [1]})
+        circ.add_gate({"name": "h", "target_qubit": 0, "control_value": []})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([0, 1, 0, 0, 0, -1, 0, 0]) / np.sqrt(2.)
@@ -122,7 +125,7 @@ class TestTestCircuit(unittest.TestCase):
     def test__create_all_qubit_gate_from_cnot_gate_1(self,):
         circ = TestCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
-            control=0, target=1
+            control=0, target=1, control_value=1
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -137,7 +140,7 @@ class TestTestCircuit(unittest.TestCase):
         circ = TestCircuit(2)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
-            control=0, target=1
+            control=0, target=1, control_value=1
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -151,7 +154,7 @@ class TestTestCircuit(unittest.TestCase):
     def test__create_all_qubit_gate_from_cnot_gate_3(self,):
         circ = TestCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
-            control=1, target=0
+            control=1, target=0, control_value=1
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -166,7 +169,7 @@ class TestTestCircuit(unittest.TestCase):
         circ = TestCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
-            control=0, target=2
+            control=0, target=2, control_value=1
         )
 
         expected_gate = np.array([
@@ -178,6 +181,20 @@ class TestTestCircuit(unittest.TestCase):
             [0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
             [0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j],
             [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test__create_all_qubit_gate_from_cnot_gate_5(self,):
+        circ = TestCircuit(2)
+        actual_gate = circ._create_all_qubit_gate_from_cnot_gate(
+            control=0, target=1, control_value=0
+        )
+
+        expected_gate = np.array([[0, 1, 0, 0],
+                                  [1, 0, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, 1]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
