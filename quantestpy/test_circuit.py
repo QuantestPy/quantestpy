@@ -8,7 +8,8 @@ _X = np.array([[0, 1], [1, 0]])
 _H = np.array([[1, 1], [1, -1]])/np.sqrt(2.)
 _S = np.array([[1, 0], [0, 1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
-_IMPLEMENTED_GATES = ["x", "h", "s", "t", "cx", "cnot"]
+_IMPLEMENTED_SINGLE_QUBIT_GATES = ["x", "h", "s", "t"]
+_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES + ["cx", "cnot"]
 
 
 class TestCircuit:
@@ -69,6 +70,26 @@ class TestCircuit:
         if not isinstance(gate["control_qubit"], list):
             raise QuantestPyTestCircuitError(
                 'gate["control_qubit"] must be a list'
+            )
+
+        if gate["name"] in _IMPLEMENTED_GATES and \
+                len(gate["target_qubit"]) != 1:
+            raise QuantestPyTestCircuitError(
+                "a gate must have a list containing exactly 1 element "
+                "for 'target_qubit'."
+            )
+
+        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
+                len(gate["control_qubit"]) != 0:
+            raise QuantestPyTestCircuitError(
+                "single qubit gate must have an empty list for "
+                "'control_qubit'."
+            )
+
+        if gate["name"] in ["cx", "cnot"] and len(gate["control_qubit"]) != 1:
+            raise QuantestPyTestCircuitError(
+                "cx and cnot gate must have a list containing exactly 1 "
+                "element for 'control_qubit'."
             )
 
         self._gates.append(gate)
