@@ -36,7 +36,7 @@ def assert_equal_to_operator(
     test_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
 
-    operator_from_test_circuit = test_circuit._get_circuit_operator()
+    operator_from_test_circuit = test_circuit._get_whole_gates()
 
     operator.assert_equal(
         operator_from_test_circuit,
