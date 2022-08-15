@@ -25,6 +25,7 @@ class TestCircuit:
         self._num_qubit = num_qubit
         self._from_right_to_left_for_qubit_ids = False
         self._binary_to_vector = None
+        self._initial_state_vector = None
 
     def add_gate(self, gate: dict) -> None:
         """
@@ -210,15 +211,33 @@ class TestCircuit:
 
         return all_qubit_gate
 
+    def set_initial_state_vector(self, initial_state_vector: np.ndarray) \
+            -> None:
+
+        if not isinstance(initial_state_vector, np.ndarray):
+            raise QuantestPyTestCircuitError(
+                'type of initial state vector must be numpy.ndarray.'
+            )
+
+        if initial_state_vector.shape != (2**self._num_qubit,) and \
+                initial_state_vector.shape != (2**self._num_qubit, 1):
+            raise QuantestPyTestCircuitError(
+                "shape of initial state vector is invalid. It must be either "
+                "(2**num_qubit,) or (2**num_qubit, 1)."
+            )
+
+        self._initial_state_vector = initial_state_vector
+
     def _get_state_vector(self,) -> np.ndarray:
 
-        # initialize state vector
-        state_vec = [1.+0j, 0.+0j]
-        state_vec += [0 for _ in range(2**self._num_qubit-2)]
-        state_vec = np.array(state_vec)
+        # initialize state vector if not given
+        if self._initial_state_vector is None:
+            state_vec = [1.+0j, 0.+0j]
+            state_vec += [0 for _ in range(2**self._num_qubit-2)]
+            self._initial_state_vector = np.array(state_vec)
 
         whole_gates = self._get_whole_gates()
-        state_vec = np.matmul(whole_gates, state_vec)
+        state_vec = np.matmul(whole_gates, self._initial_state_vector)
 
         return state_vec
 

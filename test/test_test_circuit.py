@@ -206,3 +206,28 @@ class TestTestCircuit(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_set_initial_state_vector_1(self,):
+        circ = TestCircuit(2)
+        init_vec = np.array([1, 1j, -1, -1]) / 2.
+        circ.set_initial_state_vector(init_vec)
+        actual_vec = circ._get_state_vector()
+
+        expected_vec = init_vec
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_vec, expected_vec))
+
+    def test_set_initial_state_vector_2(self,):
+        circ = TestCircuit(2)
+        init_vec = np.array([1, 0, 1, 0]) / np.sqrt(2.)
+        circ.set_initial_state_vector(init_vec)
+        circ.add_gate(
+            {"name": "cnot", "control_qubit": [0], "target_qubit": [1],
+             "control_value": [1]})
+        actual_vec = circ._get_state_vector()
+
+        expected_vec = np.array([1, 0, 0, 1]) / np.sqrt(2.)
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_vec, expected_vec))
