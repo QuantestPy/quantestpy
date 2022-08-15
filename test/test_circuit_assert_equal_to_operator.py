@@ -23,9 +23,12 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
     def setUp(self) -> None:
         """Prepare the Bell state"""
         self.test_circ = TestCircuit(2)
-        self.test_circ.add_gate({"name": "h", "target_qubit": 0})
         self.test_circ.add_gate(
-            {"name": "cx", "control_qubit": 0,  "target_qubit": 1})
+            {"name": "h", "target_qubit": [0], "control_qubit": [],
+             "control_value": []})
+        self.test_circ.add_gate(
+            {"name": "cx", "control_qubit": [0],  "target_qubit": [1],
+             "control_value": [1]})
 
     def tearDown(self) -> None:
         del self.test_circ

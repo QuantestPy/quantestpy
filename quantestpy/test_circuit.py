@@ -29,8 +29,10 @@ class TestCircuit:
     def add_gate(self, gate: dict) -> None:
         """
         Example
-        gate = {"name": "x", "target_qubit": [1], "control_qubit": []}
-        gate = {"name": "cx", "target_qubit": [1], "control_qubit": [0]}
+        gate = {"name": "x", "target_qubit": [1], "control_qubit": [],
+                "control_value": []}
+        gate = {"name": "cx", "target_qubit": [1], "control_qubit": [0],
+                "control_value": [1]}
         """
         if not isinstance(gate, dict):
             raise QuantestPyTestCircuitError(
@@ -53,6 +55,11 @@ class TestCircuit:
                 "gate must contain 'control_qubit' as a key."
             )
 
+        if "control_value" not in gate.keys():
+            raise QuantestPyTestCircuitError(
+                "gate must contain 'control_value' as a key."
+            )
+
         if gate["name"] not in _IMPLEMENTED_GATES:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} is not implemented.'
@@ -69,6 +76,11 @@ class TestCircuit:
                 'gate["control_qubit"] must be a list'
             )
 
+        if not isinstance(gate["control_value"], list):
+            raise QuantestPyTestCircuitError(
+                'gate["control_value"] must be a list'
+            )
+
         if gate["name"] in _IMPLEMENTED_GATES and \
                 len(gate["target_qubit"]) != 1:
             raise QuantestPyTestCircuitError(
@@ -83,10 +95,23 @@ class TestCircuit:
                 "'control_qubit'."
             )
 
+        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
+                len(gate["control_value"]) != 0:
+            raise QuantestPyTestCircuitError(
+                "single qubit gate must have an empty list for "
+                "'control_value'."
+            )
+
         if gate["name"] in ["cx", "cnot"] and len(gate["control_qubit"]) != 1:
             raise QuantestPyTestCircuitError(
                 "cx and cnot gate must have a list containing exactly 1 "
                 "element for 'control_qubit'."
+            )
+
+        if gate["name"] in ["cx", "cnot"] and len(gate["control_value"]) != 1:
+            raise QuantestPyTestCircuitError(
+                "cx and cnot gate must have a list containing exactly 1 "
+                "element for 'control_value'."
             )
 
         self._gates.append(gate)
@@ -148,7 +173,7 @@ class TestCircuit:
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cnot_gate(
-            self, control: int, target: int) -> np.ndarray:
+            self, control: int, target: int, control_value: int) -> np.ndarray:
 
         if self._binary_to_vector is None:
             self._binary_to_vector = {}
@@ -168,7 +193,7 @@ class TestCircuit:
         for binary_before_cnot in self._binary_to_vector.keys():
 
             binary_tmp = list(binary_before_cnot)
-            if binary_tmp[control] == "1":
+            if binary_tmp[control] == str(control_value):
                 if binary_tmp[target] == "1":
                     binary_tmp[target] = "0"
                 elif binary_tmp[target] == "0":
@@ -227,7 +252,9 @@ class TestCircuit:
             elif gate["name"] == "cx" or gate["name"] == "cnot":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cnot_gate(
-                        gate["control_qubit"][0], gate["target_qubit"][0])
+                        gate["control_qubit"][0],
+                        gate["target_qubit"][0],
+                        gate["control_value"][0])
 
             else:
                 raise
@@ -246,9 +273,12 @@ if __name__ == "__main__":
     """Example showing how to use TestCircuit class."""
 
     test_circ = TestCircuit(3)
-    test_circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": []})
+    test_circ.add_gate({"name": "x", "target_qubit": [0],
+                        "control_qubit": [], "control_value": []})
     test_circ.add_gate(
-        {"name": "cx", "target_qubit": [2], "control_qubit": [0]})
-    test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": []})
+        {"name": "cx", "target_qubit": [2], "control_qubit": [0],
+         "control_value": [1]})
+    test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
+                        "control_value": []})
 
     state_vector = test_circ._get_state_vector()
