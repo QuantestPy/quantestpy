@@ -1,3 +1,4 @@
+import unittest
 import numpy as np
 from typing import Union
 
@@ -5,6 +6,8 @@ from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.test_circuit import cvt_openqasm_to_test_circuit
+
+ut_test_case = unittest.TestCase()
 
 
 def assert_equal_to_operator(
@@ -49,7 +52,8 @@ def assert_equal_to_operator(
 def assert_is_zero(qasm: str = None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
-                   number_of_decimal_places: int = 5) -> None:
+                   number_of_decimal_places: int = 5,
+                   msg=None) -> None:
 
     # Memo220805JN: the following input checker may be common for the other
     # functions in this module, thus can be one function.
@@ -79,7 +83,7 @@ def assert_is_zero(qasm: str = None,
     if qubits is None:
         qubits = [i for i in range(num_qubit)]
 
-    def _assert_is_zero_for_one_qubit(qubit):
+    def _assert_is_zero_for_one_qubit(qubit: int) -> bool:
 
         if qubit > num_qubit-1:
             raise QuantestPyError(
@@ -97,10 +101,17 @@ def assert_is_zero(qasm: str = None,
                 clipped_state_vec, decimals=number_of_decimal_places)
 
             if not np.all(clipped_state_vec == 0.):
-                raise QuantestPyAssertionError(
-                    f"qubit {qubit} is either non-zero or "
-                    "entangled with other qubits."
-                )
+                return True  # = assertion error
 
+        return False  # = assertion non-error
+
+    error_qubits = []
     for qubit in qubits:
-        _assert_is_zero_for_one_qubit(qubit)
+        if _assert_is_zero_for_one_qubit(qubit):
+            error_qubits.append(qubit)
+
+    if len(error_qubits) > 0:
+        error_msg = f"qubit(s) {error_qubits} are either non-zero or " \
+            + "entangled with other qubits."
+        msg = ut_test_case._formatMessage(msg, error_msg)
+        raise QuantestPyAssertionError(msg)
