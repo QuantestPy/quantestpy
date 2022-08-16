@@ -219,11 +219,10 @@ class TestCircuit:
                 'type of initial state vector must be numpy.ndarray.'
             )
 
-        if initial_state_vector.shape != (2**self._num_qubit,) and \
-                initial_state_vector.shape != (2**self._num_qubit, 1):
+        if initial_state_vector.shape != (2**self._num_qubit,):
             raise QuantestPyTestCircuitError(
-                "shape of initial state vector is invalid. It must be either "
-                "(2**num_qubit,) or (2**num_qubit, 1)."
+                "shape of initial state vector is invalid. It must be "
+                "(2**num_qubit,)."
             )
 
         self._initial_state_vector = initial_state_vector
