@@ -6,7 +6,8 @@ from qiskit import QuantumCircuit
 from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
-from quantestpy.converter import _cvt_qiskit_to_test_circuit, _cvt_openqasm_to_test_circuit
+from quantestpy.converter import _cvt_qiskit_to_test_circuit
+from quantestpy.converter import _cvt_openqasm_to_test_circuit
 
 
 ut_test_case = unittest.TestCase()
@@ -31,7 +32,8 @@ def assert_equal_to_operator(
             or (qasm is not None and test_circuit is not None) \
             or (qiskit_circuit is not None and test_circuit is not None):
         raise QuantestPyError(
-            "You need to choose one parameter of Qasm, qiskit_circuit and test circuit."
+            "You need to choose one parameter of Qasm, \
+                qiskit_circuit and test circuit."
         )
 
     if qasm is not None:
@@ -71,7 +73,8 @@ def assert_is_zero(qasm: str = None,
             or (qasm is not None and test_circuit is not None) \
             or (qiskit_circuit is not None and test_circuit is not None):
         raise QuantestPyError(
-            "You need to choose one parameter of Qasm, qiskit_circuit and test circuit."
+            "You need to choose one parameter of Qasm, \
+                qiskit_circuit and test circuit."
         )
 
     if qasm is not None:

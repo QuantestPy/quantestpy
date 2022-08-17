@@ -19,7 +19,7 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit: QuantumCircuit) -> TestCircuit:
             control_qubit = []
             target_qubit = [gate["qubits"][0]]
 
-        # parameter is necessary after implementing parameter in test_circuit.py
+        # parameter is necessary after implementing parameter in test_circuit
         # if "params" in gate:
         #    parameter = gate["params"]
         # else:
@@ -31,7 +31,8 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit: QuantumCircuit) -> TestCircuit:
             control_value = []
 
         gate_test = dict(name=gate["name"], target_qubit=target_qubit,
-                         control_qubit=control_qubit, control_value=control_value)  # , parameter=parameter)
+                         control_qubit=control_qubit,
+                         control_value=control_value)  # , parameter=parameter)
         circuit.add_gate(gate_test)
 
     return circuit
