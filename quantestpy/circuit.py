@@ -195,9 +195,8 @@ def assert_ancilla_is_zero(qasm: str = None,
         return None  # = assertion non-error
 
     error_qubits = []
-    for error_msg_from_assert_is_zero in error_msgs_from_assert_is_zero:
-        error_qubits_str_list = \
-            re.findall(r'\d+', error_msg_from_assert_is_zero)
+    for err_m_from_assert_is_zero in list(set(error_msgs_from_assert_is_zero)):
+        error_qubits_str_list = re.findall(r'\d+', err_m_from_assert_is_zero)
 
         for error_qubit_str in error_qubits_str_list:
             error_qubits.append(int(error_qubit_str))
