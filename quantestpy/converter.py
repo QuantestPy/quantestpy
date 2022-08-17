@@ -2,7 +2,8 @@ from quantestpy import TestCircuit
 from qiskit import QuantumCircuit, assemble
 
 
-def _cvt_qiskit_to_test_circuit(qiskit_circuit: QuantumCircuit) -> TestCircuit:
+def _cvt_qiskit_to_test_circuit(
+        qiskit_circuit: QuantumCircuit) -> TestCircuit:
 
     qobj = assemble(qiskit_circuit)
     qobj_dict = qobj.to_dict()
@@ -30,9 +31,11 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit: QuantumCircuit) -> TestCircuit:
         else:
             control_value = []
 
-        gate_test = dict(name=gate["name"], target_qubit=target_qubit,
+        gate_test = dict(name=gate["name"],
+                         target_qubit=target_qubit,
                          control_qubit=control_qubit,
-                         control_value=control_value)  # , parameter=parameter)
+                         control_value=control_value)
+        # , parameter=parameter)
         circuit.add_gate(gate_test)
 
     return circuit
