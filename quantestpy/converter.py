@@ -12,13 +12,12 @@ def _cvt_qiskit_to_test_circuit(
     num_qubits = experiments['config']['n_qubits']
     circuit = TestCircuit(num_qubits)
 
+    # When num_qubits > 2, we must change the below for statement.
     for gate in gates:
-        if len(gate["qubits"]) == 2:
-            control_qubit = [gate["qubits"][0]]
-            target_qubit = [gate["qubits"][1]]
-        else:
+        if len(gate["qubits"]) == 1:
             control_qubit = []
-            target_qubit = [gate["qubits"][0]]
+        else:
+            control_qubit = [gate["qubits"][-2]]
 
         # parameter is necessary after implementing parameter in test_circuit
         # if "params" in gate:
@@ -32,7 +31,7 @@ def _cvt_qiskit_to_test_circuit(
             control_value = []
 
         gate_test = dict(name=gate["name"],
-                         target_qubit=target_qubit,
+                         target_qubit=[gate["qubits"][-1]],
                          control_qubit=control_qubit,
                          control_value=control_value)
         # , parameter=parameter)
