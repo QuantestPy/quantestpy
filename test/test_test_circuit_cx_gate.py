@@ -9,7 +9,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit
+    $ python -m unittest test.test_test_circuit_cx_gate
     ........
     ----------------------------------------------------------------------
     Ran 8 tests in 0.009s
