@@ -120,9 +120,9 @@ def assert_is_zero(qasm: str = None,
         raise QuantestPyAssertionError(msg)
 
 
-def assert_ancilla_is_zero(qasm: str = None,
+def assert_ancilla_is_zero(ancilla_qubits: list,
+                           qasm: str = None,
                            test_circuit: TestCircuit = None,
-                           ancilla_qubits: list = None,
                            number_of_decimal_places: int = 5,
                            msg=None) -> None:
 
@@ -140,11 +140,6 @@ def assert_ancilla_is_zero(qasm: str = None,
         test_circuit = cvt_openqasm_to_test_circuit(qasm)
         raise QuantestPyError(
             "Loading qasm is not yet implemented."
-        )
-
-    if ancilla_qubits is None:
-        raise QuantestPyError(
-            "ancilla_qubits must be given."
         )
 
     if not isinstance(ancilla_qubits, list):
