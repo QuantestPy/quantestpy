@@ -1,0 +1,96 @@
+import unittest
+import numpy as np
+
+from quantestpy import TestCircuit
+
+
+class TestTestCircuitCXGate(unittest.TestCase):
+    """
+    How to execute this test:
+    $ pwd
+    {Your directory where you git-cloned quantestpy}/quantestpy
+    $ python -m unittest test.test_test_circuit
+    ........
+    ----------------------------------------------------------------------
+    Ran 8 tests in 0.009s
+
+    OK
+    $
+    """
+
+    def test_cx_regular_qubit_order(self,):
+        circ = TestCircuit(2)
+        actual_gate = circ._create_all_qubit_gate_from_cx_gate(
+            control_qubit=[0], target_qubit=[1], control_value=[1]
+        )
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 0, 1],
+                                  [0, 0, 1, 0]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_cx_qiskit_qubit_order(self,):
+        circ = TestCircuit(2)
+        circ._from_right_to_left_for_qubit_ids = True
+        actual_gate = circ._create_all_qubit_gate_from_cx_gate(
+            control_qubit=[0], target_qubit=[1], control_value=[1]
+        )
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 0, 0, 1],
+                                  [0, 0, 1, 0],
+                                  [0, 1, 0, 0]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_cx_flip_control_target(self,):
+        circ = TestCircuit(2)
+        actual_gate = circ._create_all_qubit_gate_from_cx_gate(
+            control_qubit=[1], target_qubit=[0], control_value=[1]
+        )
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 0, 0, 1],
+                                  [0, 0, 1, 0],
+                                  [0, 1, 0, 0]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_cx_three_qubits_qiskit_qubit_order(self,):
+        circ = TestCircuit(3)
+        circ._from_right_to_left_for_qubit_ids = True
+        actual_gate = circ._create_all_qubit_gate_from_cx_gate(
+            control_qubit=[0], target_qubit=[2], control_value=[1]
+        )
+
+        expected_gate = np.array([
+            [1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+            [0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
+            [0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+            [0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j],
+            [0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+            [0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+            [0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j],
+            [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j, 0.+0.j]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_cx_control_value_is_zero(self,):
+        circ = TestCircuit(2)
+        actual_gate = circ._create_all_qubit_gate_from_cx_gate(
+            control_qubit=[0], target_qubit=[1], control_value=[0]
+        )
+
+        expected_gate = np.array([[0, 1, 0, 0],
+                                  [1, 0, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, 1]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
