@@ -17,7 +17,7 @@ def _cvt_qiskit_to_test_circuit(
         if len(gate["qubits"]) == 1:
             control_qubit = []
         else:
-            control_qubit = gate["qubits"][:-2]
+            control_qubit = gate["qubits"][:-1]
 
         # parameter is necessary after implementing parameter in test_circuit
         # if "params" in gate:
