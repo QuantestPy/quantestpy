@@ -115,6 +115,27 @@ class TestCircuit:
                 "element for 'control_value'."
             )
 
+        for qubit in gate["target_qubit"]:
+            if qubit > self._num_qubit - 1:
+                raise QuantestPyTestCircuitError(
+                    f"Index {qubit} in target_qubit out of range for "
+                    f"test_circuit size {self._num_qubit}."
+                )
+
+        for qubit in gate["control_qubit"]:
+            if qubit > self._num_qubit - 1:
+                raise QuantestPyTestCircuitError(
+                    f"Index {qubit} in control_qubit out of range for "
+                    f"test_circuit size {self._num_qubit}."
+                )
+
+        for value in gate["control_value"]:
+            if value not in [0, 1]:
+                raise QuantestPyTestCircuitError(
+                    f"Value {value} in contro_value is not acceptable. "
+                    f"It must be either 0 or 1."
+                )
+
         self._gates.append(gate)
 
     @staticmethod
