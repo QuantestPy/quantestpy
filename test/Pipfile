@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 numpy = "*"
 flake8 = "*"
+qiskit = "==0.37.*"
 
 [requires]
 python_version = "3.8"
