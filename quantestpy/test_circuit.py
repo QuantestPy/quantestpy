@@ -132,7 +132,7 @@ class TestCircuit:
         for value in gate["control_value"]:
             if value not in [0, 1]:
                 raise QuantestPyTestCircuitError(
-                    f"Value {value} in contro_value is not acceptable. "
+                    f"Value {value} in control_value is not acceptable. "
                     f"It must be either 0 or 1."
                 )
 
