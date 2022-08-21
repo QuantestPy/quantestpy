@@ -116,14 +116,14 @@ class TestCircuit:
             )
 
         for qubit in gate["target_qubit"]:
-            if qubit > self._num_qubit - 1:
+            if qubit > self._num_qubit - 1 or qubit < 0:
                 raise QuantestPyTestCircuitError(
                     f"Index {qubit} in target_qubit out of range for "
                     f"test_circuit size {self._num_qubit}."
                 )
 
         for qubit in gate["control_qubit"]:
-            if qubit > self._num_qubit - 1:
+            if qubit > self._num_qubit - 1 or qubit < 0:
                 raise QuantestPyTestCircuitError(
                     f"Index {qubit} in control_qubit out of range for "
                     f"test_circuit size {self._num_qubit}."
