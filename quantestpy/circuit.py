@@ -147,7 +147,6 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         )
 
     if qasm is not None:
-        test_circuit = cvt_openqasm_to_test_circuit(qasm)
         raise QuantestPyError(
             "Loading qasm is not yet implemented."
         )
