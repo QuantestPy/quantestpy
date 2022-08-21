@@ -32,3 +32,4 @@ jobs:
           python3 -m unittest test.test_test_circuit
           python3 -m unittest test.test_circuit_assert_equal_to_operator
           python3 -m unittest test.test_circuit_assert_is_zero
+          python3 -m unittest test.test_test_circuit_add_gate
