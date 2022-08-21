@@ -1,6 +1,9 @@
 import unittest
 import numpy as np
 from typing import Union
+import itertools
+import traceback
+import re
 from qiskit import QuantumCircuit
 
 from quantestpy import operator
@@ -125,3 +128,86 @@ def assert_is_zero(qasm: str = None,
             + "entangled with other qubits."
         msg = ut_test_case._formatMessage(msg, error_msg)
         raise QuantestPyAssertionError(msg)
+
+
+def assert_ancilla_is_zero(ancilla_qubits: list,
+                           qasm: str = None,
+                           test_circuit: TestCircuit = None,
+                           number_of_decimal_places: int = 5,
+                           msg=None) -> None:
+
+    if qasm is None and test_circuit is None:
+        raise QuantestPyError(
+            "Missing qasm or test circuit."
+        )
+
+    if qasm is not None and test_circuit is not None:
+        raise QuantestPyError(
+            "Qasm and test circuit must not both be given."
+        )
+
+    if qasm is not None:
+        raise QuantestPyError(
+            "Loading qasm is not yet implemented."
+        )
+
+    if not isinstance(ancilla_qubits, list):
+        raise QuantestPyError(
+            "ancilla_qubits must be a list of integer(s) as qubit's ID(s)."
+        )
+
+    num_qubit = test_circuit._num_qubit
+
+    # system qubits <=> ancilla qubits
+    system_qubits = [qubit for qubit in range(num_qubit)
+                     if qubit not in ancilla_qubits]
+
+    def _add_x_gate_in_front(gates: list, qubit: int) -> dict:
+        x_gate = {'name': 'x',
+                  'target_qubit': [qubit],
+                  'control_qubit': [],
+                  'control_value': []}
+        gates.insert(0, x_gate)
+
+    all_combinations_of_system_qubits = []
+    for size in range(len(system_qubits)+1):
+        c = list(itertools.combinations(system_qubits, size))
+        all_combinations_of_system_qubits += c
+
+    error_msgs_from_assert_is_zero = []
+    for comb_of_sys_qubits in all_combinations_of_system_qubits:
+
+        # add x gate(s) in test_circuit
+        for system_qubit in comb_of_sys_qubits:
+            _add_x_gate_in_front(test_circuit._gates, system_qubit)
+
+        # assertion using assert_is_zero
+        try:
+            assert_is_zero(test_circuit=test_circuit,
+                           qubits=ancilla_qubits,
+                           number_of_decimal_places=number_of_decimal_places)
+
+        except QuantestPyAssertionError as e:
+            t = traceback.format_exception_only(type(e), e)[0]
+            error_msgs_from_assert_is_zero.append(t)
+
+        # remove x gate(s) from test_circuit, i.e. reset test_circuit.
+        for _ in comb_of_sys_qubits:
+            del test_circuit._gates[0]
+
+    if len(error_msgs_from_assert_is_zero) == 0:
+        return None  # = assertion non-error
+
+    error_qubits = []
+    for err_m_from_assert_is_zero in list(set(error_msgs_from_assert_is_zero)):
+        error_qubits_str_list = re.findall(r'\d+', err_m_from_assert_is_zero)
+
+        for error_qubit_str in error_qubits_str_list:
+            error_qubits.append(int(error_qubit_str))
+
+    error_qubits = list(set(error_qubits))
+
+    error_msg = f"qubit(s) {error_qubits} are either non-zero or " \
+        + "entangled with other qubits."
+    msg = ut_test_case._formatMessage(msg, error_msg)
+    raise QuantestPyAssertionError(msg)
