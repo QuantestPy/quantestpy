@@ -9,7 +9,7 @@ _H = np.array([[1, 1], [1, -1]])/np.sqrt(2.)
 _S = np.array([[1, 0], [0, 1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
 _IMPLEMENTED_SINGLE_QUBIT_GATES = ["x", "h", "s", "t"]
-_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES + ["cx", "cnot"]
+_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES + ["cx"]
 
 
 class TestCircuit:
@@ -82,11 +82,16 @@ class TestCircuit:
                 'gate["control_value"] must be a list'
             )
 
-        if gate["name"] in _IMPLEMENTED_GATES and \
+        if len(gate["control_qubit"]) != len(gate["control_value"]):
+            raise QuantestPyTestCircuitError(
+                "control_qubit and control_value must have the same lenght."
+            )
+
+        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
                 len(gate["target_qubit"]) != 1:
             raise QuantestPyTestCircuitError(
-                "a gate must have a list containing exactly 1 element "
-                "for 'target_qubit'."
+                "single qubit gate must have a list containing exactly 1 "
+                "element for 'target_qubit'."
             )
 
         if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
@@ -103,16 +108,15 @@ class TestCircuit:
                 "'control_value'."
             )
 
-        if gate["name"] in ["cx", "cnot"] and len(gate["control_qubit"]) != 1:
+        if gate["name"] == "cx" and len(gate["control_qubit"]) < 1:
             raise QuantestPyTestCircuitError(
-                "cx and cnot gate must have a list containing exactly 1 "
-                "element for 'control_qubit'."
+                "cx gate must not have an empty list for "
+                "'control_qubit' and 'control_value'."
             )
 
-        if gate["name"] in ["cx", "cnot"] and len(gate["control_value"]) != 1:
+        if gate["name"] == "cx" and len(gate["target_qubit"]) < 1:
             raise QuantestPyTestCircuitError(
-                "cx and cnot gate must have a list containing exactly 1 "
-                "element for 'control_value'."
+                "cx gate must not have an empty list for 'target_qubit'."
             )
 
         self._gates.append(gate)
@@ -173,8 +177,11 @@ class TestCircuit:
 
         return all_qubit_gate
 
-    def _create_all_qubit_gate_from_cnot_gate(
-            self, control: int, target: int, control_value: int) -> np.ndarray:
+    def _create_all_qubit_gate_from_cx_gate(
+            self,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
 
         if self._binary_to_vector is None:
             self._binary_to_vector = {}
@@ -191,23 +198,26 @@ class TestCircuit:
         all_qubit_gate = np.zeros(
             (2**self._num_qubit, 2**self._num_qubit))
 
-        for binary_before_cnot in self._binary_to_vector.keys():
+        for binary_before_cx in self._binary_to_vector.keys():
 
-            binary_tmp = list(binary_before_cnot)
-            if binary_tmp[control] == str(control_value):
-                if binary_tmp[target] == "1":
-                    binary_tmp[target] = "0"
-                elif binary_tmp[target] == "0":
-                    binary_tmp[target] = "1"
-                else:
-                    raise
+            binary_tmp = np.array([int(i) for i in list(binary_before_cx)])
 
-            binary_after_cnot = "".join(binary_tmp)
+            if np.all(binary_tmp[control_qubit] == control_value):
 
-            vector_after_cnot = self._binary_to_vector[binary_after_cnot]
-            vector_before_cnot = self._binary_to_vector[binary_before_cnot]
+                for target in target_qubit:
+                    if binary_tmp[target] == 1:
+                        binary_tmp[target] = 0
+                    elif binary_tmp[target] == 0:
+                        binary_tmp[target] = 1
+                    else:
+                        raise
+
+            binary_after_cx = "".join([str(i) for i in binary_tmp])
+
+            vector_after_cx = self._binary_to_vector[binary_after_cx]
+            vector_before_cx = self._binary_to_vector[binary_before_cx]
             all_qubit_gate += \
-                vector_after_cnot.reshape(-1, 1) * vector_before_cnot
+                vector_after_cx.reshape(-1, 1) * vector_before_cx
 
         return all_qubit_gate
 
@@ -267,12 +277,12 @@ class TestCircuit:
                     self._create_all_qubit_gate_from_single_qubit_gate(
                         _T, gate["target_qubit"][0])
 
-            elif gate["name"] == "cx" or gate["name"] == "cnot":
+            elif gate["name"] == "cx":
                 all_qubit_gate = \
-                    self._create_all_qubit_gate_from_cnot_gate(
-                        gate["control_qubit"][0],
-                        gate["target_qubit"][0],
-                        gate["control_value"][0])
+                    self._create_all_qubit_gate_from_cx_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"])
 
             else:
                 raise
