@@ -1,11 +1,14 @@
 import unittest
 import numpy as np
 from typing import Union
+from qiskit import QuantumCircuit
 
 from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
-from quantestpy.test_circuit import cvt_openqasm_to_test_circuit
+from quantestpy.converter import _cvt_qiskit_to_test_circuit
+from quantestpy.converter import _cvt_openqasm_to_test_circuit
+
 
 ut_test_case = unittest.TestCase()
 
@@ -13,28 +16,31 @@ ut_test_case = unittest.TestCase()
 def assert_equal_to_operator(
         operator_: Union[np.ndarray, np.matrix],
         qasm: str = None,
+        qiskit_circuit: QuantumCircuit = None,
         test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         msg=None) -> None:
 
-    #
-    if qasm is None and test_circuit is None:
+    if qasm is None and qiskit_circuit is None and test_circuit is None:
         raise QuantestPyError(
-            "Missing qasm or test circuit."
+            "Missing qasm or qiskit_circuit or test circuit."
         )
 
-    if qasm is not None and test_circuit is not None:
+    if (qasm is not None and qiskit_circuit is not None) \
+            or (qasm is not None and test_circuit is not None) \
+            or (qiskit_circuit is not None and test_circuit is not None):
         raise QuantestPyError(
-            "Qasm and test circuit must not both be given."
+            "You need to choose one parameter of Qasm, \
+                qiskit_circuit and test circuit."
         )
 
     if qasm is not None:
-        test_circuit = cvt_openqasm_to_test_circuit(qasm)
-        raise QuantestPyError(
-            "Loading qasm is not yet implemented."
-        )
+        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
+
+    if qiskit_circuit is not None:
+        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     test_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
@@ -50,6 +56,7 @@ def assert_equal_to_operator(
 
 
 def assert_is_zero(qasm: str = None,
+                   qiskit_circuit: QuantumCircuit = None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
                    number_of_decimal_places: int = 5,
@@ -57,21 +64,24 @@ def assert_is_zero(qasm: str = None,
 
     # Memo220805JN: the following input checker may be common for the other
     # functions in this module, thus can be one function.
-    if qasm is None and test_circuit is None:
+    if qasm is None and qiskit_circuit is None and test_circuit is None:
         raise QuantestPyError(
-            "Missing qasm or test circuit."
+            "Missing qasm or qiskit_circuit or test circuit."
         )
 
-    if qasm is not None and test_circuit is not None:
+    if (qasm is not None and qiskit_circuit is not None) \
+            or (qasm is not None and test_circuit is not None) \
+            or (qiskit_circuit is not None and test_circuit is not None):
         raise QuantestPyError(
-            "Qasm and test circuit must not both be given."
+            "You need to choose one parameter of Qasm, \
+                qiskit_circuit and test circuit."
         )
 
     if qasm is not None:
-        test_circuit = cvt_openqasm_to_test_circuit(qasm)
-        raise QuantestPyError(
-            "Loading qasm is not yet implemented."
-        )
+        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
+
+    if qiskit_circuit is not None:
+        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(qubits, list) and qubits is not None:
         raise QuantestPyError(

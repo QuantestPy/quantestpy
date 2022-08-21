@@ -282,11 +282,6 @@ class TestCircuit:
         return whole_gates
 
 
-def cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
-    """Needs implemantation"""
-    return "Not implemented yet..."
-
-
 if __name__ == "__main__":
     """Example showing how to use TestCircuit class."""
 
