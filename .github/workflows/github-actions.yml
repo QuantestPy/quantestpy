@@ -36,3 +36,4 @@ jobs:
           python3 -m unittest test.test_test_circuit_cx_gate
           python3 -m unittest test.test_circuit_assert_ancilla_is_zero
           python3 -m unittest test.test_converter
+          python3 -m unittest test.test_test_circuit_create_all_qubit_gate_from_single_qubit_gate
