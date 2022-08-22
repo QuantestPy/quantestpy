@@ -21,7 +21,7 @@ class TestCircuit:
 
     def __init__(self, num_qubit: int):
         self._gates = []
-        self._qubits = [0 for _ in range(num_qubit)]
+        self._qubit_indices = [i for i in range(num_qubit)]
         self._num_qubit = num_qubit
         self._from_right_to_left_for_qubit_ids = False
         self._binary_to_vector = None
@@ -118,6 +118,42 @@ class TestCircuit:
             raise QuantestPyTestCircuitError(
                 "cx gate must not have an empty list for 'target_qubit'."
             )
+
+        for qubit in gate["target_qubit"]:
+            if not isinstance(qubit, int):
+                raise QuantestPyTestCircuitError(
+                    "Index in target_qubit must be integer type."
+                )
+
+            if qubit not in self._qubit_indices:
+                raise QuantestPyTestCircuitError(
+                    f"Index {qubit} in target_qubit out of range for "
+                    f"test_circuit size {self._num_qubit}."
+                )
+
+        for qubit in gate["control_qubit"]:
+            if not isinstance(qubit, int):
+                raise QuantestPyTestCircuitError(
+                    "Index in control_qubit must be integer type."
+                )
+
+            if qubit not in self._qubit_indices:
+                raise QuantestPyTestCircuitError(
+                    f"Index {qubit} in control_qubit out of range for "
+                    f"test_circuit size {self._num_qubit}."
+                )
+
+        for value in gate["control_value"]:
+            if not isinstance(value, int):
+                raise QuantestPyTestCircuitError(
+                    "Value in control_value must be integer type."
+                )
+
+            if value not in [0, 1]:
+                raise QuantestPyTestCircuitError(
+                    f"Value {value} in control_value is not acceptable. "
+                    f"It must be either 0 or 1."
+                )
 
         self._gates.append(gate)
 
