@@ -183,17 +183,19 @@ class TestCircuit:
         return row
 
     def _create_all_qubit_gate_from_single_qubit_gate(
-            self, single_qubit_gate: np.ndarray, target: int) -> np.ndarray:
+            self,
+            single_qubit_gate: np.ndarray,
+            target_qubit: list) -> np.ndarray:
 
         for qubit_id in range(self._num_qubit):
             if qubit_id == 0:
-                if qubit_id == target:
+                if qubit_id in target_qubit:
                     all_qubit_gate = single_qubit_gate
                 else:
                     all_qubit_gate = _ID
 
             else:
-                if qubit_id == target:
+                if qubit_id in target_qubit:
                     if self._from_right_to_left_for_qubit_ids:
                         all_qubit_gate = self._calculate_matrix_tensor_prod(
                             single_qubit_gate, all_qubit_gate)
@@ -296,22 +298,22 @@ class TestCircuit:
             if gate["name"] == "x":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _X, gate["target_qubit"][0])
+                        _X, gate["target_qubit"])
 
             elif gate["name"] == "h":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _H, gate["target_qubit"][0])
+                        _H, gate["target_qubit"])
 
             elif gate["name"] == "s":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _S, gate["target_qubit"][0])
+                        _S, gate["target_qubit"])
 
             elif gate["name"] == "t":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _T, gate["target_qubit"][0])
+                        _T, gate["target_qubit"])
 
             elif gate["name"] == "cx":
                 all_qubit_gate = \
