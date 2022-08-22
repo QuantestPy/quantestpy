@@ -49,6 +49,36 @@ class TestTestCircuitAddGate(unittest.TestCase):
 
         self.assertEqual(expected_gates, actual_gates)
 
+    def test_all_pass_multi_target(self,):
+        test_circuit = TestCircuit(3)
+        test_circuit.add_gate(
+            {"name": "cx",
+                "target_qubit": [1, 2],
+                "control_qubit": [0],
+                "control_value": [1]}
+        )
+        test_circuit.add_gate(
+            {"name": "h",
+                "target_qubit": [0, 1, 2],
+                "control_qubit": [],
+                "control_value": []}
+        )
+
+        expected_gates = [
+            {"name": "cx",
+                "target_qubit": [1, 2],
+                "control_qubit": [0],
+                "control_value": [1]},
+            {"name": "h",
+                "target_qubit": [0, 1, 2],
+                "control_qubit": [],
+                "control_value": []}
+        ]
+
+        actual_gates = test_circuit._gates
+
+        self.assertEqual(expected_gates, actual_gates)
+
     def test_index_range_in_target_qubit(self,):
         test_circuit = TestCircuit(3)
 

@@ -87,11 +87,9 @@ class TestCircuit:
                 "control_qubit and control_value must have the same lenght."
             )
 
-        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
-                len(gate["target_qubit"]) != 1:
+        if len(gate["target_qubit"]) < 1:
             raise QuantestPyTestCircuitError(
-                "single qubit gate must have a list containing exactly 1 "
-                "element for 'target_qubit'."
+                "'target_qubit' must not an empty list."
             )
 
         if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
@@ -112,11 +110,6 @@ class TestCircuit:
             raise QuantestPyTestCircuitError(
                 "cx gate must not have an empty list for "
                 "'control_qubit' and 'control_value'."
-            )
-
-        if gate["name"] == "cx" and len(gate["target_qubit"]) < 1:
-            raise QuantestPyTestCircuitError(
-                "cx gate must not have an empty list for 'target_qubit'."
             )
 
         for qubit in gate["target_qubit"]:
