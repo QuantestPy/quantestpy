@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from quantestpy import state_vector
+from quantestpy.exceptions import QuantestPyAssertionError
 
 
 class TestStateVectorAssertEqual(unittest.TestCase):
@@ -43,3 +44,24 @@ class TestStateVectorAssertEqual(unittest.TestCase):
                 check_including_global_phase=False
             )
         )
+
+    def test_check_including_global_phase_is_true(self,):
+        vec_a = np.array([1, 1j, -1j, -0.999123j]) / 2.
+        vec_b = np.array([1, 1j, -1j, -0.999j]) / 2.
+
+        self.assertIsNone(
+            state_vector.assert_equal(
+                vec_a,
+                vec_b,
+                check_including_global_phase=True,
+                number_of_decimal_places=3
+            )
+        )
+
+        with self.assertRaises(QuantestPyAssertionError):
+            state_vector.assert_equal(
+                vec_a,
+                vec_b,
+                check_including_global_phase=True,
+                number_of_decimal_places=4
+            )
