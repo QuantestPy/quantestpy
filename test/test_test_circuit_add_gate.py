@@ -11,9 +11,9 @@ class TestTestCircuitAddGate(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_test_circuit_add_gate
-    ........
+    .........
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.009s
+    Ran 9 tests in 0.003s
 
     OK
     $
@@ -207,6 +207,28 @@ class TestTestCircuitAddGate(unittest.TestCase):
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
                 + "Value in control_value must be integer type.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_target_qubit_empty(self,):
+        test_circuit = TestCircuit(5)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "t",
+                     "target_qubit": [],
+                     "control_qubit": [],
+                     "control_value": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "'target_qubit' must not an empty list.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
