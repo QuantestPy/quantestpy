@@ -11,9 +11,9 @@ class TestStateVectorAssertEqual(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_state_vector_assert_equal
-    ........
+    ....
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.009s
+    Ran 4 tests in 0.003s
 
     OK
     $
@@ -64,4 +64,17 @@ class TestStateVectorAssertEqual(unittest.TestCase):
                 vec_b,
                 check_including_global_phase=True,
                 number_of_decimal_places=4
+            )
+
+    def test_check_including_global_phase_is_true_error_on_purpose(self,):
+        vec_a = np.array([0.1+0.04j, 0.01, 0.5+0.007j, 0.001+0.1j]) \
+            / 0.5201442107723587
+        vec_b = np.array([0.1+0.04j, 0.01, 0.5+0.007j, 0.001+0.1j]) \
+            / 0.5201442107723587 * np.exp(0.4j)
+
+        with self.assertRaises(QuantestPyAssertionError):
+            state_vector.assert_equal(
+                vec_a,
+                vec_b,
+                check_including_global_phase=True
             )
