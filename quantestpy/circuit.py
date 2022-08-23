@@ -211,3 +211,84 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         + "entangled with other qubits."
     msg = ut_test_case._formatMessage(msg, error_msg)
     raise QuantestPyAssertionError(msg)
+
+
+def assert_equal(
+        qasm_a: str = None,
+        qiskit_circuit_a: QuantumCircuit = None,
+        test_circuit_a: TestCircuit = None,
+        qasm_b: str = None,
+        qiskit_circuit_b: QuantumCircuit = None,
+        test_circuit_b: TestCircuit = None,
+        number_of_decimal_places: int = 5,
+        check_including_global_phase: bool = True,
+        msg=None):
+
+    # Check inputs for circuit A
+    if qasm_a is None and qiskit_circuit_a is None and test_circuit_a is None:
+        raise QuantestPyError(
+            "Missing information for circuit A. "
+            "One of the following must be given: "
+            "qasm_a, qiskit_circuit_a and test_circuit_a."
+        )
+
+    if (qasm_a and qiskit_circuit_a) \
+            or (qasm_a and test_circuit_a) \
+            or (qiskit_circuit_a and test_circuit_a):
+        raise QuantestPyError(
+            "Too much information for circuit A."
+            "Only one of the following should be given: "
+            "qasm_a, qiskit_circuit_a and test_circuit_a."
+        )
+
+    if qasm_a and not isinstance(qasm_a, str):
+        raise QuantestPyError(
+            "qasm_a must be str type."
+        )
+
+    if qiskit_circuit_a and not isinstance(qiskit_circuit_a, QuantumCircuit):
+        raise QuantestPyError(
+            "qiskit_circuit_a must be an instance of "
+            "qiskit.QuantumCircuit class."
+        )
+
+    if test_circuit_a and not isinstance(test_circuit_a, TestCircuit):
+        raise QuantestPyError(
+            "test_circuit_a must be an instance of "
+            "quantestpy.TestCircuit class."
+        )
+
+    # Check inputs for circuit B
+    if qasm_b is None and qiskit_circuit_b is None and test_circuit_b is None:
+        raise QuantestPyError(
+            "Missing information for circuit B. "
+            "One of the following must be given: "
+            "qasm_b, qiskit_circuit_b and test_circuit_b."
+        )
+
+    if (qasm_b and qiskit_circuit_b) \
+            or (qasm_b and test_circuit_b) \
+            or (qiskit_circuit_b and test_circuit_b):
+        raise QuantestPyError(
+            "Too much information for circuit B."
+            "Only one of the following should be given: "
+            "qasm_b, qiskit_circuit_b and test_circuit_b."
+        )
+
+    if qasm_b and not isinstance(qasm_b, str):
+        raise QuantestPyError(
+            "qasm_b must be str type."
+        )
+
+    if qiskit_circuit_b and not isinstance(qiskit_circuit_b, QuantumCircuit):
+        raise QuantestPyError(
+            "qiskit_circuit_b must be an instance of "
+            "qiskit.QuantumCircuit class."
+        )
+
+    if test_circuit_b and not isinstance(test_circuit_b, TestCircuit):
+        raise QuantestPyError(
+            "test_circuit_b must be an instance of "
+            "quantestpy.TestCircuit class."
+        )
+    return
