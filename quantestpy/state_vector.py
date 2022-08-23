@@ -74,17 +74,14 @@ def assert_equal(
     # remove global phase
     if not check_including_global_phase:
 
-        for i in range(len(a)):
-            if abs(a[i]) > 0.:
-                a_global_phase = a[i] / abs(a[i])
-                break
+        abs_a = np.abs(a)
+        max_value_abs_a = np.max(abs_a)
+        max_index_abs_a = np.argmax(abs_a)
+        a_global_phase = a[max_index_abs_a] / max_value_abs_a
 
         a = a * a_global_phase.conj()
 
-        for i in range(len(b)):
-            if abs(b[i]) > 0.:
-                b_global_phase = b[i] / abs(b[i])
-                break
+        b_global_phase = b[max_index_abs_a] / abs(b[max_index_abs_a])
 
         b = b * b_global_phase.conj()
 
