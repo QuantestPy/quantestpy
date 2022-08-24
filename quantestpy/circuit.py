@@ -232,29 +232,31 @@ def assert_equal(
             "qasm_a, qiskit_circuit_a and test_circuit_a."
         )
 
-    if (qasm_a and qiskit_circuit_a) \
-            or (qasm_a and test_circuit_a) \
-            or (qiskit_circuit_a and test_circuit_a):
+    if (qasm_a is not None and qiskit_circuit_a is not None) \
+            or (qasm_a is not None and test_circuit_a is not None) \
+            or (qiskit_circuit_a is not None and test_circuit_a is not None):
         raise QuantestPyError(
-            "Too much information for circuit A."
+            "Too much information for circuit A. "
             "Only one of the following should be given: "
             "qasm_a, qiskit_circuit_a and test_circuit_a."
         )
 
-    if qasm_a and not isinstance(qasm_a, str):
+    if qasm_a is not None and not isinstance(qasm_a, str):
         raise QuantestPyError(
-            "qasm_a must be str type."
+            "Type of qasm_a must be str."
         )
 
-    if qiskit_circuit_a and not isinstance(qiskit_circuit_a, QuantumCircuit):
+    if qiskit_circuit_a is not None \
+            and not isinstance(qiskit_circuit_a, QuantumCircuit):
         raise QuantestPyError(
-            "qiskit_circuit_a must be an instance of "
+            "Type of qiskit_circuit_a must be an instance of "
             "qiskit.QuantumCircuit class."
         )
 
-    if test_circuit_a and not isinstance(test_circuit_a, TestCircuit):
+    if test_circuit_a is not None \
+            and not isinstance(test_circuit_a, TestCircuit):
         raise QuantestPyError(
-            "test_circuit_a must be an instance of "
+            "Type of test_circuit_a must be an instance of "
             "quantestpy.TestCircuit class."
         )
 
@@ -266,29 +268,55 @@ def assert_equal(
             "qasm_b, qiskit_circuit_b and test_circuit_b."
         )
 
-    if (qasm_b and qiskit_circuit_b) \
-            or (qasm_b and test_circuit_b) \
-            or (qiskit_circuit_b and test_circuit_b):
+    if (qasm_b is not None and qiskit_circuit_b is not None) \
+            or (qasm_b is not None and test_circuit_b is not None) \
+            or (qiskit_circuit_b is not None and test_circuit_b is not None):
         raise QuantestPyError(
-            "Too much information for circuit B."
+            "Too much information for circuit B. "
             "Only one of the following should be given: "
             "qasm_b, qiskit_circuit_b and test_circuit_b."
         )
 
-    if qasm_b and not isinstance(qasm_b, str):
+    if qasm_b is not None and not isinstance(qasm_b, str):
         raise QuantestPyError(
-            "qasm_b must be str type."
+            "Type of qasm_b must be str."
         )
 
-    if qiskit_circuit_b and not isinstance(qiskit_circuit_b, QuantumCircuit):
+    if qiskit_circuit_b is not None \
+            and not isinstance(qiskit_circuit_b, QuantumCircuit):
         raise QuantestPyError(
-            "qiskit_circuit_b must be an instance of "
+            "Type of qiskit_circuit_b must be an instance of "
             "qiskit.QuantumCircuit class."
         )
 
-    if test_circuit_b and not isinstance(test_circuit_b, TestCircuit):
+    if test_circuit_b is not None \
+            and not isinstance(test_circuit_b, TestCircuit):
         raise QuantestPyError(
-            "test_circuit_b must be an instance of "
+            "Type of test_circuit_b must be an instance of "
             "quantestpy.TestCircuit class."
         )
-    return
+
+    # cvt. to test_circuit_a
+    if qasm_a:
+        test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
+
+    elif qiskit_circuit_a:
+        test_circuit_a = _cvt_qiskit_to_test_circuit(qiskit_circuit_a)
+
+    # cvt. to test_circuit_b
+    if qasm_b:
+        test_circuit_b = _cvt_openqasm_to_test_circuit(qasm_b)
+
+    elif qiskit_circuit_b:
+        test_circuit_b = _cvt_qiskit_to_test_circuit(qiskit_circuit_b)
+
+    whole_gates_a = test_circuit_a._get_whole_gates()
+    whole_gates_b = test_circuit_b._get_whole_gates()
+
+    # assert equal exact
+    operator.assert_equal(
+        whole_gates_a,
+        whole_gates_b,
+        number_of_decimal_places,
+        check_including_global_phase,
+        msg)
