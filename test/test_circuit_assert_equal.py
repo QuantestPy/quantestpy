@@ -287,6 +287,39 @@ class TestCircuitAssertEqual(unittest.TestCase):
             )
         )
 
+    def test_msg_from_wrong_type_for_tolerance_for_matrix_norm_value(self,):
+
+        test_circuit_a = TestCircuit(2)
+        test_circuit_b = TestCircuit(2)
+
+        test_patterns = [
+            1,
+            1.+2j,
+            np.array([1.], dtype=np.float32)[0]
+        ]
+
+        for tolerance in test_patterns:
+
+            try:
+                self.assertIsNotNone(
+                    circuit.assert_equal(
+                        test_circuit_a=test_circuit_a,
+                        test_circuit_b=test_circuit_b,
+                        tolerance_for_matrix_norm_value=tolerance
+                    )
+                )
+
+            except QuantestPyError as e:
+
+                expected_error_msg = \
+                    "quantestpy.exceptions.QuantestPyError: " \
+                    + "Type of tolerance_for_matrix_norm_value must be float."
+
+                actual_error_msg = \
+                    traceback.format_exception_only(type(e), e)[0].rstrip("\n")
+
+                self.assertEqual(expected_error_msg, actual_error_msg)
+
     def test_operator_norm_1(self,):
 
         test_circuit_a = TestCircuit(2)
@@ -310,7 +343,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 test_circuit_a=test_circuit_a,
                 test_circuit_b=test_circuit_b,
                 matrix_norm_type="operator_norm_1",
-                upper_bound_for_matrix_norm_value=2.
+                tolerance_for_matrix_norm_value=2.
             )
         )
 
@@ -333,6 +366,6 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 test_circuit_a=test_circuit_a,
                 test_circuit_b=test_circuit_b,
                 matrix_norm_type="operator_norm_2",
-                upper_bound_for_matrix_norm_value=1.9
+                tolerance_for_matrix_norm_value=1.9
             )
         )

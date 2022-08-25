@@ -274,7 +274,7 @@ def assert_equal(
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
         matrix_norm_type: str = "",
-        upper_bound_for_matrix_norm_value: float = 0.,
+        tolerance_for_matrix_norm_value: float = 0.,
         msg=None):
 
     # Check inputs for circuit A
@@ -359,6 +359,11 @@ def assert_equal(
             "'Frobenius_norm' and 'max_norm'."
         )
 
+    if not isinstance(tolerance_for_matrix_norm_value, float):
+        raise QuantestPyError(
+            "Type of tolerance_for_matrix_norm_value must be float."
+        )
+
     # cvt. to test_circuit_a
     if qasm_a is not None:
         test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
@@ -394,9 +399,9 @@ def assert_equal(
             check_including_global_phase
         )
 
-        if matrix_norm_value > upper_bound_for_matrix_norm_value:
+        if matrix_norm_value > tolerance_for_matrix_norm_value:
 
             error_msg = f"matrix norm value {matrix_norm_value} is larger " \
-                + f"than the upper bound {upper_bound_for_matrix_norm_value}."
+                + f"than the tolerance {tolerance_for_matrix_norm_value}."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)
