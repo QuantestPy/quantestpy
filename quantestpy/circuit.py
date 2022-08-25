@@ -213,6 +213,57 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
     raise QuantestPyAssertionError(msg)
 
 
+def _get_matrix_norm(
+        a: np.ndarray,
+        b: np.ndarray,
+        matrix_norm_type: str,
+        check_including_global_phase: bool) -> float:
+
+    if not check_including_global_phase:
+        a_shape = a.shape
+
+        # cvt. to vector
+        a = np.ravel(a)
+        b = np.ravel(b)
+
+        abs_a = np.abs(a)
+        max_value_abs_a = np.max(abs_a)
+        max_index_abs_a = np.argmax(abs_a)
+        a_global_phase = a[max_index_abs_a] / max_value_abs_a
+
+        a = a * a_global_phase.conj()
+
+        b_global_phase = b[max_index_abs_a] / abs(b[max_index_abs_a])
+
+        b = b * b_global_phase.conj()
+
+        # back to matrix
+        a = np.reshape(a, newshape=a_shape)
+        b = np.reshape(b, newshape=a_shape)
+
+    m = a - b
+
+    if matrix_norm_type == "operator_norm_1":
+        matrix_norm_value = np.linalg.norm(m, 1)
+
+    elif matrix_norm_type == "operator_norm_2":
+        matrix_norm_value = np.linalg.norm(m, 2)
+
+    elif matrix_norm_type == "operator_norm_inf":
+        matrix_norm_value = np.linalg.norm(m, np.inf)
+
+    elif matrix_norm_type == "Frobenius_norm":
+        matrix_norm_value = np.linalg.norm(m, "fro")
+
+    elif matrix_norm_type == "max_norm":
+        matrix_norm_value = np.max(np.abs(m))
+
+    else:
+        raise
+
+    return matrix_norm_value
+
+
 def assert_equal(
         qasm_a: str = None,
         qiskit_circuit_a: QuantumCircuit = None,
@@ -222,6 +273,8 @@ def assert_equal(
         test_circuit_b: TestCircuit = None,
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
+        matrix_norm_type: str = "",
+        upper_bound_for_matrix_norm_value: float = 0.,
         msg=None):
 
     # Check inputs for circuit A
@@ -296,27 +349,54 @@ def assert_equal(
             "quantestpy.TestCircuit class."
         )
 
+    if matrix_norm_type not in \
+        ["", "operator_norm_1", "operator_norm_2",
+         "operator_norm_inf", "Frobenius_norm", "max_norm"]:
+        raise QuantestPyError(
+            "Invalid value for matrix_norm_type. "
+            "One of the following should be chosen: "
+            "'operator_norm_1', 'operator_norm_2', 'operator_norm_inf', "
+            "'Frobenius_norm' and 'max_norm'."
+        )
+
     # cvt. to test_circuit_a
-    if qasm_a:
+    if qasm_a is not None:
         test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
 
-    elif qiskit_circuit_a:
+    elif qiskit_circuit_a is not None:
         test_circuit_a = _cvt_qiskit_to_test_circuit(qiskit_circuit_a)
 
     # cvt. to test_circuit_b
-    if qasm_b:
+    if qasm_b is not None:
         test_circuit_b = _cvt_openqasm_to_test_circuit(qasm_b)
 
-    elif qiskit_circuit_b:
+    elif qiskit_circuit_b is not None:
         test_circuit_b = _cvt_qiskit_to_test_circuit(qiskit_circuit_b)
 
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
 
-    # assert equal exact
-    operator.assert_equal(
-        whole_gates_a,
-        whole_gates_b,
-        number_of_decimal_places,
-        check_including_global_phase,
-        msg)
+    if matrix_norm_type == "":
+        # assert equal exact or equal up to a global phase
+        operator.assert_equal(
+            whole_gates_a,
+            whole_gates_b,
+            number_of_decimal_places,
+            check_including_global_phase,
+            msg)
+
+    else:
+        # assert check matrix norm as a distance
+        matrix_norm_value = _get_matrix_norm(
+            whole_gates_a,
+            whole_gates_b,
+            matrix_norm_type,
+            check_including_global_phase
+        )
+
+        if matrix_norm_value > upper_bound_for_matrix_norm_value:
+
+            error_msg = f"matrix norm value {matrix_norm_value} is larger " \
+                + f"than the upper bound {upper_bound_for_matrix_norm_value}."
+            msg = ut_test_case._formatMessage(msg, error_msg)
+            raise QuantestPyAssertionError(msg)

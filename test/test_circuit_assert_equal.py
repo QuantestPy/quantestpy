@@ -286,3 +286,53 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 check_including_global_phase=False
             )
         )
+
+    def test_operator_norm_1(self,):
+
+        test_circuit_a = TestCircuit(2)
+        test_circuit_a.add_gate(
+            {"name": "x", "target_qubit": [0, 1], "control_qubit": [],
+                "control_value": []}
+        )
+        test_circuit_a.add_gate(
+            {"name": "s", "target_qubit": [1], "control_qubit": [],
+                "control_value": []}
+        )
+
+        test_circuit_b = TestCircuit(2)
+        test_circuit_b.add_gate(
+            {"name": "cx", "target_qubit": [0], "control_qubit": [1],
+                "control_value": [1]}
+        )
+
+        self.assertIsNone(
+            circuit.assert_equal(
+                test_circuit_a=test_circuit_a,
+                test_circuit_b=test_circuit_b,
+                matrix_norm_type="operator_norm_1",
+                upper_bound_for_matrix_norm_value=2.
+            )
+        )
+
+    def test_operator_norm_2(self,):
+
+        test_circuit_a = TestCircuit(1)
+        test_circuit_a.add_gate(
+            {"name": "x", "target_qubit": [0], "control_qubit": [],
+                "control_value": []}
+        )
+
+        test_circuit_b = TestCircuit(1)
+        test_circuit_b.add_gate(
+            {"name": "s", "target_qubit": [0], "control_qubit": [],
+                "control_value": []}
+        )
+
+        self.assertIsNone(
+            circuit.assert_equal(
+                test_circuit_a=test_circuit_a,
+                test_circuit_b=test_circuit_b,
+                matrix_norm_type="operator_norm_2",
+                upper_bound_for_matrix_norm_value=1.9
+            )
+        )
