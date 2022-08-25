@@ -20,10 +20,12 @@ def _cvt_qiskit_to_test_circuit(
         # else:
         #    parameter = []
 
-        if gate["name"] in ["cx", "cnot"]:
+        if gate["name"] == "cx":
             control_value = [1]
         else:
             control_value = []
+
+        # need CCX concverter in this block
 
         gate_test = dict(name=gate["name"],
                          target_qubit=[gate["qubits"][-1]],
