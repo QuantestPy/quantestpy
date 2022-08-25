@@ -25,24 +25,28 @@ class TestTestCircuitAddGate(unittest.TestCase):
             {"name": "h",
                 "target_qubit": [1],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "cx",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
-                "control_value": [1, 1]}
+                "control_value": [1, 1],
+                "parameter": []}
         )
 
         expected_gates = [
             {"name": "h",
                 "target_qubit": [1],
                 "control_qubit": [],
-                "control_value": []},
+                "control_value": [],
+                "parameter": []},
             {"name": "cx",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
-                "control_value": [1, 1]}
+                "control_value": [1, 1],
+                "parameter": []}
         ]
 
         actual_gates = test_circuit._gates
@@ -55,24 +59,28 @@ class TestTestCircuitAddGate(unittest.TestCase):
             {"name": "cx",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
-                "control_value": [1]}
+                "control_value": [1],
+                "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "h",
                 "target_qubit": [0, 1, 2],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         )
 
         expected_gates = [
             {"name": "cx",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
-                "control_value": [1]},
+                "control_value": [1],
+                "parameter": []},
             {"name": "h",
                 "target_qubit": [0, 1, 2],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         ]
 
         actual_gates = test_circuit._gates
@@ -88,7 +96,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "x",
                      "target_qubit": [3],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
@@ -110,7 +119,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "h",
                      "target_qubit": [1.],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
@@ -132,7 +142,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [1],
                      "control_qubit": [2, 10],
-                     "control_value": [1, 1]}
+                     "control_value": [1, 1],
+                     "parameter": []}
                 )
             )
 
@@ -154,7 +165,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [1.2],
-                     "control_value": [1]}
+                     "control_value": [1],
+                     "parameter": []}
                 )
             )
 
@@ -176,7 +188,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [1, 2],
-                     "control_value": [0, 2]}
+                     "control_value": [0, 2],
+                     "parameter": []}
                 )
             )
 
@@ -199,7 +212,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [0, 2],
-                     "control_value": [1., 0]}
+                     "control_value": [1., 0],
+                     "parameter": []}
                 )
             )
 
@@ -221,7 +235,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "t",
                      "target_qubit": [],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
