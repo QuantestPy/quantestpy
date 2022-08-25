@@ -22,11 +22,11 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         test_circuit = TestCircuit(3)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
-             "control_value": []}
+             "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "x", "target_qubit": [2], "control_qubit": [],
-             "control_value": []}
+             "control_value": [], "parameter": []}
         )
 
         self.assertIsNone(
@@ -40,11 +40,11 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         test_circuit = TestCircuit(4)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [3], "control_qubit": [],
-             "control_value": []}
+             "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "cx", "target_qubit": [0], "control_qubit": [3],
-             "control_value": [1]}
+             "control_value": [1], "parameter": []}
         )
 
         self.assertIsNone(
@@ -58,11 +58,11 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         test_circuit = TestCircuit(2)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
-             "control_value": []}
+             "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "cx", "target_qubit": [1], "control_qubit": [0],
-             "control_value": [1]}
+             "control_value": [1], "parameter": []}
         )
 
         with self.assertRaises(QuantestPyAssertionError):
