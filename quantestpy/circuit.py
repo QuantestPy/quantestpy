@@ -11,7 +11,7 @@ from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.converter import _cvt_qiskit_to_test_circuit
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
-
+from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
 
@@ -226,16 +226,8 @@ def _get_matrix_norm(
         a = np.ravel(a)
         b = np.ravel(b)
 
-        abs_a = np.abs(a)
-        max_value_abs_a = np.max(abs_a)
-        max_index_abs_a = np.argmax(abs_a)
-        a_global_phase = a[max_index_abs_a] / max_value_abs_a
-
-        a = a * a_global_phase.conj()
-
-        b_global_phase = b[max_index_abs_a] / abs(b[max_index_abs_a])
-
-        b = b * b_global_phase.conj()
+        # rm. global phase
+        a, b = _remove_global_phase_from_two_vectors(a, b)
 
         # back to matrix
         a = np.reshape(a, newshape=a_shape)

@@ -37,6 +37,22 @@ def assert_is_normalized(
         raise QuantestPyAssertionError(msg)
 
 
+def _remove_global_phase_from_two_vectors(a: np.ndarray, b: np.ndarray):
+
+    abs_a = np.abs(a)
+    max_value_abs_a = np.max(abs_a)
+    max_index_abs_a = np.argmax(abs_a)
+    a_global_phase = a[max_index_abs_a] / max_value_abs_a
+
+    a = a * a_global_phase.conj()
+
+    b_global_phase = b[max_index_abs_a] / abs(b[max_index_abs_a])
+
+    b = b * b_global_phase.conj()
+
+    return a, b
+
+
 def assert_equal(
         state_vector_a: Union[np.ndarray, list],
         state_vector_b: Union[np.ndarray, list],
@@ -73,17 +89,7 @@ def assert_equal(
 
     # remove global phase
     if not check_including_global_phase:
-
-        abs_a = np.abs(a)
-        max_value_abs_a = np.max(abs_a)
-        max_index_abs_a = np.argmax(abs_a)
-        a_global_phase = a[max_index_abs_a] / max_value_abs_a
-
-        a = a * a_global_phase.conj()
-
-        b_global_phase = b[max_index_abs_a] / abs(b[max_index_abs_a])
-
-        b = b * b_global_phase.conj()
+        a, b = _remove_global_phase_from_two_vectors(a, b)
 
     # round
     a = np.round(a, decimals=number_of_decimal_places)
