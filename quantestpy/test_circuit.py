@@ -47,6 +47,7 @@ class TestCircuit:
         self._from_right_to_left_for_qubit_ids = False
         self._binary_to_vector = None
         self._initial_state_vector = None
+        self.user_define_gates = {}
 
     def add_gate(self, gate: dict) -> None:
         """
@@ -87,7 +88,8 @@ class TestCircuit:
                 "gate must contain 'parameter' as a key."
             )
 
-        if gate["name"] not in _IMPLEMENTED_GATES:
+        if gate["name"] not in _IMPLEMENTED_GATES \
+                and gate["name"] not in self.user_define_gates:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} is not implemented.'
                 f'Implemented gates: {_IMPLEMENTED_GATES}'
@@ -208,6 +210,10 @@ class TestCircuit:
                         "Parameters must be float or integer type.")
 
         self._gates.append(gate)
+
+    def define_single_qubit_gate(self, name: str, gate: np.ndarray):
+        self.user_define_gates = {}
+        self.user_define_gates[name] = gate
 
     @staticmethod
     def _calculate_matrix_tensor_prod(mat1: np.ndarray, mat2: np.ndarray) \
@@ -373,6 +379,12 @@ class TestCircuit:
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
+
+            elif gate["name"] in self.user_define_gates:
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        self.user_define_gates[gate["name"]],
+                        gate["target_qubit"])
 
             else:
                 raise
