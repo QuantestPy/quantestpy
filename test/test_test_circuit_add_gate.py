@@ -25,24 +25,28 @@ class TestTestCircuitAddGate(unittest.TestCase):
             {"name": "h",
                 "target_qubit": [1],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "cx",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
-                "control_value": [1, 1]}
+                "control_value": [1, 1],
+                "parameter": []}
         )
 
         expected_gates = [
             {"name": "h",
                 "target_qubit": [1],
                 "control_qubit": [],
-                "control_value": []},
+                "control_value": [],
+                "parameter": []},
             {"name": "cx",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
-                "control_value": [1, 1]}
+                "control_value": [1, 1],
+                "parameter": []}
         ]
 
         actual_gates = test_circuit._gates
@@ -55,24 +59,28 @@ class TestTestCircuitAddGate(unittest.TestCase):
             {"name": "cx",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
-                "control_value": [1]}
+                "control_value": [1],
+                "parameter": []}
         )
         test_circuit.add_gate(
             {"name": "h",
                 "target_qubit": [0, 1, 2],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         )
 
         expected_gates = [
             {"name": "cx",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
-                "control_value": [1]},
+                "control_value": [1],
+                "parameter": []},
             {"name": "h",
                 "target_qubit": [0, 1, 2],
                 "control_qubit": [],
-                "control_value": []}
+                "control_value": [],
+                "parameter": []}
         ]
 
         actual_gates = test_circuit._gates
@@ -88,7 +96,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "x",
                      "target_qubit": [3],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
@@ -110,7 +119,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "h",
                      "target_qubit": [1.],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
@@ -132,7 +142,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [1],
                      "control_qubit": [2, 10],
-                     "control_value": [1, 1]}
+                     "control_value": [1, 1],
+                     "parameter": []}
                 )
             )
 
@@ -154,7 +165,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [1.2],
-                     "control_value": [1]}
+                     "control_value": [1],
+                     "parameter": []}
                 )
             )
 
@@ -176,7 +188,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [1, 2],
-                     "control_value": [0, 2]}
+                     "control_value": [0, 2],
+                     "parameter": []}
                 )
             )
 
@@ -199,7 +212,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "cx",
                      "target_qubit": [0],
                      "control_qubit": [0, 2],
-                     "control_value": [1., 0]}
+                     "control_value": [1., 0],
+                     "parameter": []}
                 )
             )
 
@@ -221,7 +235,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
                     {"name": "t",
                      "target_qubit": [],
                      "control_qubit": [],
-                     "control_value": []}
+                     "control_value": [],
+                     "parameter": []}
                 )
             )
 
@@ -229,6 +244,125 @@ class TestTestCircuitAddGate(unittest.TestCase):
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
                 + "'target_qubit' must not an empty list.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_without_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "x",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": [1]}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with no parameters must have " \
+                + "an empty list for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_one_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u1",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with one parameters must have a list containing " \
+                + "exactly 1 element for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_two_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u2",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with two parameters must have a list containing " \
+                + "exactly 2 elements for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_three_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u3",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with three parameters must have a list containing " \
+                + "exactly 3 elements for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_value_type_in_parameter(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u1",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": ["a"]}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Parameters must be float or integer type.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 

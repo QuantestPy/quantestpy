@@ -57,10 +57,10 @@ class TestTestCircuit(unittest.TestCase):
     def test__get_state_vector_2(self,):
         circ = TestCircuit(2)
         circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
-                       "control_value": []})
+                       "control_value": [], "parameter": []})
         circ.add_gate(
             {"name": "cx", "control_qubit": [0], "target_qubit": [1],
-             "control_value": [1]})
+             "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([1, 0, 0, 1]) / np.sqrt(2.)
@@ -71,12 +71,12 @@ class TestTestCircuit(unittest.TestCase):
     def test__get_state_vector_3(self,):
         circ = TestCircuit(2)
         circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
-                       "control_value": []})
+                       "control_value": [], "parameter": []})
         circ.add_gate({"name": "x", "target_qubit": [1], "control_qubit": [],
-                       "control_value": []})
+                       "control_value": [], "parameter": []})
         circ.add_gate(
             {"name": "cx", "control_qubit": [0], "target_qubit": [1],
-             "control_value": [1]})
+             "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([0, 0, 1, 0])
@@ -87,12 +87,12 @@ class TestTestCircuit(unittest.TestCase):
     def test__get_state_vector_4(self,):
         circ = TestCircuit(3)
         circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
-                       "control_value": []})
+                       "control_value": [], "parameter": []})
         circ.add_gate(
             {"name": "cx", "control_qubit": [0], "target_qubit": [2],
-             "control_value": [1]})
+             "control_value": [1], "parameter": []})
         circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
-                       "control_value": []})
+                       "control_value": [], "parameter": []})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([0, 1, 0, 0, 0, -1, 0, 0]) / np.sqrt(2.)
@@ -117,7 +117,7 @@ class TestTestCircuit(unittest.TestCase):
         circ.set_initial_state_vector(init_vec)
         circ.add_gate(
             {"name": "cx", "control_qubit": [0], "target_qubit": [1],
-             "control_value": [1]})
+             "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([1, 0, 0, 1]) / np.sqrt(2.)

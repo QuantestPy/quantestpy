@@ -28,9 +28,10 @@ class TestConverter(unittest.TestCase):
         expected_circuit = TestCircuit(2)
         expected_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
-             "control_value": []})
+             "control_value": [], "parameter": []})
         expected_circuit.add_gate({"name": "cx", "target_qubit": [1],
-                                   "control_qubit": [0], "control_value": [1]})
+                                   "control_qubit": [0], "control_value": [1],
+                                   "parameter": []})
 
         self.assertEqual(vars(actual_circuit), vars(expected_circuit))
 
@@ -44,8 +45,9 @@ class TestConverter(unittest.TestCase):
         expected_circuit = TestCircuit(2)
         expected_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
-             "control_value": []})
+             "control_value": [], "parameter": []})
         expected_circuit.add_gate({"name": "cx", "target_qubit": [1],
-                                   "control_qubit": [0], "control_value": [1]})
+                                   "control_qubit": [0], "control_value": [1],
+                                   "parameter": []})
 
         self.assertEqual(vars(actual_circuit), vars(expected_circuit))
