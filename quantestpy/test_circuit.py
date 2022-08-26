@@ -174,34 +174,34 @@ class TestCircuit:
                     f"It must be either 0 or 1."
                 )
 
-        if gate["parameter"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
+        if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
                 len(gate["parameter"]) != 0:
             raise QuantestPyTestCircuitError(
                 "Gates with no parameters must have an empty list for "
                 "'parameter'."
             )
 
-        if gate["parameter"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
                 len(gate["parameter"]) != 1:
             raise QuantestPyTestCircuitError(
                 "Gates with one parameters must have a list containing "
                 "exactly 1 element for 'parameter'."
             )
 
-        if gate["parameter"] in _IMPLEMENTED_GATES_WITH_TWO_PARAM and \
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_TWO_PARAM and \
                 len(gate["parameter"]) != 2:
             raise QuantestPyTestCircuitError(
                 "Gates with two parameters must have a list containing "
-                "exactly 2 element for 'parameter'."
+                "exactly 2 elements for 'parameter'."
             )
 
-        if gate["parameter"] in _IMPLEMENTED_GATES_WITH_THREE_PARAM and \
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_THREE_PARAM and \
                 len(gate["parameter"]) != 3:
             raise QuantestPyTestCircuitError(
                 "Gates with three parameters must have a list containing "
-                "exactly 3 element for 'parameter'."
+                "exactly 3 elements for 'parameter'."
             )
-        if gate["parameter"] in _IMPLEMENTED_GATES_WITH_PARAM:
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:
             for param in gate["parameter"]:
                 if not isinstance(param, float) and not isinstance(param, int):
                     raise QuantestPyTestCircuitError(

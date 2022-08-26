@@ -248,3 +248,122 @@ class TestTestCircuitAddGate(unittest.TestCase):
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
             self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_without_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "x",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": [1]}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with no parameters must have " \
+                + "an empty list for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_one_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u1",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with one parameters must have a list containing " \
+                + "exactly 1 element for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_two_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u2",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with two parameters must have a list containing " \
+                + "exactly 2 elements for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_parameter_with_three_param(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u3",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Gates with three parameters must have a list containing " \
+                + "exactly 3 elements for 'parameter'.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_value_type_in_parameter(self,):
+        test_circuit = TestCircuit(1)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "u1",
+                     "target_qubit": [0],
+                     "control_qubit": [],
+                     "control_value": [],
+                     "parameter": ["a"]}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "Parameters must be float or integer type.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
