@@ -393,7 +393,9 @@ def assert_equal(
 
         if matrix_norm_value > tolerance_for_matrix_norm_value:
 
-            error_msg = f"matrix norm value {matrix_norm_value} is larger " \
-                + f"than the tolerance {tolerance_for_matrix_norm_value}."
+            error_msg = "matrix norm value " \
+                + format(matrix_norm_value, ".15g") \
+                + " is larger than the tolerance " \
+                + format(tolerance_for_matrix_norm_value, ".15g") + "."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)

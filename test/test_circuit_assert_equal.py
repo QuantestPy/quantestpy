@@ -4,7 +4,7 @@ import numpy as np
 
 from quantestpy import TestCircuit
 from quantestpy import circuit
-from quantestpy.exceptions import QuantestPyError
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 from qiskit import QuantumCircuit
 
@@ -320,7 +320,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
                 self.assertEqual(expected_error_msg, actual_error_msg)
 
-    def test_operator_norm_1(self,):
+    def test_matrix_norms(self,):
 
         test_circuit_a = TestCircuit(2)
         test_circuit_a.add_gate(
@@ -338,14 +338,48 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 "control_value": [1]}
         )
 
-        self.assertIsNone(
-            circuit.assert_equal(
-                test_circuit_a=test_circuit_a,
-                test_circuit_b=test_circuit_b,
-                matrix_norm_type="operator_norm_1",
-                tolerance_for_matrix_norm_value=2.
-            )
-        )
+        test_patterns = [
+            {"matrix_norm_type": "operator_norm_1",
+             "tolerance_for_matrix_norm_value": 1.,
+             "expected_matrix_norm_value": 2.},
+            {"matrix_norm_type": "operator_norm_inf",
+             "tolerance_for_matrix_norm_value": 1.5,
+             "expected_matrix_norm_value": 2.},
+            {"matrix_norm_type": "Frobenius_norm",
+             "tolerance_for_matrix_norm_value": 2.,
+             "expected_matrix_norm_value": 2.*np.sqrt(2.)},
+            {"matrix_norm_type": "max_norm",
+             "tolerance_for_matrix_norm_value": 0.1,
+             "expected_matrix_norm_value": 1.}
+        ]
+
+        for pattern in test_patterns:
+
+            try:
+                self.assertIsNotNone(
+                    circuit.assert_equal(
+                        test_circuit_a=test_circuit_a,
+                        test_circuit_b=test_circuit_b,
+                        matrix_norm_type=pattern["matrix_norm_type"],
+                        tolerance_for_matrix_norm_value=pattern[
+                            "tolerance_for_matrix_norm_value"]
+                    )
+                )
+
+            except QuantestPyAssertionError as e:
+
+                expected_error_msg = \
+                    "quantestpy.exceptions.QuantestPyAssertionError: " \
+                    + "matrix norm value " \
+                    + format(pattern["expected_matrix_norm_value"], ".15g") \
+                    + " is larger than the tolerance " \
+                    + format(pattern["tolerance_for_matrix_norm_value"],
+                             ".15g") + "."
+
+                actual_error_msg = \
+                    traceback.format_exception_only(type(e), e)[0].rstrip("\n")
+
+                self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_operator_norm_2(self,):
 
@@ -361,11 +395,25 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 "control_value": []}
         )
 
-        self.assertIsNone(
-            circuit.assert_equal(
-                test_circuit_a=test_circuit_a,
-                test_circuit_b=test_circuit_b,
-                matrix_norm_type="operator_norm_2",
-                tolerance_for_matrix_norm_value=1.9
+        try:
+            self.assertIsNotNone(
+                circuit.assert_equal(
+                    test_circuit_a=test_circuit_a,
+                    test_circuit_b=test_circuit_b,
+                    matrix_norm_type="operator_norm_2",
+                    tolerance_for_matrix_norm_value=1.5
+                )
             )
-        )
+
+        except QuantestPyAssertionError as e:
+
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyAssertionError: " \
+                + "matrix norm value " \
+                + format(np.sqrt(2.+np.sqrt(2.)), ".15g") \
+                + f" is larger than the tolerance {1.5}."
+
+            actual_error_msg = \
+                traceback.format_exception_only(type(e), e)[0].rstrip("\n")
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
