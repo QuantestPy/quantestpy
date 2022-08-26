@@ -8,8 +8,29 @@ _X = np.array([[0, 1], [1, 0]])
 _H = np.array([[1, 1], [1, -1]])/np.sqrt(2.)
 _S = np.array([[1, 0], [0, 1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
-_IMPLEMENTED_SINGLE_QUBIT_GATES = ["x", "h", "s", "t"]
-_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES + ["cx"]
+# gates lists
+_IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM = [
+    "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg"]
+_IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM = [
+    "rx", "ry", "rz", "u1", "u2", "u3"]
+_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM = ["cx", "cy", "cz", "ch"]
+_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM = ["crz", "cu1", "cu3"]
+_IMPLEMENTED_SINGLE_QUBIT_GATES = \
+    _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
+    + _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM
+_IMPLEMENTED_MULTIPLE_QUBIT_GATES = \
+    _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM \
+    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM
+_IMPLEMENTED_GATES_WITHOUT_PARAM = \
+    _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
+    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM
+_IMPLEMENTED_GATES_WITH_ONE_PARAM = ["rx", "ry", "rz", "u1", "crz", "cu1"]
+_IMPLEMENTED_GATES_WITH_TWO_PARAM = ["u2"]
+_IMPLEMENTED_GATES_WITH_THREE_PARAM = ["u3", "cu3"]
+_IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM \
+    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM
+_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES \
+    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES
 
 
 class TestCircuit:
@@ -31,9 +52,9 @@ class TestCircuit:
         """
         Example
         gate = {"name": "x", "target_qubit": [1], "control_qubit": [],
-                "control_value": []}
+                "control_value": [], "parameter": []}
         gate = {"name": "cx", "target_qubit": [1], "control_qubit": [0],
-                "control_value": [1]}
+                "control_value": [1], "parameter": []}
         """
         if not isinstance(gate, dict):
             raise QuantestPyTestCircuitError(
@@ -59,6 +80,11 @@ class TestCircuit:
         if "control_value" not in gate.keys():
             raise QuantestPyTestCircuitError(
                 "gate must contain 'control_value' as a key."
+            )
+
+        if "parameter" not in gate.keys():
+            raise QuantestPyTestCircuitError(
+                "gate must contain 'parameter' as a key."
             )
 
         if gate["name"] not in _IMPLEMENTED_GATES:
@@ -147,6 +173,39 @@ class TestCircuit:
                     f"Value {value} in control_value is not acceptable. "
                     f"It must be either 0 or 1."
                 )
+
+        if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
+                len(gate["parameter"]) != 0:
+            raise QuantestPyTestCircuitError(
+                "Gates with no parameters must have an empty list for "
+                "'parameter'."
+            )
+
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
+                len(gate["parameter"]) != 1:
+            raise QuantestPyTestCircuitError(
+                "Gates with one parameters must have a list containing "
+                "exactly 1 element for 'parameter'."
+            )
+
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_TWO_PARAM and \
+                len(gate["parameter"]) != 2:
+            raise QuantestPyTestCircuitError(
+                "Gates with two parameters must have a list containing "
+                "exactly 2 elements for 'parameter'."
+            )
+
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_THREE_PARAM and \
+                len(gate["parameter"]) != 3:
+            raise QuantestPyTestCircuitError(
+                "Gates with three parameters must have a list containing "
+                "exactly 3 elements for 'parameter'."
+            )
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:
+            for param in gate["parameter"]:
+                if not isinstance(param, float) and not isinstance(param, int):
+                    raise QuantestPyTestCircuitError(
+                        "Parameters must be float or integer type.")
 
         self._gates.append(gate)
 
@@ -327,12 +386,12 @@ if __name__ == "__main__":
     """Example showing how to use TestCircuit class."""
 
     test_circ = TestCircuit(3)
-    test_circ.add_gate({"name": "x", "target_qubit": [0],
-                        "control_qubit": [], "control_value": []})
+    test_circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
+                        "control_value": [], "parameter": []})
     test_circ.add_gate(
         {"name": "cx", "target_qubit": [2], "control_qubit": [0],
-         "control_value": [1]})
+         "control_value": [1], "parameter": []})
     test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
-                        "control_value": []})
+                        "control_value": [], "parameter": []})
 
     state_vector = test_circ._get_state_vector()

@@ -163,10 +163,11 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
                      if qubit not in ancilla_qubits]
 
     def _add_x_gate_in_front(gates: list, qubit: int) -> dict:
-        x_gate = {'name': 'x',
-                  'target_qubit': [qubit],
-                  'control_qubit': [],
-                  'control_value': []}
+        x_gate = {"name": "x",
+                  "target_qubit": [qubit],
+                  "control_qubit": [],
+                  "control_value": [],
+                  "parameter": []}
         gates.insert(0, x_gate)
 
     all_combinations_of_system_qubits = []
