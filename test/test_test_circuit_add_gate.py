@@ -367,3 +367,76 @@ class TestTestCircuitAddGate(unittest.TestCase):
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
             self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_msg_from_duplicate_in_target_qubit(self,):
+
+        test_circuit = TestCircuit(5)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "cx",
+                     "target_qubit": [0, 0, 2],
+                     "control_qubit": [4],
+                     "control_value": [1],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "target_qubit has duplicates: [0, 0, 2].\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_msg_from_duplicate_in_control_qubit(self,):
+
+        test_circuit = TestCircuit(5)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "cx",
+                     "target_qubit": [0],
+                     "control_qubit": [1, 2, 3, 4, 4],
+                     "control_value": [1, 0, 1, 0, 1],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "control_qubit has duplicates: [1, 2, 3, 4, 4].\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_msg_from_intersection_in_target_and_control_qubits(self,):
+
+        test_circuit = TestCircuit(5)
+
+        try:
+            self.assertIsNotNone(
+                test_circuit.add_gate(
+                    {"name": "cx",
+                     "target_qubit": [0, 1, 2, 3],
+                     "control_qubit": [3, 4],
+                     "control_value": [1, 0],
+                     "parameter": []}
+                )
+            )
+
+        except QuantestPyTestCircuitError as e:
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
+                + "target_qubit [0, 1, 2, 3] and control_qubit [3, 4] have " \
+                + "intersection.\n"
+
+            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)
