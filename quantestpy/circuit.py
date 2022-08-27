@@ -23,7 +23,7 @@ def assert_equal_to_operator(
         test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
         number_of_decimal_places: int = 5,
-        check_including_global_phase: bool = True,
+        up_to_global_phase: bool = False,
         msg=None) -> None:
 
     if qasm is None and qiskit_circuit is None and test_circuit is None:
@@ -54,7 +54,7 @@ def assert_equal_to_operator(
         operator_from_test_circuit,
         operator_,
         number_of_decimal_places,
-        check_including_global_phase,
+        up_to_global_phase,
         msg)
 
 
