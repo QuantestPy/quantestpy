@@ -174,6 +174,23 @@ class TestCircuit:
                     f"It must be either 0 or 1."
                 )
 
+        if len(gate["target_qubit"]) != len(set(gate["target_qubit"])):
+            raise QuantestPyTestCircuitError(
+                "Duplicate in target_qubit is not supported."
+            )
+
+        if len(gate["control_qubit"]) != len(set(gate["control_qubit"])):
+            raise QuantestPyTestCircuitError(
+                "Duplicate in control_qubit is not supported."
+            )
+
+        if len(list(set(gate["target_qubit"]) & set(gate["control_qubit"]))) \
+                > 0:
+            raise QuantestPyTestCircuitError(
+                f'target_qubit {gate["target_qubit"]} and '
+                f'control_qubit {gate["control_qubit"]} have intersection.'
+            )
+
         if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
                 len(gate["parameter"]) != 0:
             raise QuantestPyTestCircuitError(
