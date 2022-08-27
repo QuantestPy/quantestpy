@@ -2,12 +2,22 @@ import numpy as np
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 # inside of test unit
-
+# single qubit gates
 _ID = np.array([[1, 0], [0, 1]])
 _X = np.array([[0, 1], [1, 0]])
+_Y = np.array([[0, -1j], [1j, 0]])
+_Z = np.array([[1, 0], [0, -1]])
 _H = np.array([[1, 1], [1, -1]])/np.sqrt(2.)
 _S = np.array([[1, 0], [0, 1j]])
+_Sdg = np.array([[1, 0], [0, -1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
+_Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
+
+# U gates should be implemented here.
+
+# rotation gates should be implemented here.
+
+
 # gates lists
 _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM = [
     "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg"]
@@ -325,6 +335,73 @@ class TestCircuit:
             vector_before_cx = self._binary_to_vector[binary_before_cx]
             all_qubit_gate += \
                 vector_after_cx.reshape(-1, 1) * vector_before_cx
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_cz_gate(
+            self,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_h = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_H, target_qubit=target_qubit)
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_cx, all_qubit_gate_from_h)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_h, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_cy_gate(
+            self,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_sdg = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_Sdg, target_qubit=target_qubit)
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate_from_s = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_S, target_qubit=target_qubit)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_cx, all_qubit_gate_from_sdg)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_s, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_ch_gate(
+            self,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_h = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_H, target_qubit=target_qubit)
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate_from_t = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_T, target_qubit=target_qubit)
+        all_qubit_gate_from_tdg = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_Tdg, target_qubit=target_qubit)
+        all_qubit_gate_from_s = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_S, target_qubit=target_qubit)
+        all_qubit_gate_from_sdg = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_Sdg, target_qubit=target_qubit)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_h, all_qubit_gate_from_s)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_t, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_tdg, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_h, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_sdg, all_qubit_gate)
 
         return all_qubit_gate
 
