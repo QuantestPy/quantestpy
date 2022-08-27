@@ -41,7 +41,7 @@ def assert_equal(
         state_vector_a: Union[np.ndarray, list],
         state_vector_b: Union[np.ndarray, list],
         number_of_decimal_places: int = 5,
-        check_including_global_phase: bool = True,
+        up_to_global_phase: bool = False,
         msg=None):
 
     a = state_vector_a
@@ -72,7 +72,7 @@ def assert_equal(
         )
 
     # remove global phase
-    if not check_including_global_phase:
+    if up_to_global_phase:
 
         abs_a = np.abs(a)
         max_value_abs_a = np.max(abs_a)
