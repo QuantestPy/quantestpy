@@ -4,7 +4,7 @@ import numpy as np
 from quantestpy import TestCircuit
 
 
-class TestTestCircuitCXGate(unittest.TestCase):
+class TestTestCircuitCHGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
