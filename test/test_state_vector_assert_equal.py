@@ -27,7 +27,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             state_vector.assert_equal(
                 vec_a,
                 vec_b,
-                check_including_global_phase=False
+                up_to_global_phase=True
             )
         )
 
@@ -41,11 +41,11 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             state_vector.assert_equal(
                 vec_a,
                 vec_b,
-                check_including_global_phase=False
+                up_to_global_phase=True
             )
         )
 
-    def test_check_including_global_phase_is_true(self,):
+    def test_up_to_global_phase_is_false(self,):
         vec_a = np.array([1, 1j, -1j, -0.999123j]) / 2.
         vec_b = np.array([1, 1j, -1j, -0.999j]) / 2.
 
@@ -53,7 +53,6 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             state_vector.assert_equal(
                 vec_a,
                 vec_b,
-                check_including_global_phase=True,
                 number_of_decimal_places=3
             )
         )
@@ -62,11 +61,10 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             state_vector.assert_equal(
                 vec_a,
                 vec_b,
-                check_including_global_phase=True,
                 number_of_decimal_places=4
             )
 
-    def test_check_including_global_phase_is_true_error_on_purpose(self,):
+    def test_up_to_global_phase_is_false_error_on_purpose(self,):
         vec_a = np.array([0.1+0.04j, 0.01, 0.5+0.007j, 0.001+0.1j]) \
             / 0.5201442107723587
         vec_b = np.array([0.1+0.04j, 0.01, 0.5+0.007j, 0.001+0.1j]) \
@@ -75,6 +73,5 @@ class TestStateVectorAssertEqual(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             state_vector.assert_equal(
                 vec_a,
-                vec_b,
-                check_including_global_phase=True
+                vec_b
             )
