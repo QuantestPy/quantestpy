@@ -414,26 +414,31 @@ class TestCircuit:
         # apply each gate to state vector
         for gate in self._gates:
             if gate["name"] == "x":
-                all_qubit_gate = self._create_all_qubit_gate_from_single_qubit_gate(
-                    _X, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _X, gate["target_qubit"])
 
             elif gate["name"] == "h":
-                all_qubit_gate = self._create_all_qubit_gate_from_single_qubit_gate(
-                    _H, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _H, gate["target_qubit"])
 
             elif gate["name"] == "s":
-                all_qubit_gate = self._create_all_qubit_gate_from_single_qubit_gate(
-                    _S, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _S, gate["target_qubit"])
 
             elif gate["name"] == "t":
-                all_qubit_gate = self._create_all_qubit_gate_from_single_qubit_gate(
-                    _T, gate["target_qubit"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _T, gate["target_qubit"])
 
             elif gate["name"] == "cx":
-                all_qubit_gate = self._create_all_qubit_gate_from_cx_gate(
-                    gate["control_qubit"],
-                    gate["target_qubit"],
-                    gate["control_value"])
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cx_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"])
 
             else:
                 raise
