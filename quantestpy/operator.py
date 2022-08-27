@@ -35,7 +35,7 @@ def assert_equal(
         operator_a: Union[np.ndarray, np.matrix],
         operator_b: Union[np.ndarray, np.matrix],
         number_of_decimal_places: int = 5,
-        check_including_global_phase: bool = True,
+        up_to_global_phase: bool = False,
         msg=None) -> None:
 
     a = operator_a
@@ -60,4 +60,4 @@ def assert_equal(
 
     # Note: error message dhould
     state_vector.assert_equal(a, b, number_of_decimal_places,
-                              check_including_global_phase, msg)
+                              up_to_global_phase, msg)
