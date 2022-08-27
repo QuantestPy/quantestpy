@@ -258,17 +258,17 @@ def _get_matrix_norm(
 
 
 def assert_equal(
-        qasm_a: str = None,
-        qiskit_circuit_a: QuantumCircuit = None,
-        test_circuit_a: TestCircuit = None,
-        qasm_b: str = None,
-        qiskit_circuit_b: QuantumCircuit = None,
-        test_circuit_b: TestCircuit = None,
+        qasm_a: Union[str, None] = None,
+        qiskit_circuit_a: Union[QuantumCircuit, None] = None,
+        test_circuit_a: Union[TestCircuit, None] = None,
+        qasm_b: Union[str, None] = None,
+        qiskit_circuit_b: Union[QuantumCircuit, None] = None,
+        test_circuit_b: Union[TestCircuit, None] = None,
         number_of_decimal_places: int = 5,
         check_including_global_phase: bool = True,
-        matrix_norm_type: str = "",
-        tolerance_for_matrix_norm_value: float = 0.,
-        msg=None):
+        matrix_norm_type: Union[str, None] = None,
+        tolerance_for_matrix_norm_value: Union[float, None] = None,
+        msg: Union[str, None] = None):
 
     # Check inputs for circuit A
     if qasm_a is None and qiskit_circuit_a is None and test_circuit_a is None:
@@ -342,8 +342,8 @@ def assert_equal(
             "quantestpy.TestCircuit class."
         )
 
-    if matrix_norm_type not in \
-        ["", "operator_norm_1", "operator_norm_2",
+    if matrix_norm_type is not None and matrix_norm_type not in \
+        ["operator_norm_1", "operator_norm_2",
          "operator_norm_inf", "Frobenius_norm", "max_norm"]:
         raise QuantestPyError(
             "Invalid value for matrix_norm_type. "
@@ -352,7 +352,8 @@ def assert_equal(
             "'Frobenius_norm' and 'max_norm'."
         )
 
-    if not isinstance(tolerance_for_matrix_norm_value, float):
+    if not isinstance(tolerance_for_matrix_norm_value, float) \
+            and tolerance_for_matrix_norm_value is not None:
         raise QuantestPyError(
             "Type of tolerance_for_matrix_norm_value must be float."
         )
@@ -374,7 +375,7 @@ def assert_equal(
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
 
-    if matrix_norm_type == "":
+    if matrix_norm_type is None:
         # assert equal exact or equal up to a global phase
         operator.assert_equal(
             whole_gates_a,
@@ -391,6 +392,9 @@ def assert_equal(
             matrix_norm_type,
             check_including_global_phase
         )
+
+        if tolerance_for_matrix_norm_value is None:
+            tolerance_for_matrix_norm_value = 0.
 
         if matrix_norm_value > tolerance_for_matrix_norm_value:
 
