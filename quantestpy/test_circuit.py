@@ -388,8 +388,8 @@ class TestCircuit:
 
         return all_qubit_gate
 
-    def set_initial_state_vector(self,
-                                 initial_state_vector: np.ndarray) -> None:
+    def set_initial_state_vector(self, initial_state_vector: np.ndarray) \
+            -> None:
 
         if not isinstance(initial_state_vector, np.ndarray):
             raise QuantestPyTestCircuitError(
