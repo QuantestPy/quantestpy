@@ -386,7 +386,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "target_qubit has duplicates: [0, 0, 2].\n"
+                + "Duplicate in target_qubit is not supported.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
@@ -410,7 +410,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "control_qubit has duplicates: [1, 2, 3, 4, 4].\n"
+                + "Duplicate in control_qubit is not supported.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 

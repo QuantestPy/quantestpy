@@ -176,12 +176,12 @@ class TestCircuit:
 
         if len(gate["target_qubit"]) != len(set(gate["target_qubit"])):
             raise QuantestPyTestCircuitError(
-                f'target_qubit has duplicates: {gate["target_qubit"]}.'
+                "Duplicate in target_qubit is not supported."
             )
 
         if len(gate["control_qubit"]) != len(set(gate["control_qubit"])):
             raise QuantestPyTestCircuitError(
-                f'control_qubit has duplicates: {gate["control_qubit"]}.'
+                "Duplicate in control_qubit is not supported."
             )
 
         if len(list(set(gate["target_qubit"]) & set(gate["control_qubit"]))) \
