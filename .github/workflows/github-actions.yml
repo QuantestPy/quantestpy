@@ -39,3 +39,6 @@ jobs:
           python3 -m unittest test.test_test_circuit_create_all_qubit_gate_from_single_qubit_gate
           python3 -m unittest test.test_state_vector_assert_equal
           python3 -m unittest test.test_circuit_assert_equal
+          python3 -m unittest test.test_test_circuit_ch_gate
+          python3 -m unittest test.test_test_circuit_cz_gate
+          python3 -m unittest test.test_test_circuit_cy_gate
