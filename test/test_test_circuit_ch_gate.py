@@ -12,7 +12,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
     $ python -m unittest test.test_test_circuit_ch_gate
     ........
     ----------------------------------------------------------------------
-    Ran 7 tests in 0.050s
+    Ran 7 tests in 0.009s
 
     OK
     $
@@ -30,7 +30,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
                                   [0, 0, 1/np.sqrt(2), -1/np.sqrt(2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_qiskit_qubit_order(self,):
         circ = TestCircuit(2)
@@ -46,7 +46,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
             [0. + 0.j, 0.70710678+0.j, 0. + 0.j, -0.70710678+0.j]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_flip_control_target(self,):
         circ = TestCircuit(2)
@@ -62,7 +62,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
             [0. + 0.j, 0.70710678+0.j, 0. + 0.j, -0.70710678+0.j]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_three_qubits_qiskit_qubit_order(self,):
         circ = TestCircuit(3)
@@ -98,7 +98,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
                                    0. + 0.j, -0.70710678+0.j]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_control_value_is_zero(self,):
         circ = TestCircuit(2)
@@ -112,7 +112,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
                                   [0, 0, 0, 1]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_multiple_controls(self,):
         circ = TestCircuit(3)
@@ -132,7 +132,7 @@ class TestTestCircuitCHGate(unittest.TestCase):
                                    1/np.sqrt(2), -1/np.sqrt(2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_ch_multiple_targets(self,):
 
@@ -150,4 +150,5 @@ class TestTestCircuitCHGate(unittest.TestCase):
         )
 
         self.assertIsNone(
-            np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1)))
+            np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1),
+                                       atol=1e-07))
