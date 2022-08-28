@@ -83,9 +83,11 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         )
 
         try:
-            circuit.assert_ancilla_is_zero(
-                test_circuit=test_circuit,
-                ancilla_qubits=[1, 2]
+            self.assertIsNotNone(
+                circuit.assert_ancilla_is_zero(
+                    test_circuit=test_circuit,
+                    ancilla_qubits=[1, 2]
+                )
             )
 
         except QuantestPyAssertionError as e:

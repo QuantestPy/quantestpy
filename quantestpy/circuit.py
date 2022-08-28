@@ -132,24 +132,29 @@ def assert_is_zero(qasm: str = None,
 
 def assert_ancilla_is_zero(ancilla_qubits: list,
                            qasm: str = None,
+                           qiskit_circuit: QuantumCircuit = None,
                            test_circuit: TestCircuit = None,
                            number_of_decimal_places: int = 5,
                            msg=None) -> None:
 
-    if qasm is None and test_circuit is None:
+    if qasm is None and qiskit_circuit is None and test_circuit is None:
         raise QuantestPyError(
-            "Missing qasm or test circuit."
+            "Missing qasm or qiskit_circuit or test circuit."
         )
 
-    if qasm is not None and test_circuit is not None:
+    if (qasm is not None and qiskit_circuit is not None) \
+            or (qasm is not None and test_circuit is not None) \
+            or (qiskit_circuit is not None and test_circuit is not None):
         raise QuantestPyError(
-            "Qasm and test circuit must not both be given."
+            "You need to choose one parameter of Qasm, \
+                qiskit_circuit and test circuit."
         )
 
     if qasm is not None:
-        raise QuantestPyError(
-            "Loading qasm is not yet implemented."
-        )
+        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
+
+    if qiskit_circuit is not None:
+        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(ancilla_qubits, list):
         raise QuantestPyError(
@@ -218,9 +223,9 @@ def _get_matrix_norm(
         a: np.ndarray,
         b: np.ndarray,
         matrix_norm_type: str,
-        check_including_global_phase: bool) -> float:
+        up_to_global_phase: bool) -> float:
 
-    if not check_including_global_phase:
+    if up_to_global_phase:
         a_shape = a.shape
 
         # cvt. to vector
@@ -265,7 +270,7 @@ def assert_equal(
         qiskit_circuit_b: Union[QuantumCircuit, None] = None,
         test_circuit_b: Union[TestCircuit, None] = None,
         number_of_decimal_places: int = 5,
-        check_including_global_phase: bool = True,
+        up_to_global_phase: bool = False,
         matrix_norm_type: Union[str, None] = None,
         tolerance_for_matrix_norm_value: Union[float, None] = None,
         msg: Union[str, None] = None):
@@ -381,7 +386,7 @@ def assert_equal(
             whole_gates_a,
             whole_gates_b,
             number_of_decimal_places,
-            check_including_global_phase,
+            up_to_global_phase,
             msg)
 
     else:
@@ -390,7 +395,7 @@ def assert_equal(
             whole_gates_a,
             whole_gates_b,
             matrix_norm_type,
-            check_including_global_phase
+            up_to_global_phase
         )
 
         if tolerance_for_matrix_norm_value is None:
