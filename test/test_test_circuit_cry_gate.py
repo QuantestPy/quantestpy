@@ -32,7 +32,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
             [0, 0, np.sin(lambda_/2), np.cos(lambda_/2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_qiskit_qubit_order(self,):
         circ = TestCircuit(2)
@@ -49,7 +50,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
             [0, np.sin(lambda_/2), 0, np.cos(lambda_/2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_flip_control_target(self,):
         circ = TestCircuit(2)
@@ -65,7 +67,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
             [0, np.sin(lambda_/2), 0, np.cos(lambda_/2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_three_qubits_qiskit_qubit_order(self,):
         circ = TestCircuit(3)
@@ -103,7 +106,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
                  0. + 0.j,  0.98078528+0.j]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_control_value_is_zero(self,):
         circ = TestCircuit(2)
@@ -119,7 +123,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
             [0, 0, 0, 1]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_multiple_controls(self,):
         circ = TestCircuit(3)
@@ -141,7 +146,8 @@ class TestTestCircuitCRYGate(unittest.TestCase):
                                    np.sin(lambda_/2), np.cos(lambda_/2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-07))
 
     def test_cry_multiple_targets(self,):
         lambda_ = np.pi/8
