@@ -11,7 +11,7 @@ from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.converter import _cvt_qiskit_to_test_circuit
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
-
+from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
 
@@ -212,3 +212,195 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         + "entangled with other qubits."
     msg = ut_test_case._formatMessage(msg, error_msg)
     raise QuantestPyAssertionError(msg)
+
+
+def _get_matrix_norm(
+        a: np.ndarray,
+        b: np.ndarray,
+        matrix_norm_type: str,
+        check_including_global_phase: bool) -> float:
+
+    if not check_including_global_phase:
+        a_shape = a.shape
+
+        # cvt. to vector
+        a = np.ravel(a)
+        b = np.ravel(b)
+
+        # rm. global phase
+        a, b = _remove_global_phase_from_two_vectors(a, b)
+
+        # back to matrix
+        a = np.reshape(a, newshape=a_shape)
+        b = np.reshape(b, newshape=a_shape)
+
+    m = a - b
+
+    if matrix_norm_type == "operator_norm_1":
+        matrix_norm_value = np.linalg.norm(m, 1)
+
+    elif matrix_norm_type == "operator_norm_2":
+        matrix_norm_value = np.linalg.norm(m, 2)
+
+    elif matrix_norm_type == "operator_norm_inf":
+        matrix_norm_value = np.linalg.norm(m, np.inf)
+
+    elif matrix_norm_type == "Frobenius_norm":
+        matrix_norm_value = np.linalg.norm(m, "fro")
+
+    elif matrix_norm_type == "max_norm":
+        matrix_norm_value = np.max(np.abs(m))
+
+    else:
+        raise
+
+    return matrix_norm_value
+
+
+def assert_equal(
+        qasm_a: Union[str, None] = None,
+        qiskit_circuit_a: Union[QuantumCircuit, None] = None,
+        test_circuit_a: Union[TestCircuit, None] = None,
+        qasm_b: Union[str, None] = None,
+        qiskit_circuit_b: Union[QuantumCircuit, None] = None,
+        test_circuit_b: Union[TestCircuit, None] = None,
+        number_of_decimal_places: int = 5,
+        check_including_global_phase: bool = True,
+        matrix_norm_type: Union[str, None] = None,
+        tolerance_for_matrix_norm_value: Union[float, None] = None,
+        msg: Union[str, None] = None):
+
+    # Check inputs for circuit A
+    if qasm_a is None and qiskit_circuit_a is None and test_circuit_a is None:
+        raise QuantestPyError(
+            "Missing information for circuit A. "
+            "One of the following must be given: "
+            "qasm_a, qiskit_circuit_a and test_circuit_a."
+        )
+
+    if (qasm_a is not None and qiskit_circuit_a is not None) \
+            or (qasm_a is not None and test_circuit_a is not None) \
+            or (qiskit_circuit_a is not None and test_circuit_a is not None):
+        raise QuantestPyError(
+            "Too much information for circuit A. "
+            "Only one of the following should be given: "
+            "qasm_a, qiskit_circuit_a and test_circuit_a."
+        )
+
+    if qasm_a is not None and not isinstance(qasm_a, str):
+        raise QuantestPyError(
+            "Type of qasm_a must be str."
+        )
+
+    if qiskit_circuit_a is not None \
+            and not isinstance(qiskit_circuit_a, QuantumCircuit):
+        raise QuantestPyError(
+            "Type of qiskit_circuit_a must be an instance of "
+            "qiskit.QuantumCircuit class."
+        )
+
+    if test_circuit_a is not None \
+            and not isinstance(test_circuit_a, TestCircuit):
+        raise QuantestPyError(
+            "Type of test_circuit_a must be an instance of "
+            "quantestpy.TestCircuit class."
+        )
+
+    # Check inputs for circuit B
+    if qasm_b is None and qiskit_circuit_b is None and test_circuit_b is None:
+        raise QuantestPyError(
+            "Missing information for circuit B. "
+            "One of the following must be given: "
+            "qasm_b, qiskit_circuit_b and test_circuit_b."
+        )
+
+    if (qasm_b is not None and qiskit_circuit_b is not None) \
+            or (qasm_b is not None and test_circuit_b is not None) \
+            or (qiskit_circuit_b is not None and test_circuit_b is not None):
+        raise QuantestPyError(
+            "Too much information for circuit B. "
+            "Only one of the following should be given: "
+            "qasm_b, qiskit_circuit_b and test_circuit_b."
+        )
+
+    if qasm_b is not None and not isinstance(qasm_b, str):
+        raise QuantestPyError(
+            "Type of qasm_b must be str."
+        )
+
+    if qiskit_circuit_b is not None \
+            and not isinstance(qiskit_circuit_b, QuantumCircuit):
+        raise QuantestPyError(
+            "Type of qiskit_circuit_b must be an instance of "
+            "qiskit.QuantumCircuit class."
+        )
+
+    if test_circuit_b is not None \
+            and not isinstance(test_circuit_b, TestCircuit):
+        raise QuantestPyError(
+            "Type of test_circuit_b must be an instance of "
+            "quantestpy.TestCircuit class."
+        )
+
+    if matrix_norm_type is not None and matrix_norm_type not in \
+        ["operator_norm_1", "operator_norm_2",
+         "operator_norm_inf", "Frobenius_norm", "max_norm"]:
+        raise QuantestPyError(
+            "Invalid value for matrix_norm_type. "
+            "One of the following should be chosen: "
+            "'operator_norm_1', 'operator_norm_2', 'operator_norm_inf', "
+            "'Frobenius_norm' and 'max_norm'."
+        )
+
+    if not isinstance(tolerance_for_matrix_norm_value, float) \
+            and tolerance_for_matrix_norm_value is not None:
+        raise QuantestPyError(
+            "Type of tolerance_for_matrix_norm_value must be float."
+        )
+
+    # cvt. to test_circuit_a
+    if qasm_a is not None:
+        test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
+
+    elif qiskit_circuit_a is not None:
+        test_circuit_a = _cvt_qiskit_to_test_circuit(qiskit_circuit_a)
+
+    # cvt. to test_circuit_b
+    if qasm_b is not None:
+        test_circuit_b = _cvt_openqasm_to_test_circuit(qasm_b)
+
+    elif qiskit_circuit_b is not None:
+        test_circuit_b = _cvt_qiskit_to_test_circuit(qiskit_circuit_b)
+
+    whole_gates_a = test_circuit_a._get_whole_gates()
+    whole_gates_b = test_circuit_b._get_whole_gates()
+
+    if matrix_norm_type is None:
+        # assert equal exact or equal up to a global phase
+        operator.assert_equal(
+            whole_gates_a,
+            whole_gates_b,
+            number_of_decimal_places,
+            check_including_global_phase,
+            msg)
+
+    else:
+        # assert check matrix norm as a distance
+        matrix_norm_value = _get_matrix_norm(
+            whole_gates_a,
+            whole_gates_b,
+            matrix_norm_type,
+            check_including_global_phase
+        )
+
+        if tolerance_for_matrix_norm_value is None:
+            tolerance_for_matrix_norm_value = 0.
+
+        if matrix_norm_value > tolerance_for_matrix_norm_value:
+
+            error_msg = "matrix norm value " \
+                + format(matrix_norm_value, ".15g") \
+                + " is larger than the tolerance " \
+                + format(tolerance_for_matrix_norm_value, ".15g") + "."
+            msg = ut_test_case._formatMessage(msg, error_msg)
+            raise QuantestPyAssertionError(msg)
