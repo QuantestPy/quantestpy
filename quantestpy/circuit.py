@@ -218,9 +218,9 @@ def _get_matrix_norm(
         a: np.ndarray,
         b: np.ndarray,
         matrix_norm_type: str,
-        check_including_global_phase: bool) -> float:
+        up_to_global_phase: bool) -> float:
 
-    if not check_including_global_phase:
+    if up_to_global_phase:
         a_shape = a.shape
 
         # cvt. to vector
@@ -265,7 +265,7 @@ def assert_equal(
         qiskit_circuit_b: Union[QuantumCircuit, None] = None,
         test_circuit_b: Union[TestCircuit, None] = None,
         number_of_decimal_places: int = 5,
-        check_including_global_phase: bool = True,
+        up_to_global_phase: bool = False,
         matrix_norm_type: Union[str, None] = None,
         tolerance_for_matrix_norm_value: Union[float, None] = None,
         msg: Union[str, None] = None):
@@ -381,7 +381,7 @@ def assert_equal(
             whole_gates_a,
             whole_gates_b,
             number_of_decimal_places,
-            check_including_global_phase,
+            up_to_global_phase,
             msg)
 
     else:
@@ -390,7 +390,7 @@ def assert_equal(
             whole_gates_a,
             whole_gates_b,
             matrix_norm_type,
-            check_including_global_phase
+            up_to_global_phase
         )
 
         if tolerance_for_matrix_norm_value is None:
