@@ -13,9 +13,37 @@ _Sdg = np.array([[1, 0], [0, -1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
 _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
 
-# U gates should be implemented here.
+# U gates
 
-# rotation gates should be implemented here.
+
+def _u3(theta: float, phi: float, lambda_: float) -> np.ndarray:
+    return np.array([
+        [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
+        [np.exp(1j*phi)*np.sin(theta/2),
+         np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
+
+
+def _u2(phi: float, lambda_: float) -> np.ndarray:
+    return _u3(np.pi/2, phi, lambda_)
+
+
+def _u1(lambda_: float) -> np.ndarray:
+    return _u3(0, 0, lambda_)
+
+
+# rotation gates
+
+
+def _rx(theta: float) -> np.ndarray:
+    return _u3(theta, -np.pi/2, np.pi/2)
+
+
+def _ry(theta: float) -> np.ndarray:
+    return _u3(theta, 0, 0)
+
+
+def _rz(phi: float) -> np.ndarray:
+    return _u1(phi)
 
 
 # gates lists
@@ -24,7 +52,8 @@ _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM = [
 _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM = [
     "rx", "ry", "rz", "u1", "u2", "u3"]
 _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM = ["cx", "cy", "cz", "ch"]
-_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM = ["crz", "cu1", "cu3"]
+_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM = [
+    "crx", "cry", "crz", "cu1", "cu3"]
 _IMPLEMENTED_SINGLE_QUBIT_GATES = \
     _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM
@@ -34,7 +63,8 @@ _IMPLEMENTED_MULTIPLE_QUBIT_GATES = \
 _IMPLEMENTED_GATES_WITHOUT_PARAM = \
     _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM
-_IMPLEMENTED_GATES_WITH_ONE_PARAM = ["rx", "ry", "rz", "u1", "crz", "cu1"]
+_IMPLEMENTED_GATES_WITH_ONE_PARAM = [
+    "rx", "ry", "rz", "u1", "crx", "cry", "crz", "cu1"]
 _IMPLEMENTED_GATES_WITH_TWO_PARAM = ["u2"]
 _IMPLEMENTED_GATES_WITH_THREE_PARAM = ["u3", "cu3"]
 _IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM \
@@ -402,6 +432,82 @@ class TestCircuit:
         all_qubit_gate = np.matmul(all_qubit_gate_from_tdg, all_qubit_gate)
         all_qubit_gate = np.matmul(all_qubit_gate_from_h, all_qubit_gate)
         all_qubit_gate = np.matmul(all_qubit_gate_from_sdg, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_crx_gate(
+            self,
+            lambda_,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_s = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_S, target_qubit=target_qubit)
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate_from_ry = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_ry(-lambda_ / 2),
+                target_qubit=target_qubit)
+        all_qubit_gate_from_u3 = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_u3(lambda_/2, -np.pi/2, 0),
+                target_qubit=target_qubit)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_cx, all_qubit_gate_from_s)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_ry, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_u3, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_cry_gate(
+            self,
+            lambda_,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate_from_ry_plus = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_ry(lambda_ / 2),
+                target_qubit=target_qubit)
+        all_qubit_gate_from_ry_minus = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_ry(-lambda_ / 2),
+                target_qubit=target_qubit)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_cx, all_qubit_gate_from_ry_plus)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_ry_minus, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_crz_gate(
+            self,
+            lambda_,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list) -> np.ndarray:
+        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
+            control_qubit, target_qubit, control_value)
+        all_qubit_gate_from_u1_plus = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_u1(lambda_ / 2),
+                target_qubit=target_qubit)
+        all_qubit_gate_from_u1_minus = \
+            self._create_all_qubit_gate_from_single_qubit_gate(
+                single_qubit_gate=_u1(-lambda_ / 2),
+                target_qubit=target_qubit)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_cx, all_qubit_gate_from_u1_plus)
+        all_qubit_gate = np.matmul(
+            all_qubit_gate_from_u1_minus, all_qubit_gate)
+        all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
 
         return all_qubit_gate
 
