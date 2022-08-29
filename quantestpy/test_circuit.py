@@ -16,34 +16,34 @@ _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
 # U gates
 
 
-def _U3(theta: float, phi: float, lambda_: float) -> np.ndarray:
+def _u3(theta: float, phi: float, lambda_: float) -> np.ndarray:
     return np.array([
         [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
         [np.exp(1j*phi)*np.sin(theta/2),
          np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
 
 
-def _U2(phi: float, lambda_: float) -> np.ndarray:
-    return _U3(np.pi/2, phi, lambda_)
+def _u2(phi: float, lambda_: float) -> np.ndarray:
+    return _u3(np.pi/2, phi, lambda_)
 
 
-def _U1(lambda_: float) -> np.ndarray:
-    return _U3(0, 0, lambda_)
+def _u1(lambda_: float) -> np.ndarray:
+    return _u3(0, 0, lambda_)
 
 
 # rotation gates
 
 
-def _RX(theta: float) -> np.ndarray:
-    return _U3(theta, -np.pi/2, np.pi/2)
+def _rx(theta: float) -> np.ndarray:
+    return _u3(theta, -np.pi/2, np.pi/2)
 
 
-def _RY(theta: float) -> np.ndarray:
-    return _U3(theta, 0, 0)
+def _ry(theta: float) -> np.ndarray:
+    return _u3(theta, 0, 0)
 
 
-def _RZ(phi: float) -> np.ndarray:
-    return _U1(phi)
+def _rz(phi: float) -> np.ndarray:
+    return _u1(phi)
 
 
 # gates lists
@@ -448,11 +448,11 @@ class TestCircuit:
             control_qubit, target_qubit, control_value)
         all_qubit_gate_from_ry = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_RY(-lambda_ / 2),
+                single_qubit_gate=_ry(-lambda_ / 2),
                 target_qubit=target_qubit)
         all_qubit_gate_from_u3 = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_U3(lambda_/2, -np.pi/2, 0),
+                single_qubit_gate=_u3(lambda_/2, -np.pi/2, 0),
                 target_qubit=target_qubit)
         all_qubit_gate = np.matmul(
             all_qubit_gate_from_cx, all_qubit_gate_from_s)
@@ -473,11 +473,11 @@ class TestCircuit:
             control_qubit, target_qubit, control_value)
         all_qubit_gate_from_ry_plus = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_RY(lambda_ / 2),
+                single_qubit_gate=_ry(lambda_ / 2),
                 target_qubit=target_qubit)
         all_qubit_gate_from_ry_minus = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_RY(-lambda_ / 2),
+                single_qubit_gate=_ry(-lambda_ / 2),
                 target_qubit=target_qubit)
         all_qubit_gate = np.matmul(
             all_qubit_gate_from_cx, all_qubit_gate_from_ry_plus)
@@ -497,11 +497,11 @@ class TestCircuit:
             control_qubit, target_qubit, control_value)
         all_qubit_gate_from_u1_plus = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_U1(lambda_ / 2),
+                single_qubit_gate=_u1(lambda_ / 2),
                 target_qubit=target_qubit)
         all_qubit_gate_from_u1_minus = \
             self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_U1(-lambda_ / 2),
+                single_qubit_gate=_u1(-lambda_ / 2),
                 target_qubit=target_qubit)
         all_qubit_gate = np.matmul(
             all_qubit_gate_from_cx, all_qubit_gate_from_u1_plus)
