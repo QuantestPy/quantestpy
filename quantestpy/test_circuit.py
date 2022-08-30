@@ -1,5 +1,5 @@
 import numpy as np
-#from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.exceptions import QuantestPyTestCircuitError
 
 # inside of test unit
 # single qubit gates
