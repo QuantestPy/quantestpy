@@ -657,34 +657,34 @@ class TestCircuit:
             elif gate["name"] == "rx":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _rx(gate["params"][0]), gate["target_qubit"])
+                        _rx(gate["parameter"][0]), gate["target_qubit"])
 
             elif gate["name"] == "ry":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _ry(gate["params"][0]), gate["target_qubit"])
+                        _ry(gate["parameter"][0]), gate["target_qubit"])
 
             elif gate["name"] == "rz":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _rz(gate["params"][0]), gate["target_qubit"])
+                        _rz(gate["parameter"][0]), gate["target_qubit"])
 
             elif gate["name"] == "u1":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _u1(gate["params"][0]), gate["target_qubit"])
+                        _u1(gate["parameter"][0]), gate["target_qubit"])
 
             elif gate["name"] == "u2":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _u2(gate["params"][0], (gate["params"][1])),
+                        _u2(gate["parameter"][0], (gate["parameter"][1])),
                         gate["target_qubit"])
 
             elif gate["name"] == "u3":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _u3(gate["params"][0], gate["params"][1],
-                            gate["params"][2]),
+                        _u3(gate["parameter"][0], gate["parameter"][1],
+                            gate["parameter"][2]),
                         gate["target_qubit"])
 
             elif gate["name"] == "cx":
@@ -718,7 +718,7 @@ class TestCircuit:
             elif gate["name"] == "crx":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_crx_gate(
-                        gate["params"][0],
+                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
@@ -726,7 +726,7 @@ class TestCircuit:
             elif gate["name"] == "cry":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cry_gate(
-                        gate["params"][0],
+                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
@@ -734,7 +734,7 @@ class TestCircuit:
             elif gate["name"] == "crz":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_crz_gate(
-                        gate["params"][0],
+                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
@@ -742,7 +742,7 @@ class TestCircuit:
             elif gate["name"] == "cu1":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cu1_gate(
-                        gate["params"][0],
+                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
@@ -750,9 +750,9 @@ class TestCircuit:
             elif gate["name"] == "cu3":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cu3_gate(
-                        gate["params"][0],
-                        gate["params"][1],
-                        gate["params"][2],
+                        gate["parameter"][0],
+                        gate["parameter"][1],
+                        gate["parameter"][2],
                         gate["control_qubit"],
                         gate["target_qubit"],
                         gate["control_value"])
