@@ -192,10 +192,11 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
 
         actual_gate = circ._get_whole_gates()
 
-        expected_gate = np.array([[np.cos(theta/2), -np.sin(theta/2), 0, 0],
-                                  [-np.sin(theta/2), np.cos(theta/2), 0, 0],
-                                  [0, 0, np.cos(theta/2), -np.sin(theta/2)],
-                                  [0, 0, -np.sin(theta/2), np.cos(theta/2)]])
+        expected_gate = np.array(
+            [[np.cos(theta/2), -1j*np.sin(theta/2), 0, 0],
+             [-1j*np.sin(theta/2), np.cos(theta/2), 0, 0],
+             [0, 0, np.cos(theta/2), -1j*np.sin(theta/2)],
+             [0, 0, -1j*np.sin(theta/2), np.cos(theta/2)]])
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
