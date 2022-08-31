@@ -437,7 +437,7 @@ class TestCircuit:
 
     def _create_all_qubit_gate_from_crx_gate(
             self,
-            lambda_,
+            lambda_: float,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:
@@ -465,7 +465,7 @@ class TestCircuit:
 
     def _create_all_qubit_gate_from_cry_gate(
             self,
-            lambda_,
+            lambda_: float,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:
@@ -489,7 +489,7 @@ class TestCircuit:
 
     def _create_all_qubit_gate_from_crz_gate(
             self,
-            lambda_,
+            lambda_: float,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:
@@ -615,7 +615,7 @@ class TestCircuit:
             elif gate["name"] == "u2":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_single_qubit_gate(
-                        _u2(gate["parameter"][0], (gate["parameter"][1])),
+                        _u2(gate["parameter"][0], gate["parameter"][1]),
                         gate["target_qubit"])
 
             elif gate["name"] == "u3":
