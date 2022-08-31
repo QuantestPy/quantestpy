@@ -337,7 +337,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, 0, -1]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, rtol=1e-07))
 
     def test_get_whole_gates_ch(self,):
         circ = TestCircuit(2)
@@ -353,7 +353,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, 1/np.sqrt(2), -1/np.sqrt(2)]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_crx(self,):
         circ = TestCircuit(2)
@@ -386,7 +386,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, np.cos(theta/2), -np.sin(theta/2)],
                                   [0, 0, np.sin(theta/2), np.cos(theta/2)]])
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_crz(self,):
         circ = TestCircuit(2)
