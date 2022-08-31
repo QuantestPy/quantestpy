@@ -337,7 +337,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, 0, -1]])
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate, rtol=1e-07))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_ch(self,):
         circ = TestCircuit(2)
