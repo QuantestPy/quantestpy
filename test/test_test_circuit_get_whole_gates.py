@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 
 from quantestpy import TestCircuit
-from quantestpy import test_circuit
 
 
 class TestTestCircuitGetWholeGates(unittest.TestCase):
@@ -13,7 +12,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
     $ python -m unittest test.test_test_circuit_get_whole_gates
     ........
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.009s
+    Ran 24 tests in 0.009s
 
     OK
     $
@@ -365,12 +364,13 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
 
         actual_gate = circ._get_whole_gates()
 
-        expected_gate = np.array([[1, 0, 0, 0],
-                                  [0, 1, 0, 0],
-                                  [0, 0, np.cos(theta/2), -np.sin(theta/2)],
-                                  [0, 0, -np.sin(theta/2), np.cos(theta/2)]])
+        expected_gate = np.array([
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, np.cos(theta/2), -1j*np.sin(theta/2)],
+            [0, 0, -1j*np.sin(theta/2), np.cos(theta/2)]])
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_cry(self,):
         circ = TestCircuit(2)
@@ -438,4 +438,4 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, np.exp(1j*phi)*np.sin(theta/2),
                                    np.exp(1j*(lambda_+phi))*np.cos(theta/2)]])
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))

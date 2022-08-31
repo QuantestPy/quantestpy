@@ -43,7 +43,7 @@ def _ry(theta: float) -> np.ndarray:
 
 
 def _rz(phi: float) -> np.ndarray:
-    return _u1(phi)
+    return _u1(phi)*np.exp(-1j*phi/2)
 
 
 # gates lists
@@ -512,7 +512,8 @@ class TestCircuit:
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cu1_gate(
-            self, lambda_,
+            self,
+            lambda_: float,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:
@@ -541,7 +542,10 @@ class TestCircuit:
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cu3_gate(
-            self, theta, phi, lambda_,
+            self,
+            theta: float,
+            phi: float,
+            lambda_: float,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:
