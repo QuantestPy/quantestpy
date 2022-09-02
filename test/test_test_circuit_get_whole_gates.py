@@ -306,3 +306,67 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_scalar_one_target(self,):
+
+        test_patterns = [
+            (0, np.pi/3.),
+            (1, np.pi/5.),
+            (2, np.pi/7.)
+        ]
+
+        for target_qubit, parameter in test_patterns:
+            circ = TestCircuit(3)
+            circ.add_gate(
+                {"name": "scalar",
+                 "target_qubit": [target_qubit],
+                 "control_qubit": [],
+                 "control_value": [],
+                 "parameter": [parameter]})
+            actual_gate = circ._get_whole_gates()
+
+            expected_gate = \
+                np.array([[1, 0, 0, 0, 0, 0, 0, 0],
+                          [0, 1, 0, 0, 0, 0, 0, 0],
+                          [0, 0, 1, 0, 0, 0, 0, 0],
+                          [0, 0, 0, 1, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 1, 0, 0, 0],
+                          [0, 0, 0, 0, 0, 1, 0, 0],
+                          [0, 0, 0, 0, 0, 0, 1, 0],
+                          [0, 0, 0, 0, 0, 0, 0, 1]]) * np.exp(1j*parameter)
+
+            self.assertIsNone(
+                np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_scalar_multi_target(self,):
+
+        test_patterns = [
+            (3, [0, 1], np.pi/3.),
+            (3, [0, 1, 2], np.pi/5.),
+            (3, [0, 2], np.pi/7.)
+        ]
+
+        for num_qubit, target_qubit, parameter in test_patterns:
+
+            circ = TestCircuit(num_qubit)
+            circ.add_gate(
+                {"name": "scalar",
+                    "target_qubit": target_qubit,
+                    "control_qubit": [],
+                    "control_value": [],
+                    "parameter": [parameter]})
+            actual_gate = circ._get_whole_gates()
+
+            expected_gate = \
+                np.array([[1, 0, 0, 0, 0, 0, 0, 0],
+                          [0, 1, 0, 0, 0, 0, 0, 0],
+                          [0, 0, 1, 0, 0, 0, 0, 0],
+                          [0, 0, 0, 1, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 1, 0, 0, 0],
+                          [0, 0, 0, 0, 0, 1, 0, 0],
+                          [0, 0, 0, 0, 0, 0, 1, 0],
+                          [0, 0, 0, 0, 0, 0, 0, 1]]) \
+                * np.exp(1j*parameter*len(target_qubit))
+
+            self.assertIsNone(
+                np.testing.assert_allclose(actual_gate, expected_gate))
