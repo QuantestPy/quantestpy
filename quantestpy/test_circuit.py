@@ -46,11 +46,17 @@ def _rz(phi: float) -> np.ndarray:
     return _u1(phi)*np.exp(-1j*phi/2)
 
 
+# scalar gate
+def _scalar(parameter: list) -> np.ndarray:
+    theta = parameter[0]
+    return _ID * np.exp(1j*theta)
+
+
 # gates lists
 _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM = [
     "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg"]
 _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM = [
-    "rx", "ry", "rz", "u1", "u2", "u3"]
+    "rx", "ry", "rz", "u1", "u2", "u3", "scalar"]
 _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM = ["cx", "cy", "cz", "ch"]
 _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM = [
     "crx", "cry", "crz", "cu1", "cu3"]
@@ -64,7 +70,7 @@ _IMPLEMENTED_GATES_WITHOUT_PARAM = \
     _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM
 _IMPLEMENTED_GATES_WITH_ONE_PARAM = [
-    "rx", "ry", "rz", "u1", "crx", "cry", "crz", "cu1"]
+    "rx", "ry", "rz", "u1", "crx", "cry", "crz", "cu1", "scalar"]
 _IMPLEMENTED_GATES_WITH_TWO_PARAM = ["u2"]
 _IMPLEMENTED_GATES_WITH_THREE_PARAM = ["u3", "cu3"]
 _IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM \
@@ -624,6 +630,11 @@ class TestCircuit:
                         _u3(gate["parameter"][0], gate["parameter"][1],
                             gate["parameter"][2]),
                         gate["target_qubit"])
+
+            elif gate["name"] == "scalar":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_single_qubit_gate(
+                        _scalar(gate["parameter"]), gate["target_qubit"])
 
             elif gate["name"] == "cx":
                 all_qubit_gate = \
