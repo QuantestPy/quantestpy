@@ -13,15 +13,15 @@ def _requires_from_file(filename):
 setup(
     name="quantestpy",
     version="0.1.0",
-    license="Apache-2.0",
-    description="Test framework for quantum circuits",
-    author="mitz1012,junnaka51",
+    license="Apache 2.0",
+    description="Software for testing quantum computing programs.",
+    author="Quantestpy Development Team",
     url="https://github.com/QuantestPy/quantestpy",
     packages=find_packages(),
     py_modules=[splitext(basename(path))[0]
-                for path in glob('quantestpy/*.py')],
+                for path in glob("quantestpy/*.py")],
     include_package_data=True,
     zip_safe=False,
-    python_requires='>=3.8.0',
-    install_requires=_requires_from_file('requirements.txt')
+    python_requires=">=3.7",
+    install_requires=_requires_from_file("requirements.txt")
 )
