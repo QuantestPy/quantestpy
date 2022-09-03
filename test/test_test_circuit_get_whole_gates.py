@@ -12,7 +12,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
     $ python -m unittest test.test_test_circuit_get_whole_gates
     ........
     ----------------------------------------------------------------------
-    Ran 24 tests in 0.009s
+    Ran 18 tests in 0.007s
 
     OK
     $
