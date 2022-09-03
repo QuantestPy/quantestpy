@@ -122,3 +122,29 @@ class TestConverter(unittest.TestCase):
                                    "parameter": []})
 
         self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+
+    def test__cvt_qiskit_to_test_circuit_global_phase(self,):
+
+        qc = QuantumCircuit(3, global_phase=np.pi/7.)
+        qc.h(0)
+        qc.ccx(0, 1, 2)
+        actual_circuit = _cvt_qiskit_to_test_circuit(qc)
+
+        expected_circuit = TestCircuit(3)
+        expected_circuit.add_gate({"name": "h",
+                                   "target_qubit": [0],
+                                   "control_qubit": [],
+                                   "control_value": [],
+                                   "parameter": []})
+        expected_circuit.add_gate({"name": "cx",
+                                   "target_qubit": [2],
+                                   "control_qubit": [0, 1],
+                                   "control_value": [1, 1],
+                                   "parameter": []})
+        expected_circuit.add_gate({"name": "scalar",
+                                   "target_qubit": [0],
+                                   "control_qubit": [],
+                                   "control_value": [],
+                                   "parameter": [np.pi/7.]})
+
+        self.assertEqual(vars(actual_circuit), vars(expected_circuit))

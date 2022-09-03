@@ -10,6 +10,7 @@ def _cvt_qiskit_to_test_circuit(
     experiments = qobj_dict["experiments"][0]  # [0] changes list into dict.
     gates = experiments["instructions"]
     num_qubits = experiments["config"]["n_qubits"]
+    global_phase = experiments["header"]["global_phase"]
     circuit = TestCircuit(num_qubits)
 
     # When num_qubits > 2, we must change the below for statement.
@@ -33,6 +34,14 @@ def _cvt_qiskit_to_test_circuit(
                          control_qubit=gate["qubits"][:-1],
                          control_value=control_value,
                          parameter=parameter)
+        circuit.add_gate(gate_test)
+
+    if global_phase != 0.:
+        gate_test = dict(name="scalar",
+                         target_qubit=[0],
+                         control_qubit=[],
+                         control_value=[],
+                         parameter=[global_phase])
         circuit.add_gate(gate_test)
 
     return circuit
