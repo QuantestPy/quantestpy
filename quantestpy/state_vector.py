@@ -92,11 +92,11 @@ def assert_equal(
         a, b = _remove_global_phase_from_two_vectors(a, b)
 
     # round
-    a = np.round(a, decimals=number_of_decimal_places)
-    b = np.round(b, decimals=number_of_decimal_places)
+    a_rounded = np.round(a, decimals=number_of_decimal_places)
+    b_rounded = np.round(b, decimals=number_of_decimal_places)
 
     # assert equal
-    equals = a == b
+    equals = a_rounded == b_rounded
     if np.all(equals):
         return
 
@@ -105,8 +105,8 @@ def assert_equal(
         if not equal:
             error_msgs.append((
                 f"\n{i}th element:\n"
-                f"a: {a[i]}\n"
-                f"b: {b[i]}"
+                + "a: {:.15g}\n".format(a[i])
+                + "b: {:.15g}\n".format(b[i])
             ))
     error_msg = "".join(error_msgs)
     msg = ut_test_case._formatMessage(msg, error_msg)
