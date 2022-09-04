@@ -518,10 +518,12 @@ class TestCircuit:
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cu1_gate(
-            self, lambda_,
+            self,
             control_qubit: list,
             target_qubit: list,
-            control_value: list) -> np.ndarray:
+            control_value: list,
+            parameter: list) -> np.ndarray:
+        lambda_ = parameter[0]
         all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
             control_qubit, target_qubit, control_value)
         all_qubit_gate_from_u1_plus_control = \
@@ -547,10 +549,12 @@ class TestCircuit:
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cu3_gate(
-            self, theta, phi, lambda_,
+            self,
             control_qubit: list,
             target_qubit: list,
-            control_value: list) -> np.ndarray:
+            control_value: list,
+            parameter: list) -> np.ndarray:
+        theta, phi, lambda_ = parameter
         all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
             control_qubit, target_qubit, control_value)
         all_qubit_gate_from_u1_1 = \
