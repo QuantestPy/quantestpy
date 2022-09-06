@@ -4,13 +4,13 @@ from typing import Union
 import itertools
 import traceback
 import re
-from qiskit import QuantumCircuit
 
 from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.converter import _cvt_qiskit_to_test_circuit
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
+from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
 from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
@@ -19,7 +19,7 @@ ut_test_case = unittest.TestCase()
 def assert_equal_to_operator(
         operator_: Union[np.ndarray, np.matrix],
         qasm: str = None,
-        qiskit_circuit: QuantumCircuit = None,
+        qiskit_circuit=None,
         test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
         number_of_decimal_places: int = 5,
@@ -59,7 +59,7 @@ def assert_equal_to_operator(
 
 
 def assert_is_zero(qasm: str = None,
-                   qiskit_circuit: QuantumCircuit = None,
+                   qiskit_circuit=None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
                    number_of_decimal_places: int = 5,
@@ -132,7 +132,7 @@ def assert_is_zero(qasm: str = None,
 
 def assert_ancilla_is_zero(ancilla_qubits: list,
                            qasm: str = None,
-                           qiskit_circuit: QuantumCircuit = None,
+                           qiskit_circuit=None,
                            test_circuit: TestCircuit = None,
                            number_of_decimal_places: int = 5,
                            msg=None) -> None:
@@ -264,10 +264,10 @@ def _get_matrix_norm(
 
 def assert_equal(
         qasm_a: Union[str, None] = None,
-        qiskit_circuit_a: Union[QuantumCircuit, None] = None,
+        qiskit_circuit_a=None,
         test_circuit_a: Union[TestCircuit, None] = None,
         qasm_b: Union[str, None] = None,
-        qiskit_circuit_b: Union[QuantumCircuit, None] = None,
+        qiskit_circuit_b=None,
         test_circuit_b: Union[TestCircuit, None] = None,
         number_of_decimal_places: int = 5,
         up_to_global_phase: bool = False,
@@ -298,7 +298,7 @@ def assert_equal(
         )
 
     if qiskit_circuit_a is not None \
-            and not isinstance(qiskit_circuit_a, QuantumCircuit):
+            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_a):
         raise QuantestPyError(
             "Type of qiskit_circuit_a must be an instance of "
             "qiskit.QuantumCircuit class."
@@ -334,7 +334,7 @@ def assert_equal(
         )
 
     if qiskit_circuit_b is not None \
-            and not isinstance(qiskit_circuit_b, QuantumCircuit):
+            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_b):
         raise QuantestPyError(
             "Type of qiskit_circuit_b must be an instance of "
             "qiskit.QuantumCircuit class."

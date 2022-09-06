@@ -68,3 +68,13 @@ def _cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
 
     qiskit_circuit = QuantumCircuit.from_qasm_str(qasm)
     return _cvt_qiskit_to_test_circuit(qiskit_circuit)
+
+
+def _is_instance_of_qiskit_quantumcircuit(circuit) -> bool:
+
+    if not qiskit_installed:
+        raise QuantestPyError(
+            "Qiskit is missing. Please install it."
+        )
+
+    return isinstance(circuit, QuantumCircuit)
