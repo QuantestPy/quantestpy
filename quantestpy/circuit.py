@@ -62,7 +62,7 @@ def assert_is_zero(qasm: str = None,
                    qiskit_circuit: QuantumCircuit = None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
-                   a_tol: float = 1e-8,
+                   atol: float = 1e-8,
                    msg=None) -> None:
 
     # Memo220805JN: the following input checker may be common for the other
@@ -112,7 +112,7 @@ def assert_is_zero(qasm: str = None,
             clipped_state_vec = clipped_state_vec[dim_reg_rear:]
             clipped_state_vec = np.abs(clipped_state_vec)
 
-            if not np.all(clipped_state_vec <= a_tol):
+            if not np.all(clipped_state_vec <= atol):
                 return True  # = assertion error
 
         return False  # = assertion non-error
@@ -133,7 +133,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
                            qasm: str = None,
                            qiskit_circuit: QuantumCircuit = None,
                            test_circuit: TestCircuit = None,
-                           a_tol: float = 1e-8,
+                           atol: float = 1e-8,
                            msg=None) -> None:
 
     if qasm is None and qiskit_circuit is None and test_circuit is None:
@@ -190,7 +190,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         try:
             assert_is_zero(test_circuit=test_circuit,
                            qubits=ancilla_qubits,
-                           a_tol=a_tol)
+                           atol=atol)
 
         except QuantestPyAssertionError as e:
             t = traceback.format_exception_only(type(e), e)[0]

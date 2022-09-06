@@ -87,7 +87,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         self.assertIsNone(
             circuit.assert_is_zero(
                 test_circuit=test_circuit,
-                a_tol=0.71
+                atol=0.71
             )
         )
 
@@ -95,5 +95,5 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_is_zero(
                 test_circuit=test_circuit,
-                a_tol=0.7
+                atol=0.7
             )
