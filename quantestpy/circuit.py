@@ -111,7 +111,7 @@ def assert_is_zero(qasm: str = None,
                 state_vec[i*dim_reg_rear*2: (i+1)*dim_reg_rear*2]
             clipped_state_vec = clipped_state_vec[dim_reg_rear:]
 
-            if not np.all(clipped_state_vec < a_tol):
+            if not np.all(clipped_state_vec <= a_tol):
                 return True  # = assertion error
 
         return False  # = assertion non-error
