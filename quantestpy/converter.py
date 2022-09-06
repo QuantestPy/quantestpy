@@ -9,8 +9,7 @@ except ModuleNotFoundError:
     qiskit_installed = False
 
 
-def _cvt_qiskit_to_test_circuit(
-        qiskit_circuit: QuantumCircuit) -> TestCircuit:
+def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
 
     if not qiskit_installed:
         raise QuantestPyError(
