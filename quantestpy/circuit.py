@@ -397,18 +397,29 @@ def assert_equal(
 
     else:
         # assert check matrix norm as a distance
-        matrix_norm_value = _get_matrix_norm(
+        matrix_norm_a_minus_b = _get_matrix_norm(
             whole_gates_a,
             whole_gates_b,
             matrix_norm_type,
             up_to_global_phase
         )
 
-        if matrix_norm_value >= atol:
+        if rtol != 0.:
+            matrix_norm_b = _get_matrix_norm(
+                whole_gates_b,
+                np.zeros_like(whole_gates_b),
+                matrix_norm_type,
+                False
+            )
 
-            error_msg = "matrix norm value " \
-                + format(matrix_norm_value, ".15g") \
-                + " is larger than the absolute tolerance " \
-                + format(atol, ".15g") + "."
+        else:
+            matrix_norm_b = 0.
+
+        if matrix_norm_a_minus_b >= atol + rtol * matrix_norm_b:
+
+            error_msg = "matrix norm ||A-B|| " \
+                + format(matrix_norm_a_minus_b, ".15g") \
+                + " is larger than (atol + rtol*||B||) " \
+                + format(atol + rtol * matrix_norm_b, ".15g") + "."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)

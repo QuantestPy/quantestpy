@@ -369,11 +369,11 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
                 expected_error_msg = \
                     "quantestpy.exceptions.QuantestPyAssertionError: " \
-                    + "matrix norm value " \
+                    + "matrix norm ||A-B|| " \
                     + format(pattern["expected_matrix_norm_value"], ".15g") \
-                    + " is larger than the absolute tolerance " \
-                    + format(pattern["atol"],
-                             ".15g") + "."
+                    + " is larger than (atol + rtol*||B||) " \
+                    + format(pattern["atol"], ".15g") \
+                    + "."
 
                 actual_error_msg = \
                     traceback.format_exception_only(type(e), e)[0].rstrip("\n")
@@ -408,11 +408,78 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyAssertionError: " \
-                + "matrix norm value " \
+                + "matrix norm ||A-B|| " \
                 + format(np.sqrt(2.+np.sqrt(2.)), ".15g") \
-                + f" is larger than the absolute tolerance {1.5}."
+                + f" is larger than (atol + rtol*||B||) {1.5}."
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0].rstrip("\n")
 
             self.assertEqual(expected_error_msg, actual_error_msg)
+
+    def test_matrix_norms_with_rtol(self,):
+
+        test_circuit_a = TestCircuit(2)
+        test_circuit_a.add_gate(
+            {"name": "x", "target_qubit": [0, 1], "control_qubit": [],
+                "control_value": [], "parameter": []}
+        )
+        test_circuit_a.add_gate(
+            {"name": "s", "target_qubit": [1], "control_qubit": [],
+                "control_value": [], "parameter": []}
+        )
+
+        test_circuit_b = TestCircuit(2)
+        test_circuit_b.add_gate(
+            {"name": "cx", "target_qubit": [0], "control_qubit": [1],
+                "control_value": [1], "parameter": []}
+        )
+
+        test_patterns = [
+            {"matrix_norm_type": "operator_norm_1",
+             "rtol": 1.1,
+             "expected_matrix_norm_a_minus_b": 2.,
+             "expected_matrix_norm_b": 1.},
+            {"matrix_norm_type": "operator_norm_inf",
+             "rtol": 1.5,
+             "expected_matrix_norm_a_minus_b": 2.,
+             "expected_matrix_norm_b": 1.},
+            {"matrix_norm_type": "Frobenius_norm",
+             "rtol": 1.1,
+             "expected_matrix_norm_a_minus_b": 2.*np.sqrt(2.),
+             "expected_matrix_norm_b": 2.},
+            {"matrix_norm_type": "max_norm",
+             "rtol": 0.1,
+             "expected_matrix_norm_a_minus_b": 1.,
+             "expected_matrix_norm_b": 1.}
+        ]
+
+        for pattern in test_patterns:
+
+            try:
+                self.assertIsNotNone(
+                    circuit.assert_equal(
+                        test_circuit_a=test_circuit_a,
+                        test_circuit_b=test_circuit_b,
+                        matrix_norm_type=pattern["matrix_norm_type"],
+                        atol=0.,
+                        rtol=pattern["rtol"]
+                    )
+                )
+
+            except QuantestPyAssertionError as e:
+
+                expected_error_msg = \
+                    "quantestpy.exceptions.QuantestPyAssertionError: " \
+                    + "matrix norm ||A-B|| " \
+                    + format(pattern["expected_matrix_norm_a_minus_b"],
+                             ".15g") \
+                    + " is larger than (atol + rtol*||B||) " \
+                    + format(pattern["rtol"]
+                             * pattern["expected_matrix_norm_b"], ".15g") \
+                    + "."
+
+                actual_error_msg = \
+                    traceback.format_exception_only(type(e), e)[0].rstrip("\n")
+
+                self.assertEqual(expected_error_msg, actual_error_msg)
