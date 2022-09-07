@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import traceback
 
 from quantestpy import state_vector
 from quantestpy.exceptions import QuantestPyAssertionError
@@ -53,15 +54,14 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             state_vector.assert_equal(
                 vec_a,
                 vec_b,
-                number_of_decimal_places=3
+                atol=6.2e-05
             )
         )
 
         with self.assertRaises(QuantestPyAssertionError):
             state_vector.assert_equal(
                 vec_a,
-                vec_b,
-                number_of_decimal_places=4
+                vec_b
             )
 
     def test_up_to_global_phase_is_false_error_on_purpose(self,):
@@ -75,3 +75,34 @@ class TestStateVectorAssertEqual(unittest.TestCase):
                 vec_a,
                 vec_b
             )
+
+    def test_err_msg(self,):
+        vec_a = np.array([1, 0, 0, 1]) / np.sqrt(2.)
+        vec_b = - np.array([1, 0, 0, 1]) / np.sqrt(2.)
+
+        try:
+            self.assertIsNotNone(
+                state_vector.assert_equal(
+                    vec_a,
+                    vec_b,
+                    rtol=1e-06,
+                    atol=1e-09
+                )
+            )
+
+        except QuantestPyAssertionError as e:
+
+            expected_error_msg = \
+                "quantestpy.exceptions.QuantestPyAssertionError: \n" \
+                + "Not equal to tolerance rtol=1e-06, atol=1e-09\n" \
+                + "Up to global phase: False\n" \
+                + "Mismatched elements: 2 / 4 (50%)\n" \
+                + "Max absolute difference: 1.41421356\n" \
+                + "Max relative difference: 2.\n" \
+                + " x: array([0.707107, 0.      , 0.      , 0.707107])\n" \
+                + " y: array([-0.707107,  0.      ,  0.      , -0.707107])\n"
+
+            actual_error_msg = \
+                traceback.format_exception_only(type(e), e)[0]
+
+            self.assertEqual(expected_error_msg, actual_error_msg)

@@ -34,7 +34,8 @@ def assert_is_unitary(
 def assert_equal(
         operator_a: Union[np.ndarray, np.matrix],
         operator_b: Union[np.ndarray, np.matrix],
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         msg=None) -> None:
 
@@ -59,5 +60,4 @@ def assert_equal(
     b = np.ravel(b)
 
     # Note: error message dhould
-    state_vector.assert_equal(a, b, number_of_decimal_places,
-                              up_to_global_phase, msg)
+    state_vector.assert_equal(a, b, rtol, atol, up_to_global_phase, msg)

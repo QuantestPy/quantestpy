@@ -22,7 +22,8 @@ def assert_equal_to_operator(
         qiskit_circuit: QuantumCircuit = None,
         test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         msg=None) -> None:
 
@@ -53,7 +54,8 @@ def assert_equal_to_operator(
     operator.assert_equal(
         operator_from_test_circuit,
         operator_,
-        number_of_decimal_places,
+        rtol,
+        atol,
         up_to_global_phase,
         msg)
 
@@ -269,10 +271,10 @@ def assert_equal(
         qasm_b: Union[str, None] = None,
         qiskit_circuit_b: Union[QuantumCircuit, None] = None,
         test_circuit_b: Union[TestCircuit, None] = None,
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         matrix_norm_type: Union[str, None] = None,
-        tolerance_for_matrix_norm_value: Union[float, None] = None,
         msg: Union[str, None] = None):
 
     # Check inputs for circuit A
@@ -357,10 +359,14 @@ def assert_equal(
             "'Frobenius_norm' and 'max_norm'."
         )
 
-    if not isinstance(tolerance_for_matrix_norm_value, float) \
-            and tolerance_for_matrix_norm_value is not None:
+    if not isinstance(atol, float):
         raise QuantestPyError(
-            "Type of tolerance_for_matrix_norm_value must be float."
+            "Type of atol must be float."
+        )
+
+    if not isinstance(rtol, float):
+        raise QuantestPyError(
+            "Type of rtol must be float."
         )
 
     # cvt. to test_circuit_a
@@ -385,7 +391,8 @@ def assert_equal(
         operator.assert_equal(
             whole_gates_a,
             whole_gates_b,
-            number_of_decimal_places,
+            rtol,
+            atol,
             up_to_global_phase,
             msg)
 
@@ -398,14 +405,11 @@ def assert_equal(
             up_to_global_phase
         )
 
-        if tolerance_for_matrix_norm_value is None:
-            tolerance_for_matrix_norm_value = 0.
-
-        if matrix_norm_value > tolerance_for_matrix_norm_value:
+        if matrix_norm_value >= atol:
 
             error_msg = "matrix norm value " \
                 + format(matrix_norm_value, ".15g") \
-                + " is larger than the tolerance " \
-                + format(tolerance_for_matrix_norm_value, ".15g") + "."
+                + " is larger than the absolute tolerance " \
+                + format(atol, ".15g") + "."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)
