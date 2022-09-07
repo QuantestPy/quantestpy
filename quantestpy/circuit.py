@@ -64,7 +64,7 @@ def assert_is_zero(qasm: str = None,
                    qiskit_circuit: QuantumCircuit = None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
-                   number_of_decimal_places: int = 5,
+                   atol: float = 1e-8,
                    msg=None) -> None:
 
     # Memo220805JN: the following input checker may be common for the other
@@ -112,10 +112,9 @@ def assert_is_zero(qasm: str = None,
             clipped_state_vec = \
                 state_vec[i*dim_reg_rear*2: (i+1)*dim_reg_rear*2]
             clipped_state_vec = clipped_state_vec[dim_reg_rear:]
-            clipped_state_vec = np.round(
-                clipped_state_vec, decimals=number_of_decimal_places)
+            clipped_state_vec = np.abs(clipped_state_vec)
 
-            if not np.all(clipped_state_vec == 0.):
+            if not np.all(clipped_state_vec <= atol):
                 return True  # = assertion error
 
         return False  # = assertion non-error
@@ -136,7 +135,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
                            qasm: str = None,
                            qiskit_circuit: QuantumCircuit = None,
                            test_circuit: TestCircuit = None,
-                           number_of_decimal_places: int = 5,
+                           atol: float = 1e-8,
                            msg=None) -> None:
 
     if qasm is None and qiskit_circuit is None and test_circuit is None:
@@ -193,7 +192,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         try:
             assert_is_zero(test_circuit=test_circuit,
                            qubits=ancilla_qubits,
-                           number_of_decimal_places=number_of_decimal_places)
+                           atol=atol)
 
         except QuantestPyAssertionError as e:
             t = traceback.format_exception_only(type(e), e)[0]
