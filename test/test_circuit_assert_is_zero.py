@@ -69,3 +69,31 @@ class TestCircuitAssertIsZero(unittest.TestCase):
             circuit.assert_is_zero(
                 test_circuit=test_circuit
             )
+
+    def test_large_a_tol_raise_no_error(self,):
+        """Assertion error does not raise for Bell state when a_tol is large
+        """
+        test_circuit = TestCircuit(2)
+        test_circuit.add_gate(
+            {"name": "h", "target_qubit": [0], "control_qubit": [],
+             "control_value": [], "parameter": []}
+        )
+        test_circuit.add_gate(
+            {"name": "cx", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": []}
+        )
+
+        # no error
+        self.assertIsNone(
+            circuit.assert_is_zero(
+                test_circuit=test_circuit,
+                atol=0.71
+            )
+        )
+
+        # error
+        with self.assertRaises(QuantestPyAssertionError):
+            circuit.assert_is_zero(
+                test_circuit=test_circuit,
+                atol=0.7
+            )
