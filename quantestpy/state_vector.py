@@ -56,8 +56,7 @@ def _remove_global_phase_from_two_vectors(a: np.ndarray, b: np.ndarray):
 def assert_equal(
         state_vector_a: Union[np.ndarray, list],
         state_vector_b: Union[np.ndarray, list],
-        rtol: float = 0.,
-        atol: float = 1e-8,
+        number_of_decimal_places: int = 5,
         up_to_global_phase: bool = False,
         msg=None):
 
@@ -92,17 +91,23 @@ def assert_equal(
     if up_to_global_phase:
         a, b = _remove_global_phase_from_two_vectors(a, b)
 
-    # assert equal
-    try:
-        np.testing.assert_allclose(
-            actual=a,
-            desired=b,
-            rtol=rtol,
-            atol=atol,
-            err_msg=f"Up to global phase: {up_to_global_phase}"
-        )
+    # round
+    a_rounded = np.round(a, decimals=number_of_decimal_places)
+    b_rounded = np.round(b, decimals=number_of_decimal_places)
 
-    except AssertionError as e:
-        error_msg = e.args[0]
-        msg = ut_test_case._formatMessage(msg, error_msg)
-        raise QuantestPyAssertionError(msg)
+    # assert equal
+    equals = a_rounded == b_rounded
+    if np.all(equals):
+        return
+
+    error_msgs = list()
+    for i, equal in enumerate(equals):
+        if not equal:
+            error_msgs.append((
+                f"\n{i}th element:\n"
+                + "a: {:.15g}\n".format(a[i])
+                + "b: {:.15g}\n".format(b[i])
+            ))
+    error_msg = "".join(error_msgs)
+    msg = ut_test_case._formatMessage(msg, error_msg)
+    raise QuantestPyAssertionError(msg)
