@@ -26,7 +26,6 @@ jobs:
           python3 -m flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
           python3 -m flake8 --exclude ./test/__init__.py ./test/*.py
           python3 -m flake8 ./examples/*.py
-          python3 -m flake8 ./*.py
 
       - name: Run unit test
         run: |
