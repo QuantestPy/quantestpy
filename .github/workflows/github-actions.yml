@@ -25,8 +25,32 @@ jobs:
         run: |
           python3 -m flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
           python3 -m flake8 --exclude ./test/__init__.py ./test/*.py
+          python3 -m flake8 --exclude ./test/__init__.py ./test/with_qiskit/*.py
           python3 -m flake8 ./examples/*.py
+          python3 -m flake8 ./*.py
 
       - name: Run unit test
         run: |
-          python3 -m unittest
+          python3 -m unittest discover -v ./test/
+
+  test_with_qiskit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: "pip"
+          cache-dependency-path: "./test/with_qiskit/requirements.txt"
+
+      - name: Install library
+        run: |
+          pip install -r ./test/with_qiskit/requirements.txt
+
+      - name: Run unit test
+        run: |
+          python3 -m unittest discover -v ./test/with_qiskit/

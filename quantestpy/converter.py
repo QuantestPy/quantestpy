@@ -1,9 +1,25 @@
 from quantestpy import TestCircuit
-from qiskit import QuantumCircuit, assemble
+from quantestpy.exceptions import QuantestPyError
+
+try:
+    from qiskit import QuantumCircuit, assemble
+    qiskit_installed = True
+
+except ModuleNotFoundError:
+    qiskit_installed = False
 
 
-def _cvt_qiskit_to_test_circuit(
-        qiskit_circuit: QuantumCircuit) -> TestCircuit:
+def _raise_error_if_not_qiskit_installed():
+
+    if not qiskit_installed:
+        raise QuantestPyError(
+            "Qiskit is missing. Please install it."
+        )
+
+
+def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
+
+    _raise_error_if_not_qiskit_installed()
 
     qobj = assemble(qiskit_circuit)
     qobj_dict = qobj.to_dict()
@@ -48,5 +64,15 @@ def _cvt_qiskit_to_test_circuit(
 
 
 def _cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
+
+    _raise_error_if_not_qiskit_installed()
+
     qiskit_circuit = QuantumCircuit.from_qasm_str(qasm)
     return _cvt_qiskit_to_test_circuit(qiskit_circuit)
+
+
+def _is_instance_of_qiskit_quantumcircuit(circuit) -> bool:
+
+    _raise_error_if_not_qiskit_installed()
+
+    return isinstance(circuit, QuantumCircuit)
