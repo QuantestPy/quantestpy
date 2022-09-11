@@ -14,7 +14,7 @@ class TestStateVectorAssertIsNormalized(unittest.TestCase):
     $ python -m unittest test.test_state_vector_assert_is_normalized
     ....
     ----------------------------------------------------------------------
-    Ran 4 tests in 0.003s
+    Ran 2 tests in 0.001s
 
     OK
     $
