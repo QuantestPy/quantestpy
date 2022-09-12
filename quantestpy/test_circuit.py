@@ -768,6 +768,67 @@ class TestCircuit:
                         gate["target_qubit"],
                         gate["control_value"])
 
+            elif gate["name"] == "cy":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cy_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"])
+
+            elif gate["name"] == "cz":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cz_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"])
+
+            elif gate["name"] == "ch":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_ch_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"])
+
+            elif gate["name"] == "crx":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_crx_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"],
+                        gate["parameter"])
+
+            elif gate["name"] == "cry":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cry_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"],
+                        gate["parameter"])
+
+            elif gate["name"] == "crz":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_crz_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"],
+                        gate["parameter"])
+
+            elif gate["name"] == "cu1":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cu1_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"],
+                        gate["parameter"])
+
+            elif gate["name"] == "cu3":
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_cu3_gate(
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"],
+                        gate["parameter"])
+
             else:
                 raise
 

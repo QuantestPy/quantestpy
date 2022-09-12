@@ -307,6 +307,139 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
+    def test_get_whole_gates_cy(self,):
+        circ = TestCircuit(2)
+        circ.add_gate(
+            {"name": "cy", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": []})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 0, -1j],
+                                  [0, 0, 1j, 0]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_cz(self,):
+        circ = TestCircuit(2)
+        circ.add_gate(
+            {"name": "cz", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": []})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, -1]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
+
+    def test_get_whole_gates_ch(self,):
+        circ = TestCircuit(2)
+        circ.add_gate(
+            {"name": "ch", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": []})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 1/np.sqrt(2), 1/np.sqrt(2)],
+                                  [0, 0, 1/np.sqrt(2), -1/np.sqrt(2)]])
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
+
+    def test_get_whole_gates_crx(self,):
+        circ = TestCircuit(2)
+        theta = np.pi/4
+        circ.add_gate(
+            {"name": "crx", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": [theta]})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, np.cos(theta/2), -1j*np.sin(theta/2)],
+            [0, 0, -1j*np.sin(theta/2), np.cos(theta/2)]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
+
+    def test_get_whole_gates_cry(self,):
+        circ = TestCircuit(2)
+        theta = np.pi/4
+        circ.add_gate(
+            {"name": "cry", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": [theta]})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, np.cos(theta/2), -np.sin(theta/2)],
+                                  [0, 0, np.sin(theta/2), np.cos(theta/2)]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
+
+    def test_get_whole_gates_crz(self,):
+        circ = TestCircuit(2)
+        lambda_ = np.pi/4
+        circ.add_gate(
+            {"name": "crz", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": [lambda_]})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, np.exp(-1j*lambda_/2), 0],
+                                  [0, 0, 0, np.exp(1j*lambda_/2)]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_cu1(self,):
+        circ = TestCircuit(2)
+        lambda_ = np.pi/4
+        circ.add_gate(
+            {"name": "cu1", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": [lambda_]})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, np.exp(1j*lambda_)]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_cu3(self,):
+        circ = TestCircuit(2)
+        theta = np.pi/16
+        phi = np.pi/8
+        lambda_ = np.pi/4
+        circ.add_gate(
+            {"name": "cu3", "target_qubit": [1], "control_qubit": [0],
+             "control_value": [1], "parameter": [theta, phi, lambda_]})
+
+        actual_gate = circ._get_whole_gates()
+
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, np.cos(theta/2),
+                                   -np.exp(1j*lambda_)*np.sin(theta/2)],
+                                  [0, 0, np.exp(1j*phi)*np.sin(theta/2),
+                                   np.exp(1j*(lambda_+phi))*np.cos(theta/2)]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
+
     def test_scalar_one_target(self,):
 
         test_patterns = [
