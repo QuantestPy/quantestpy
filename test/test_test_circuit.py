@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 
 from quantestpy import TestCircuit
-from quantestpy import test_circuit
 
 
 class TestTestCircuit(unittest.TestCase):

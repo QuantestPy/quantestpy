@@ -18,7 +18,7 @@ class TestTestCircuitCRYGate(unittest.TestCase):
     $
     """
 
-    def _u3(self, arameter: list) -> np.ndarray:
+    def _u3(self, parameter: list) -> np.ndarray:
         theta, phi, lambda_ = parameter
         return np.array([
             [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],

@@ -118,7 +118,8 @@ class TestTestCircuitCHGate(unittest.TestCase):
     def test_ch_multiple_controls(self,):
         circ = TestCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._H, control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1]
+            self._H,
+            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1]
         )
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
@@ -151,5 +152,4 @@ class TestTestCircuitCHGate(unittest.TestCase):
         )
 
         self.assertIsNone(
-            np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1),
-                                       atol=1e-07))
+            np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1)))
