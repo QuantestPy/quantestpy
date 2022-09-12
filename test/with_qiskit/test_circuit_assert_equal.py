@@ -14,12 +14,12 @@ class TestCircuitAssertEqual(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_circuit_assert_equal
-    ...
+    $ python -m unittest test.with_qiskit.test_circuit_assert_equal
+    .s..........
     ----------------------------------------------------------------------
-    Ran 3 tests in 0.006s
+    Ran 12 tests in 0.012s
 
-    OK
+    OK (skipped=1)
     """
 
     def test_msg_from_miss_all_info_for_circuit_a(self,):
