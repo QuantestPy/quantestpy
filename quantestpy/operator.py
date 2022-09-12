@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from typing import Union
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
-from quantestpy import state_vector
+from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
 
@@ -54,9 +54,32 @@ def assert_equal(
             "The shapes of the operators must be the same."
         )
 
-    # cvt. to vector
-    a = np.ravel(a)
-    b = np.ravel(b)
+    # remove global phase
+    if up_to_global_phase:
+        a_shape = a.shape
 
-    # Note: error message dhould
-    state_vector.assert_equal(a, b, rtol, atol, up_to_global_phase, msg)
+        # cvt. to vector
+        a = np.ravel(a)
+        b = np.ravel(b)
+
+        # rm. global phase
+        a, b = _remove_global_phase_from_two_vectors(a, b)
+
+        # cvt. back to matrix
+        a = np.reshape(a, newshape=a_shape)
+        b = np.reshape(b, newshape=a_shape)
+
+    # assert equal
+    try:
+        np.testing.assert_allclose(
+            actual=a,
+            desired=b,
+            rtol=rtol,
+            atol=atol,
+            err_msg=f"Up to global phase: {up_to_global_phase}"
+        )
+
+    except AssertionError as e:
+        error_msg = e.args[0]
+        msg = ut_test_case._formatMessage(msg, error_msg)
+        raise QuantestPyAssertionError(msg)
