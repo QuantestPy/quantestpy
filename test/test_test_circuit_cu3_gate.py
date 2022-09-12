@@ -4,7 +4,7 @@ import numpy as np
 from quantestpy import TestCircuit
 
 
-class TestTestCircuitCU1Gate(unittest.TestCase):
+class TestTestCircuitCU3Gate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
@@ -24,8 +24,8 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[1], control_value=[1]
+            control_qubit=[0], target_qubit=[1], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         expected_gate = np.array([
@@ -46,15 +46,15 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[1], control_value=[1]
+            control_qubit=[0], target_qubit=[1], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         expected_gate = np.array([
             [1, 0, 0, 0],
             [0, np.cos(theta/2), 0, -np.exp(1j*lambda_) * np.sin(theta/2)],
             [0, 0, 1, 0],
-            [0, 0, np.exp(1j*phi)*np.sin(theta/2),
+            [0, np.exp(1j*phi)*np.sin(theta/2), 0,
              np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
 
         self.assertIsNone(
@@ -66,15 +66,15 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[1], target_qubit=[0], control_value=[1]
+            control_qubit=[1], target_qubit=[0], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         expected_gate = np.array([
             [1, 0, 0, 0],
             [0, np.cos(theta/2), 0, -np.exp(1j*lambda_) * np.sin(theta/2)],
             [0, 0, 1, 0],
-            [0, 0, np.exp(1j*phi)*np.sin(theta/2),
+            [0, np.exp(1j*phi)*np.sin(theta/2), 0,
              np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
 
         self.assertIsNone(
@@ -87,8 +87,8 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[2], control_value=[1]
+            control_qubit=[0], target_qubit=[2], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         # this is qiskit's output
@@ -135,8 +135,8 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[1], control_value=[0]
+            control_qubit=[0], target_qubit=[1], control_value=[0],
+            parameter=[theta, phi, lambda_]
         )
 
         expected_gate = np.array([
@@ -155,8 +155,8 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         phi = np.pi/8
         lambda_ = np.pi/16
         actual_gate = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1]
+            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1],
+            parameter=[theta, phi, lambda_]
         )
 
         expected_gate = np.array(
@@ -181,18 +181,18 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
 
         circ = TestCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[1, 2], control_value=[1]
+            control_qubit=[0], target_qubit=[1, 2], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         circ = TestCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[1], control_value=[1]
+            control_qubit=[0], target_qubit=[1], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
         gate_1_1 = circ._create_all_qubit_gate_from_cu3_gate(
-            theta, phi, lambda_,
-            control_qubit=[0], target_qubit=[2], control_value=[1]
+            control_qubit=[0], target_qubit=[2], control_value=[1],
+            parameter=[theta, phi, lambda_]
         )
 
         self.assertIsNone(
