@@ -17,26 +17,27 @@ class TestTestCircuitCRZGate(unittest.TestCase):
     OK
     $
     """
-    def _u3(parameter: list) -> np.ndarray:
+
+    def _u3(self, parameter: list) -> np.ndarray:
         theta, phi, lambda_ = parameter
         return np.array([
             [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
             [np.exp(1j*phi)*np.sin(theta/2),
              np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
 
-    def _u1(parameter: list) -> np.ndarray:
+    def _u1(self, parameter: list) -> np.ndarray:
         lambda_ = parameter[0]
-        return _u3([0, 0, lambda_])
+        return self._u3([0, 0, lambda_])
 
-    def _rz(parameter: list) -> np.ndarray:
+    def _rz(self, parameter: list) -> np.ndarray:
         phi = parameter[0]
-        return _u1(parameter)*np.exp(-1j*phi/2)
+        return self._u1(parameter)*np.exp(-1j*phi/2)
 
     def test_crz_regular_qubit_order(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
@@ -53,7 +54,7 @@ class TestTestCircuitCRZGate(unittest.TestCase):
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
@@ -69,7 +70,7 @@ class TestTestCircuitCRZGate(unittest.TestCase):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[1], target_qubit=[0], control_value=[1])
 
         expected_gate = np.array([
@@ -86,7 +87,7 @@ class TestTestCircuitCRZGate(unittest.TestCase):
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[2], control_value=[1])
 
         # this is qiskit's output
@@ -131,7 +132,7 @@ class TestTestCircuitCRZGate(unittest.TestCase):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[0])
 
         expected_gate = np.array([
@@ -147,7 +148,7 @@ class TestTestCircuitCRZGate(unittest.TestCase):
         circ = TestCircuit(3)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
@@ -169,15 +170,15 @@ class TestTestCircuitCRZGate(unittest.TestCase):
 
         circ = TestCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[1, 2], control_value=[1])
 
         circ = TestCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
         gate_1_1 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz([lambda_]),
+            self._rz([lambda_]),
             control_qubit=[0], target_qubit=[2], control_value=[1])
 
         self.assertIsNone(

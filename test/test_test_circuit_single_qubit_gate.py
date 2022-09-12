@@ -10,7 +10,7 @@ class TestTestCircuitSingleQubitGate(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test_test_circuit_single_qubit_gate
+    $ python -m unittest test.test_test_circuit_single_qubit_gate
 
     ........
     ----------------------------------------------------------------------
