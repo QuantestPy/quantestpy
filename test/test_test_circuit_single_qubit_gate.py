@@ -14,7 +14,7 @@ class TestTestCircuitSingleQubitGate(unittest.TestCase):
 
     ........
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.009s
+    Ran 4 tests in 0.009s
 
     OK
     $
