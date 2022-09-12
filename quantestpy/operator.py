@@ -9,7 +9,7 @@ ut_test_case = unittest.TestCase()
 
 def assert_is_unitary(
         operator_subject_to_test: Union[np.ndarray, np.matrix],
-        number_of_decimal_places: int = 5,
+        atol: float = 1e-8,
         msg=None) -> None:
 
     m = operator_subject_to_test
@@ -19,9 +19,8 @@ def assert_is_unitary(
         m = np.matrix(m)
 
     a = m * m.H
-    a = np.round(a, decimals=number_of_decimal_places)
 
-    if np.all(a == np.eye(m.shape[0])):
+    if np.all(a - np.eye(m.shape[0]) <= atol):
         return
 
     else:
@@ -34,7 +33,8 @@ def assert_is_unitary(
 def assert_equal(
         operator_a: Union[np.ndarray, np.matrix],
         operator_b: Union[np.ndarray, np.matrix],
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         msg=None) -> None:
 
@@ -59,5 +59,4 @@ def assert_equal(
     b = np.ravel(b)
 
     # Note: error message dhould
-    state_vector.assert_equal(a, b, number_of_decimal_places,
-                              up_to_global_phase, msg)
+    state_vector.assert_equal(a, b, rtol, atol, up_to_global_phase, msg)
