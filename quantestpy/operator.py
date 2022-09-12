@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from typing import Union
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
-from quantestpy import state_vector
+from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
 
@@ -64,7 +64,7 @@ def assert_equal(
         b = np.ravel(b)
 
         # rm. global phase
-        a, b = state_vector._remove_global_phase_from_two_vectors(a, b)
+        a, b = _remove_global_phase_from_two_vectors(a, b)
 
         # cvt. back to matrix
         a = np.reshape(a, newshape=a_shape)
