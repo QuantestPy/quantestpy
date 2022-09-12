@@ -24,6 +24,7 @@ def assert_equal_to_operator(
         rtol: float = 0.,
         atol: float = 1e-8,
         up_to_global_phase: bool = False,
+        matrix_norm_type: Union[str, None] = None,
         msg=None) -> None:
 
     if qasm is None and qiskit_circuit is None and test_circuit is None:
@@ -56,7 +57,9 @@ def assert_equal_to_operator(
         rtol,
         atol,
         up_to_global_phase,
-        msg)
+        matrix_norm_type,
+        msg
+    )
 
 
 def assert_is_zero(qasm: str = None,
