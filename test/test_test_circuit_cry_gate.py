@@ -17,14 +17,23 @@ class TestTestCircuitCRYGate(unittest.TestCase):
     OK
     $
     """
+    def _u3(parameter: list) -> np.ndarray:
+        theta, phi, lambda_ = parameter
+        return np.array([
+            [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
+            [np.exp(1j*phi)*np.sin(theta/2),
+             np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
+
+    def _ry(parameter: list) -> np.ndarray:
+        theta = parameter[0]
+        return _u3([theta, 0, 0])
 
     def test_cry_regular_qubit_order(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -40,10 +49,9 @@ class TestTestCircuitCRYGate(unittest.TestCase):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -58,10 +66,9 @@ class TestTestCircuitCRYGate(unittest.TestCase):
     def test_cry_flip_control_target(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[1], target_qubit=[0], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[1], target_qubit=[0], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -77,10 +84,9 @@ class TestTestCircuitCRYGate(unittest.TestCase):
         circ = TestCircuit(3)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[2], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[2], control_value=[1])
 
         # this is qiskit's output
         expected_gate = np.array(
@@ -116,10 +122,9 @@ class TestTestCircuitCRYGate(unittest.TestCase):
     def test_cry_control_value_is_zero(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[0],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[0])
 
         expected_gate = np.array([
             [np.cos(lambda_/2), -np.sin(lambda_/2), 0, 0],
@@ -134,10 +139,9 @@ class TestTestCircuitCRYGate(unittest.TestCase):
     def test_cry_multiple_controls(self,):
         circ = TestCircuit(3)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
                                   [0, 1, 0, 0, 0, 0, 0, 0],
@@ -158,20 +162,17 @@ class TestTestCircuitCRYGate(unittest.TestCase):
         lambda_ = np.pi/8
 
         circ = TestCircuit(3)
-        gate_0 = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[1, 2], control_value=[1],
-            parameter=[lambda_]
-        )
+        gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[1, 2], control_value=[1])
 
         circ = TestCircuit(3)
-        gate_1_0 = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
-        gate_1_1 = circ._create_all_qubit_gate_from_cry_gate(
-            control_qubit=[0], target_qubit=[2], control_value=[1],
-            parameter=[lambda_]
-        )
+        gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
+        gate_1_1 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _ry([lambda_]),
+            control_qubit=[0], target_qubit=[2], control_value=[1])
 
         self.assertIsNone(
             np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1),
