@@ -435,7 +435,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 1, 0, 0],
                                   [0, 0, np.cos(theta/2),
                                    -np.exp(1j*lambda_)*np.sin(theta/2)],
-                                  [0, np.exp(1j*phi)*np.sin(theta/2), 0,
+                                  [0, 0, np.exp(1j*phi)*np.sin(theta/2),
                                    np.exp(1j*(lambda_+phi))*np.cos(theta/2)]])
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))

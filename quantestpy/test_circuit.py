@@ -1,3 +1,4 @@
+import itertools
 import numpy as np
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
@@ -508,7 +509,7 @@ class TestCircuit:
         lambda_ = parameter[0]
         all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
             control_qubit, target_qubit, control_value)
-        all_qubit_gate_from_u1_plus_control = \
+        all_qubit_gate_from_u1_plus = \
             self._create_all_qubit_gate_from_single_qubit_gate(
                 single_qubit_gate=_u1([lambda_ / 2]),
                 target_qubit=target_qubit)
@@ -516,53 +517,101 @@ class TestCircuit:
             self._create_all_qubit_gate_from_single_qubit_gate(
                 single_qubit_gate=_u1([-lambda_ / 2]),
                 target_qubit=target_qubit)
-        all_qubit_gate_from_u1_plus_target = \
-            self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_u1(lambda_ / 2),
-                target_qubit=target_qubit)
         all_qubit_gate = np.matmul(
-            all_qubit_gate_from_cx, all_qubit_gate_from_u1_plus_control)
+            all_qubit_gate_from_cx, all_qubit_gate_from_u1_plus)
         all_qubit_gate = np.matmul(
             all_qubit_gate_from_u1_minus, all_qubit_gate)
         all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
-        all_qubit_gate = np.matmul(
-            all_qubit_gate_from_u1_plus_target, all_qubit_gate)
+
+        return all_qubit_gate
+
+    def _create_all_qubit_gate_from_cu1_gate(
+            self,
+            control_qubit: list,
+            target_qubit: list,
+            control_value: list,
+            parameter: list) -> np.ndarray:
+
+        all_qubit_gate = np.zeros((2**self._num_qubit, 2**self._num_qubit))
+        patterns = list(itertools.product([0, 1], repeat=len(control_qubit)))
+        for pattern in patterns:
+            term = 1
+            for i in range(self._num_qubit):
+                if i in control_qubit:
+                    if pattern[control_qubit.index(i)] == 0:
+                        # |0><0|
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(np.array([[1, 0], [0, 0]]), term)
+                        else:
+                            term = np.kron(term, np.array([[1, 0], [0, 0]]))
+                    else:
+                        # |1><1|
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(np.array([[0, 0], [0, 1]]), term)
+                        else:
+                            term = np.kron(term, np.array([[0, 0], [0, 1]]))
+                elif i in target_qubit:
+                    if list(pattern) == control_value:
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(_u1(parameter), term)
+                        else:
+                            term = np.kron(term, _u1(parameter))
+                    else:
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(_ID, term)
+                        else:
+                            term = np.kron(term, _ID)
+                else:
+                    if self._from_right_to_left_for_qubit_ids:
+                        term = np.kron(_ID, term)
+                    else:
+                        term = np.kron(term, _ID)
+            all_qubit_gate = all_qubit_gate + term
 
         return all_qubit_gate
 
     def _create_all_qubit_gate_from_cu3_gate(
             self,
-            theta: float,
-            phi: float,
-            lambda_: float,
             control_qubit: list,
             target_qubit: list,
-            control_value: list) -> np.ndarray:
-        all_qubit_gate_from_cx = self._create_all_qubit_gate_from_cx_gate(
-            control_qubit, target_qubit, control_value)
-        all_qubit_gate_from_u1_1 = \
-            self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_u1((lambda_ + phi)/2),
-                target_qubit=control_qubit)
-        all_qubit_gate_from_u1_2 = \
-            self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_u1((lambda_ - phi)/2),
-                target_qubit=target_qubit)
-        all_qubit_gate_from_u3_1 = \
-            self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_u3(-theta/2, 0, -(phi+lambda_)/2),
-                target_qubit=target_qubit)
-        all_qubit_gate_from_u3_2 = \
-            self._create_all_qubit_gate_from_single_qubit_gate(
-                single_qubit_gate=_u3(theta/2, phi, 0),
-                target_qubit=target_qubit)
-        all_qubit_gate = np.matmul(
-            all_qubit_gate_from_u1_2, all_qubit_gate_from_u1_1)
-        all_qubit_gate = np.matmul(
-            all_qubit_gate_from_cx, all_qubit_gate)
-        all_qubit_gate = np.matmul(all_qubit_gate_from_u3_1, all_qubit_gate)
-        all_qubit_gate = np.matmul(all_qubit_gate_from_cx, all_qubit_gate)
-        all_qubit_gate = np.matmul(all_qubit_gate_from_u3_2, all_qubit_gate)
+            control_value: list,
+            parameter: list) -> np.ndarray:
+
+        all_qubit_gate = np.zeros((2**self._num_qubit, 2**self._num_qubit))
+        patterns = list(itertools.product([0, 1], repeat=len(control_qubit)))
+        for pattern in patterns:
+            term = 1
+            for i in range(self._num_qubit):
+                if i in control_qubit:
+                    if pattern[control_qubit.index(i)] == 0:
+                        # |0><0|
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(np.array([[1, 0], [0, 0]]), term)
+                        else:
+                            term = np.kron(term, np.array([[1, 0], [0, 0]]))
+                    else:
+                        # |1><1|
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(np.array([[0, 0], [0, 1]]), term)
+                        else:
+                            term = np.kron(term, np.array([[0, 0], [0, 1]]))
+                elif i in target_qubit:
+                    if list(pattern) == control_value:
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(_u3(parameter), term)
+                        else:
+                            term = np.kron(term, _u3(parameter))
+                    else:
+                        if self._from_right_to_left_for_qubit_ids:
+                            term = np.kron(_ID, term)
+                        else:
+                            term = np.kron(term, _ID)
+                else:
+                    if self._from_right_to_left_for_qubit_ids:
+                        term = np.kron(_ID, term)
+                    else:
+                        term = np.kron(term, _ID)
+            all_qubit_gate = all_qubit_gate + term
 
         return all_qubit_gate
 
@@ -713,44 +762,42 @@ class TestCircuit:
             elif gate["name"] == "crx":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_crx_gate(
-                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
-                        gate["control_value"])
+                        gate["control_value"],
+                        gate["parameter"])
 
             elif gate["name"] == "cry":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cry_gate(
-                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
-                        gate["control_value"])
+                        gate["control_value"],
+                        gate["parameter"])
 
             elif gate["name"] == "crz":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_crz_gate(
-                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
-                        gate["control_value"])
+                        gate["control_value"],
+                        gate["parameter"])
 
             elif gate["name"] == "cu1":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cu1_gate(
-                        gate["parameter"][0],
                         gate["control_qubit"],
                         gate["target_qubit"],
-                        gate["control_value"])
+                        gate["control_value"],
+                        gate["parameter"])
 
             elif gate["name"] == "cu3":
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_cu3_gate(
-                        gate["parameter"][0],
-                        gate["parameter"][1],
-                        gate["parameter"][2],
                         gate["control_qubit"],
                         gate["target_qubit"],
-                        gate["control_value"])
+                        gate["control_value"],
+                        gate["parameter"])
 
             else:
                 raise
