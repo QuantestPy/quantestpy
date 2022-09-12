@@ -1,5 +1,4 @@
 import itertools
-from re import U
 import numpy as np
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
