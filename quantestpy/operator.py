@@ -9,7 +9,7 @@ ut_test_case = unittest.TestCase()
 
 def assert_is_unitary(
         operator_subject_to_test: Union[np.ndarray, np.matrix],
-        number_of_decimal_places: int = 5,
+        atol: float = 1e-8,
         msg=None) -> None:
 
     m = operator_subject_to_test
@@ -19,9 +19,8 @@ def assert_is_unitary(
         m = np.matrix(m)
 
     a = m * m.H
-    a = np.round(a, decimals=number_of_decimal_places)
 
-    if np.all(a == np.eye(m.shape[0])):
+    if np.all(a - np.eye(m.shape[0]) <= atol):
         return
 
     else:

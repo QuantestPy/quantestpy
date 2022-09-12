@@ -8,7 +8,7 @@ ut_test_case = unittest.TestCase()
 
 def assert_is_normalized(
         state_vector_subject_to_test: Union[np.ndarray, list],
-        number_of_decimal_places: int = 5,
+        atol: float = 1e-8,
         msg=None) -> None:
 
     a = state_vector_subject_to_test
@@ -26,13 +26,12 @@ def assert_is_normalized(
 
     # calc. norm
     norm = np.sqrt(np.dot(a, a.conj()).real)
-    norm_round = np.round(norm, decimals=number_of_decimal_places)
 
-    if norm_round == 1.:
+    if np.abs(norm - 1.) <= atol:
         return
     else:
         error_msg = ("The state vector is not normalized.\n"
-                     f"Norm: {norm_round}")
+                     f"Norm: {norm}")
         msg = ut_test_case._formatMessage(msg, error_msg)
         raise QuantestPyAssertionError(msg)
 
