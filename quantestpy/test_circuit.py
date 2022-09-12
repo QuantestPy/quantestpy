@@ -714,7 +714,7 @@ class TestCircuit:
 
             elif gate["name"] == "u1":
                 all_qubit_gate = \
-                    elf._create_all_qubit_gate_from_single_qubit_gate(
+                    self._create_all_qubit_gate_from_single_qubit_gate(
                         _u1(gate["parameter"]), gate["target_qubit"])
 
             elif gate["name"] == "u2":
