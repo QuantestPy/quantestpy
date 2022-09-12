@@ -533,40 +533,55 @@ class TestCircuit:
             parameter: list) -> np.ndarray:
 
         all_qubit_gate = np.zeros((2**self._num_qubit, 2**self._num_qubit))
-        patterns = list(itertools.product([0, 1], repeat=len(control_qubit)))
-        for pattern in patterns:
-            term = 1
+        bit_patterns_for_control_qubit = list(
+            itertools.product([0, 1], repeat=len(control_qubit)))
+        for bit_pattern in bit_patterns_for_control_qubit:
+            qubit_gate_for_bit_pattern = 1
             for i in range(self._num_qubit):
                 if i in control_qubit:
-                    if pattern[control_qubit.index(i)] == 0:
+                    if bit_pattern[control_qubit.index(i)] == 0:
                         # |0><0|
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(np.array([[1, 0], [0, 0]]), term)
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(np.array([[1, 0], [0, 0]]),
+                                        qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, np.array([[1, 0], [0, 0]]))
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(qubit_gate_for_bit_pattern,
+                                        np.array([[1, 0], [0, 0]]))
                     else:
                         # |1><1|
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(np.array([[0, 0], [0, 1]]), term)
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(np.array([[0, 0], [0, 1]]),
+                                        qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, np.array([[0, 0], [0, 1]]))
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(qubit_gate_for_bit_pattern,
+                                        np.array([[0, 0], [0, 1]]))
                 elif i in target_qubit:
-                    if list(pattern) == control_value:
+                    if list(bit_pattern) == control_value:
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(_u1(parameter), term)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                _u1(parameter), qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, _u1(parameter))
+                            qubit_gate_for_bit_pattern = np.kron(
+                                qubit_gate_for_bit_pattern, _u1(parameter))
                     else:
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(_ID, term)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                _ID, qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, _ID)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                qubit_gate_for_bit_pattern, _ID)
                 else:
                     if self._from_right_to_left_for_qubit_ids:
-                        term = np.kron(_ID, term)
+                        qubit_gate_for_bit_pattern = np.kron(
+                            _ID, qubit_gate_for_bit_pattern)
                     else:
-                        term = np.kron(term, _ID)
-            all_qubit_gate = all_qubit_gate + term
+                        qubit_gate_for_bit_pattern = np.kron(
+                            qubit_gate_for_bit_pattern, _ID)
+            all_qubit_gate = all_qubit_gate + qubit_gate_for_bit_pattern
 
         return all_qubit_gate
 
@@ -578,45 +593,60 @@ class TestCircuit:
             parameter: list) -> np.ndarray:
 
         all_qubit_gate = np.zeros((2**self._num_qubit, 2**self._num_qubit))
-        patterns = list(itertools.product([0, 1], repeat=len(control_qubit)))
-        for pattern in patterns:
-            term = 1
+        bit_patterns_for_control_qubit = \
+            list(itertools.product([0, 1], repeat=len(control_qubit)))
+        for bit_pattern in bit_patterns_for_control_qubit:
+            qubit_gate_for_bit_pattern = 1
             for i in range(self._num_qubit):
                 if i in control_qubit:
-                    if pattern[control_qubit.index(i)] == 0:
+                    if bit_pattern[control_qubit.index(i)] == 0:
                         # |0><0|
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(np.array([[1, 0], [0, 0]]), term)
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(np.array([[1, 0], [0, 0]]),
+                                        qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, np.array([[1, 0], [0, 0]]))
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(qubit_gate_for_bit_pattern,
+                                        np.array([[1, 0], [0, 0]]))
                     else:
                         # |1><1|
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(np.array([[0, 0], [0, 1]]), term)
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(np.array([[0, 0], [0, 1]]),
+                                        qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, np.array([[0, 0], [0, 1]]))
+                            qubit_gate_for_bit_pattern = \
+                                np.kron(qubit_gate_for_bit_pattern,
+                                        np.array([[0, 0], [0, 1]]))
                 elif i in target_qubit:
-                    if list(pattern) == control_value:
+                    if list(bit_pattern) == control_value:
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(_u3(parameter), term)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                _u3(parameter), qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, _u3(parameter))
+                            qubit_gate_for_bit_pattern = np.kron(
+                                qubit_gate_for_bit_pattern, _u3(parameter))
                     else:
                         if self._from_right_to_left_for_qubit_ids:
-                            term = np.kron(_ID, term)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                _ID, qubit_gate_for_bit_pattern)
                         else:
-                            term = np.kron(term, _ID)
+                            qubit_gate_for_bit_pattern = np.kron(
+                                qubit_gate_for_bit_pattern, _ID)
                 else:
                     if self._from_right_to_left_for_qubit_ids:
-                        term = np.kron(_ID, term)
+                        qubit_gate_for_bit_pattern = np.kron(
+                            _ID, qubit_gate_for_bit_pattern)
                     else:
-                        term = np.kron(term, _ID)
-            all_qubit_gate = all_qubit_gate + term
+                        qubit_gate_for_bit_pattern = np.kron(
+                            qubit_gate_for_bit_pattern, _ID)
+            all_qubit_gate = all_qubit_gate + qubit_gate_for_bit_pattern
 
         return all_qubit_gate
 
-    def set_initial_state_vector(self,
-                                 initial_state_vector: np.ndarray) -> None:
+    def set_initial_state_vector(self, initial_state_vector: np.ndarray) \
+            -> None:
 
         if not isinstance(initial_state_vector, np.ndarray):
             raise QuantestPyTestCircuitError(
