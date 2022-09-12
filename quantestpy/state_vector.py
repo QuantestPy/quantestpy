@@ -8,7 +8,7 @@ ut_test_case = unittest.TestCase()
 
 def assert_is_normalized(
         state_vector_subject_to_test: Union[np.ndarray, list],
-        number_of_decimal_places: int = 5,
+        atol: float = 1e-8,
         msg=None) -> None:
 
     a = state_vector_subject_to_test
@@ -26,13 +26,12 @@ def assert_is_normalized(
 
     # calc. norm
     norm = np.sqrt(np.dot(a, a.conj()).real)
-    norm_round = np.round(norm, decimals=number_of_decimal_places)
 
-    if norm_round == 1.:
+    if np.abs(norm - 1.) <= atol:
         return
     else:
         error_msg = ("The state vector is not normalized.\n"
-                     f"Norm: {norm_round}")
+                     f"Norm: {norm}")
         msg = ut_test_case._formatMessage(msg, error_msg)
         raise QuantestPyAssertionError(msg)
 
@@ -56,7 +55,8 @@ def _remove_global_phase_from_two_vectors(a: np.ndarray, b: np.ndarray):
 def assert_equal(
         state_vector_a: Union[np.ndarray, list],
         state_vector_b: Union[np.ndarray, list],
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         msg=None):
 
@@ -91,23 +91,17 @@ def assert_equal(
     if up_to_global_phase:
         a, b = _remove_global_phase_from_two_vectors(a, b)
 
-    # round
-    a = np.round(a, decimals=number_of_decimal_places)
-    b = np.round(b, decimals=number_of_decimal_places)
-
     # assert equal
-    equals = a == b
-    if np.all(equals):
-        return
+    try:
+        np.testing.assert_allclose(
+            actual=a,
+            desired=b,
+            rtol=rtol,
+            atol=atol,
+            err_msg=f"Up to global phase: {up_to_global_phase}"
+        )
 
-    error_msgs = list()
-    for i, equal in enumerate(equals):
-        if not equal:
-            error_msgs.append((
-                f"\n{i}th element:\n"
-                f"a: {a[i]}\n"
-                f"b: {b[i]}"
-            ))
-    error_msg = "".join(error_msgs)
-    msg = ut_test_case._formatMessage(msg, error_msg)
-    raise QuantestPyAssertionError(msg)
+    except AssertionError as e:
+        error_msg = e.args[0]
+        msg = ut_test_case._formatMessage(msg, error_msg)
+        raise QuantestPyAssertionError(msg)

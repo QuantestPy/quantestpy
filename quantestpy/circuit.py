@@ -4,13 +4,13 @@ from typing import Union
 import itertools
 import traceback
 import re
-from qiskit import QuantumCircuit
 
 from quantestpy import operator
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.converter import _cvt_qiskit_to_test_circuit
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
+from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
 from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
@@ -19,10 +19,11 @@ ut_test_case = unittest.TestCase()
 def assert_equal_to_operator(
         operator_: Union[np.ndarray, np.matrix],
         qasm: str = None,
-        qiskit_circuit: QuantumCircuit = None,
+        qiskit_circuit=None,
         test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         msg=None) -> None:
 
@@ -53,16 +54,17 @@ def assert_equal_to_operator(
     operator.assert_equal(
         operator_from_test_circuit,
         operator_,
-        number_of_decimal_places,
+        rtol,
+        atol,
         up_to_global_phase,
         msg)
 
 
 def assert_is_zero(qasm: str = None,
-                   qiskit_circuit: QuantumCircuit = None,
+                   qiskit_circuit=None,
                    test_circuit: TestCircuit = None,
                    qubits: list = None,
-                   number_of_decimal_places: int = 5,
+                   atol: float = 1e-8,
                    msg=None) -> None:
 
     # Memo220805JN: the following input checker may be common for the other
@@ -110,10 +112,9 @@ def assert_is_zero(qasm: str = None,
             clipped_state_vec = \
                 state_vec[i*dim_reg_rear*2: (i+1)*dim_reg_rear*2]
             clipped_state_vec = clipped_state_vec[dim_reg_rear:]
-            clipped_state_vec = np.round(
-                clipped_state_vec, decimals=number_of_decimal_places)
+            clipped_state_vec = np.abs(clipped_state_vec)
 
-            if not np.all(clipped_state_vec == 0.):
+            if not np.all(clipped_state_vec <= atol):
                 return True  # = assertion error
 
         return False  # = assertion non-error
@@ -132,9 +133,9 @@ def assert_is_zero(qasm: str = None,
 
 def assert_ancilla_is_zero(ancilla_qubits: list,
                            qasm: str = None,
-                           qiskit_circuit: QuantumCircuit = None,
+                           qiskit_circuit=None,
                            test_circuit: TestCircuit = None,
-                           number_of_decimal_places: int = 5,
+                           atol: float = 1e-8,
                            msg=None) -> None:
 
     if qasm is None and qiskit_circuit is None and test_circuit is None:
@@ -191,7 +192,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
         try:
             assert_is_zero(test_circuit=test_circuit,
                            qubits=ancilla_qubits,
-                           number_of_decimal_places=number_of_decimal_places)
+                           atol=atol)
 
         except QuantestPyAssertionError as e:
             t = traceback.format_exception_only(type(e), e)[0]
@@ -264,15 +265,15 @@ def _get_matrix_norm(
 
 def assert_equal(
         qasm_a: Union[str, None] = None,
-        qiskit_circuit_a: Union[QuantumCircuit, None] = None,
+        qiskit_circuit_a=None,
         test_circuit_a: Union[TestCircuit, None] = None,
         qasm_b: Union[str, None] = None,
-        qiskit_circuit_b: Union[QuantumCircuit, None] = None,
+        qiskit_circuit_b=None,
         test_circuit_b: Union[TestCircuit, None] = None,
-        number_of_decimal_places: int = 5,
+        rtol: float = 0.,
+        atol: float = 1e-8,
         up_to_global_phase: bool = False,
         matrix_norm_type: Union[str, None] = None,
-        tolerance_for_matrix_norm_value: Union[float, None] = None,
         msg: Union[str, None] = None):
 
     # Check inputs for circuit A
@@ -298,7 +299,7 @@ def assert_equal(
         )
 
     if qiskit_circuit_a is not None \
-            and not isinstance(qiskit_circuit_a, QuantumCircuit):
+            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_a):
         raise QuantestPyError(
             "Type of qiskit_circuit_a must be an instance of "
             "qiskit.QuantumCircuit class."
@@ -334,7 +335,7 @@ def assert_equal(
         )
 
     if qiskit_circuit_b is not None \
-            and not isinstance(qiskit_circuit_b, QuantumCircuit):
+            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_b):
         raise QuantestPyError(
             "Type of qiskit_circuit_b must be an instance of "
             "qiskit.QuantumCircuit class."
@@ -357,10 +358,14 @@ def assert_equal(
             "'Frobenius_norm' and 'max_norm'."
         )
 
-    if not isinstance(tolerance_for_matrix_norm_value, float) \
-            and tolerance_for_matrix_norm_value is not None:
+    if not isinstance(atol, float):
         raise QuantestPyError(
-            "Type of tolerance_for_matrix_norm_value must be float."
+            "Type of atol must be float."
+        )
+
+    if not isinstance(rtol, float):
+        raise QuantestPyError(
+            "Type of rtol must be float."
         )
 
     # cvt. to test_circuit_a
@@ -385,27 +390,36 @@ def assert_equal(
         operator.assert_equal(
             whole_gates_a,
             whole_gates_b,
-            number_of_decimal_places,
+            rtol,
+            atol,
             up_to_global_phase,
             msg)
 
     else:
         # assert check matrix norm as a distance
-        matrix_norm_value = _get_matrix_norm(
+        matrix_norm_a_minus_b = _get_matrix_norm(
             whole_gates_a,
             whole_gates_b,
             matrix_norm_type,
             up_to_global_phase
         )
 
-        if tolerance_for_matrix_norm_value is None:
-            tolerance_for_matrix_norm_value = 0.
+        if rtol != 0.:
+            matrix_norm_b = _get_matrix_norm(
+                whole_gates_b,
+                np.zeros_like(whole_gates_b),
+                matrix_norm_type,
+                False
+            )
 
-        if matrix_norm_value > tolerance_for_matrix_norm_value:
+        else:
+            matrix_norm_b = 0.
 
-            error_msg = "matrix norm value " \
-                + format(matrix_norm_value, ".15g") \
-                + " is larger than the tolerance " \
-                + format(tolerance_for_matrix_norm_value, ".15g") + "."
+        if matrix_norm_a_minus_b >= atol + rtol * matrix_norm_b:
+
+            error_msg = "matrix norm ||A-B|| " \
+                + format(matrix_norm_a_minus_b, ".15g") \
+                + " is larger than (atol + rtol*||B||) " \
+                + format(atol + rtol * matrix_norm_b, ".15g") + "."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)
