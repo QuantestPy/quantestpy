@@ -360,102 +360,44 @@ class TestCircuit:
         # apply each gate to state vector
         for gate in self._gates:
             if gate["name"] == "id":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _ID, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _ID
             elif gate["name"] in ("x", "cx"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _X
             elif gate["name"] in ("y", "cy"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _Y, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _Y
             elif gate["name"] in ("z", "cz"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _Z, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _Z
             elif gate["name"] in ("h", "ch"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _H, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _H
             elif gate["name"] == "s":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _S, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _S
             elif gate["name"] == "sdg":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _Sdg, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _Sdg
             elif gate["name"] == "t":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _T, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _T
             elif gate["name"] == "tdg":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _Tdg, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _Tdg
             elif gate["name"] in ("rx", "crx"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _rx(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _rx(gate["parameter"])
             elif gate["name"] in ("ry", "cry"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _ry(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _ry(gate["parameter"])
             elif gate["name"] in ("rz", "crz"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _rz(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _rz(gate["parameter"])
             elif gate["name"] in ("u1", "cu1"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _u1(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _u1(gate["parameter"])
             elif gate["name"] in ("u2", "cu2"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _u2(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _u2(gate["parameter"])
             elif gate["name"] in ("u3", "cu3"):
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _u3(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
-
+                original_qubit_gate = _u3(gate["parameter"])
             elif gate["name"] == "scalar":
-                all_qubit_gate = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _scalar(gate["parameter"]), gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
+                original_qubit_gate = _scalar(gate["parameter"])
             else:
                 raise
+
+            all_qubit_gate = \
+                self._create_all_qubit_gate_from_original_qubit_gate(
+                    original_qubit_gate, gate["control_qubit"],
+                    gate["target_qubit"], gate["control_value"])
 
             whole_gates = np.matmul(all_qubit_gate, whole_gates)
 
