@@ -253,12 +253,8 @@ def _get_matrix_norm(
 
 
 def assert_equal(
-        qasm_a: Union[str, None] = None,
-        qiskit_circuit_a=None,
-        test_circuit_a: Union[TestCircuit, None] = None,
-        qasm_b: Union[str, None] = None,
-        qiskit_circuit_b=None,
-        test_circuit_b: Union[TestCircuit, None] = None,
+        circuit_a: Union[TestCircuit, str],
+        circuit_b: Union[TestCircuit, str],
         rtol: float = 0.,
         atol: float = 1e-8,
         up_to_global_phase: bool = False,
@@ -266,75 +262,41 @@ def assert_equal(
         msg: Union[str, None] = None):
 
     # Check inputs for circuit A
-    if qasm_a is None and qiskit_circuit_a is None and test_circuit_a is None:
-        raise QuantestPyError(
-            "Missing information for circuit A. "
-            "One of the following must be given: "
-            "qasm_a, qiskit_circuit_a and test_circuit_a."
-        )
+    # test_circuit
+    if isinstance(circuit_a, TestCircuit):
+        test_circuit_a = circuit_a
 
-    if (qasm_a is not None and qiskit_circuit_a is not None) \
-            or (qasm_a is not None and test_circuit_a is not None) \
-            or (qiskit_circuit_a is not None and test_circuit_a is not None):
-        raise QuantestPyError(
-            "Too much information for circuit A. "
-            "Only one of the following should be given: "
-            "qasm_a, qiskit_circuit_a and test_circuit_a."
-        )
+    # qasm
+    elif isinstance(circuit_a, str):
+        test_circuit_a = _cvt_openqasm_to_test_circuit(circuit_a)
 
-    if qasm_a is not None and not isinstance(qasm_a, str):
-        raise QuantestPyError(
-            "Type of qasm_a must be str."
-        )
+    # qiskit.QuantumCircuit()
+    elif _is_instance_of_qiskit_quantumcircuit(circuit_a):
+        test_circuit_a = _cvt_qiskit_to_test_circuit(circuit_a)
 
-    if qiskit_circuit_a is not None \
-            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_a):
+    else:
         raise QuantestPyError(
-            "Type of qiskit_circuit_a must be an instance of "
-            "qiskit.QuantumCircuit class."
-        )
-
-    if test_circuit_a is not None \
-            and not isinstance(test_circuit_a, TestCircuit):
-        raise QuantestPyError(
-            "Type of test_circuit_a must be an instance of "
-            "quantestpy.TestCircuit class."
+            "circuit_a must be one of the following: "
+            "qasm, qiskit.QuantumCircuit and TestCircuit."
         )
 
     # Check inputs for circuit B
-    if qasm_b is None and qiskit_circuit_b is None and test_circuit_b is None:
-        raise QuantestPyError(
-            "Missing information for circuit B. "
-            "One of the following must be given: "
-            "qasm_b, qiskit_circuit_b and test_circuit_b."
-        )
+    # test_circuit
+    if isinstance(circuit_b, TestCircuit):
+        test_circuit_b = circuit_b
 
-    if (qasm_b is not None and qiskit_circuit_b is not None) \
-            or (qasm_b is not None and test_circuit_b is not None) \
-            or (qiskit_circuit_b is not None and test_circuit_b is not None):
-        raise QuantestPyError(
-            "Too much information for circuit B. "
-            "Only one of the following should be given: "
-            "qasm_b, qiskit_circuit_b and test_circuit_b."
-        )
+    # qasm
+    elif isinstance(circuit_b, str):
+        test_circuit_b = _cvt_openqasm_to_test_circuit(circuit_b)
 
-    if qasm_b is not None and not isinstance(qasm_b, str):
-        raise QuantestPyError(
-            "Type of qasm_b must be str."
-        )
+    # qiskit.QuantumCircuit()
+    elif _is_instance_of_qiskit_quantumcircuit(circuit_b):
+        test_circuit_b = _cvt_qiskit_to_test_circuit(circuit_b)
 
-    if qiskit_circuit_b is not None \
-            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_b):
+    else:
         raise QuantestPyError(
-            "Type of qiskit_circuit_b must be an instance of "
-            "qiskit.QuantumCircuit class."
-        )
-
-    if test_circuit_b is not None \
-            and not isinstance(test_circuit_b, TestCircuit):
-        raise QuantestPyError(
-            "Type of test_circuit_b must be an instance of "
-            "quantestpy.TestCircuit class."
+            "circuit_b must be one of the following: "
+            "qasm, qiskit.QuantumCircuit and TestCircuit."
         )
 
     if matrix_norm_type is not None and matrix_norm_type not in \
@@ -356,20 +318,6 @@ def assert_equal(
         raise QuantestPyError(
             "Type of rtol must be float."
         )
-
-    # cvt. to test_circuit_a
-    if qasm_a is not None:
-        test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
-
-    elif qiskit_circuit_a is not None:
-        test_circuit_a = _cvt_qiskit_to_test_circuit(qiskit_circuit_a)
-
-    # cvt. to test_circuit_b
-    if qasm_b is not None:
-        test_circuit_b = _cvt_openqasm_to_test_circuit(qasm_b)
-
-    elif qiskit_circuit_b is not None:
-        test_circuit_b = _cvt_qiskit_to_test_circuit(qiskit_circuit_b)
 
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
