@@ -57,33 +57,28 @@ def assert_equal_to_operator(
         msg)
 
 
-def assert_is_zero(qasm: str = None,
-                   qiskit_circuit=None,
-                   test_circuit: TestCircuit = None,
+def assert_is_zero(circuit: Union[TestCircuit, str],
                    qubits: list = None,
                    atol: float = 1e-8,
                    msg=None) -> None:
 
-    # Memo220805JN: the following input checker may be common for the other
-    # functions in this module, thus can be one function.
-    if qasm is None and qiskit_circuit is None and test_circuit is None:
+    # test_circuit
+    if isinstance(circuit, TestCircuit):
+        test_circuit = circuit
+
+    # qasm
+    elif isinstance(circuit, str):
+        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
+
+    # qiskit.QuantumCircuit()
+    elif _is_instance_of_qiskit_quantumcircuit(circuit):
+        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
+
+    else:
         raise QuantestPyError(
-            "Missing qasm or qiskit_circuit or test circuit."
+            "Input circuit must be one of the following: "
+            "qasm, qiskit.QuantumCircuit and TestCircuit."
         )
-
-    if (qasm is not None and qiskit_circuit is not None) \
-            or (qasm is not None and test_circuit is not None) \
-            or (qiskit_circuit is not None and test_circuit is not None):
-        raise QuantestPyError(
-            "You need to choose one parameter of Qasm, \
-                qiskit_circuit and test circuit."
-        )
-
-    if qasm is not None:
-        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
-
-    if qiskit_circuit is not None:
-        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(qubits, list) and qubits is not None:
         raise QuantestPyError(
@@ -187,7 +182,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
 
         # assertion using assert_is_zero
         try:
-            assert_is_zero(test_circuit=test_circuit,
+            assert_is_zero(circuit=test_circuit,
                            qubits=ancilla_qubits,
                            atol=atol)
 
