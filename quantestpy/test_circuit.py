@@ -279,7 +279,7 @@ class TestCircuit:
 
     def _create_all_qubit_gate_from_original_qubit_gate(
             self,
-            gate: np.array,
+            gate: np.ndarray,
             control_qubit: list,
             target_qubit: list,
             control_value: list) -> np.ndarray:

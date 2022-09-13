@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from quantestpy import TestCircuit
+from quantestpy.test_circuit import _X
 
 
 class TestTestCircuitCXGate(unittest.TestCase):
@@ -17,12 +18,11 @@ class TestTestCircuitCXGate(unittest.TestCase):
     OK
     $
     """
-    _X = np.array([[0, 1], [1, 0]])
 
     def test_cx_regular_qubit_order(self,):
         circ = TestCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[1], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[1], control_value=[1]
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -37,7 +37,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
         circ = TestCircuit(2)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[1], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[1], control_value=[1]
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -51,7 +51,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
     def test_cx_flip_control_target(self,):
         circ = TestCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[1], target_qubit=[0], control_value=[1]
+            _X, control_qubit=[1], target_qubit=[0], control_value=[1]
         )
 
         expected_gate = np.array([[1, 0, 0, 0],
@@ -66,7 +66,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
         circ = TestCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[2], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[2], control_value=[1]
         )
 
         # this is qiskit's output
@@ -86,7 +86,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
     def test_cx_control_value_is_zero(self,):
         circ = TestCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[1], control_value=[0]
+            _X, control_qubit=[0], target_qubit=[1], control_value=[0]
         )
 
         expected_gate = np.array([[0, 1, 0, 0],
@@ -100,7 +100,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
     def test_toffoli(self,):
         circ = TestCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X,
+            _X,
             control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
@@ -119,7 +119,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
         circ = TestCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X,
+            _X,
             control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         # this is qiskit's output
@@ -140,15 +140,15 @@ class TestTestCircuitCXGate(unittest.TestCase):
 
         circ = TestCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[1, 2], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[1, 2], control_value=[1]
         )
 
         circ = TestCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[1], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[1], control_value=[1]
         )
         gate_1_1 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            self._X, control_qubit=[0], target_qubit=[2], control_value=[1]
+            _X, control_qubit=[0], target_qubit=[2], control_value=[1]
         )
 
         self.assertIsNone(
