@@ -123,31 +123,28 @@ def assert_is_zero(circuit: Union[TestCircuit, str],
         raise QuantestPyAssertionError(msg)
 
 
-def assert_ancilla_is_zero(ancilla_qubits: list,
-                           qasm: str = None,
-                           qiskit_circuit=None,
-                           test_circuit: TestCircuit = None,
+def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
+                           ancilla_qubits: list,
                            atol: float = 1e-8,
                            msg=None) -> None:
 
-    if qasm is None and qiskit_circuit is None and test_circuit is None:
+    # test_circuit
+    if isinstance(circuit, TestCircuit):
+        test_circuit = circuit
+
+    # qasm
+    elif isinstance(circuit, str):
+        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
+
+    # qiskit.QuantumCircuit()
+    elif _is_instance_of_qiskit_quantumcircuit(circuit):
+        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
+
+    else:
         raise QuantestPyError(
-            "Missing qasm or qiskit_circuit or test circuit."
+            "Input circuit must be one of the following: "
+            "qasm, qiskit.QuantumCircuit and TestCircuit."
         )
-
-    if (qasm is not None and qiskit_circuit is not None) \
-            or (qasm is not None and test_circuit is not None) \
-            or (qiskit_circuit is not None and test_circuit is not None):
-        raise QuantestPyError(
-            "You need to choose one parameter of Qasm, \
-                qiskit_circuit and test circuit."
-        )
-
-    if qasm is not None:
-        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
-
-    if qiskit_circuit is not None:
-        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(ancilla_qubits, list):
         raise QuantestPyError(

@@ -12,9 +12,9 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_circuit_assert_ancilla_is_zero
-    ...
+    ..
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.017s
+    Ran 2 tests in 0.135s
 
     OK
     """
@@ -49,7 +49,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
 
         self.assertIsNone(
             circuit.assert_ancilla_is_zero(
-                test_circuit=test_circuit,
+                circuit=test_circuit,
                 ancilla_qubits=[1, 2]
             )
         )
@@ -85,7 +85,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 circuit.assert_ancilla_is_zero(
-                    test_circuit=test_circuit,
+                    circuit=test_circuit,
                     ancilla_qubits=[1, 2]
                 )
             )
