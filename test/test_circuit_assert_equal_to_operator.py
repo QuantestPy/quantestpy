@@ -12,7 +12,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_circuit_assert_equal_to_operator
-    ........
+    ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.003s
 
@@ -45,7 +45,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         self.assertIsNone(
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                test_circuit=self.test_circ
+                circuit=self.test_circ
             )
         )
 
@@ -61,7 +61,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                test_circuit=self.test_circ,
+                circuit=self.test_circ,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
             )
 
@@ -77,7 +77,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         self.assertIsNone(
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                test_circuit=self.test_circ,
+                circuit=self.test_circ,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
             )
         )
@@ -94,5 +94,5 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                test_circuit=self.test_circ
+                circuit=self.test_circ
             )
