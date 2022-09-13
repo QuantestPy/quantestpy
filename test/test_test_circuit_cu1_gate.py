@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from quantestpy import TestCircuit
+from quantestpy.test_circuit import _u1
 
 
 class TestTestCircuitCU1Gate(unittest.TestCase):
@@ -21,10 +22,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
     def test_cu1_regular_qubit_order(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -39,10 +39,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -56,10 +55,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
     def test_cu1_flip_control_target(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[1], target_qubit=[0], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[1], target_qubit=[0], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -74,10 +72,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         circ = TestCircuit(3)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[2], control_value=[1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[2], control_value=[1])
 
         # this is qiskit's output
         expected_gate = np.array(
@@ -120,10 +117,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
     def test_cu1_control_value_is_zero(self,):
         circ = TestCircuit(2)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[0],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[0])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
@@ -137,10 +133,9 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
     def test_cu1_multiple_controls(self,):
         circ = TestCircuit(3)
         lambda_ = np.pi/8
-        actual_gate = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1],
-            parameter=[lambda_]
-        )
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
                                   [0, 1, 0, 0, 0, 0, 0, 0],
@@ -158,20 +153,17 @@ class TestTestCircuitCU1Gate(unittest.TestCase):
         lambda_ = np.pi/8
 
         circ = TestCircuit(3)
-        gate_0 = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[1, 2], control_value=[1],
-            parameter=[lambda_]
-        )
+        gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[1, 2], control_value=[1])
 
         circ = TestCircuit(3)
-        gate_1_0 = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[1], control_value=[1],
-            parameter=[lambda_]
-        )
-        gate_1_1 = circ._create_all_qubit_gate_from_cu1_gate(
-            control_qubit=[0], target_qubit=[2], control_value=[1],
-            parameter=[lambda_]
-        )
+        gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[1], control_value=[1])
+        gate_1_1 = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _u1([lambda_]),
+            control_qubit=[0], target_qubit=[2], control_value=[1])
 
         self.assertIsNone(
             np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1)))

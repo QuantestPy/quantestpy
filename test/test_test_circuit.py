@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 
 from quantestpy import TestCircuit
-from quantestpy import test_circuit
 
 
 class TestTestCircuit(unittest.TestCase):
@@ -18,32 +17,6 @@ class TestTestCircuit(unittest.TestCase):
     OK
     $
     """
-
-    def test__calculate_matrix_tensor_prod_1(self,):
-        x = test_circuit._X
-        h = test_circuit._H
-        actual_matrix = TestCircuit._calculate_matrix_tensor_prod(x, h)
-
-        expected_matrix = np.array([[0, 0, 1, 1],
-                                   [0, 0, 1, -1],
-                                   [1, 1, 0, 0],
-                                   [1, -1, 0, 0]]) / np.sqrt(2.)
-
-        self.assertIsNone(
-            np.testing.assert_allclose(actual_matrix, expected_matrix))
-
-    def test__calculate_matrix_tensor_prod_2(self,):
-        x = test_circuit._X
-        h = test_circuit._H
-        actual_matrix = TestCircuit._calculate_matrix_tensor_prod(h, x)
-
-        expected_matrix = np.array([[0, 1, 0, 1],
-                                   [1, 0, 1, 0],
-                                   [0, 1, 0, -1],
-                                   [1, 0, -1, 0]]) / np.sqrt(2.)
-
-        self.assertIsNone(
-            np.testing.assert_allclose(actual_matrix, expected_matrix))
 
     def test__get_state_vector_1(self,):
         circ = TestCircuit(2)
