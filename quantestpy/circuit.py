@@ -11,7 +11,6 @@ from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
 from quantestpy.converter import _cvt_qiskit_to_test_circuit
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
 from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
-from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
 
@@ -23,6 +22,7 @@ def assert_equal_to_operator(
         rtol: float = 0.,
         atol: float = 1e-8,
         up_to_global_phase: bool = False,
+        matrix_norm_type: Union[str, None] = None,
         msg=None) -> None:
 
     # test_circuit
@@ -54,7 +54,9 @@ def assert_equal_to_operator(
         rtol,
         atol,
         up_to_global_phase,
-        msg)
+        matrix_norm_type,
+        msg
+    )
 
 
 def assert_is_zero(circuit: Union[TestCircuit, str],
@@ -209,49 +211,6 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
     raise QuantestPyAssertionError(msg)
 
 
-def _get_matrix_norm(
-        a: np.ndarray,
-        b: np.ndarray,
-        matrix_norm_type: str,
-        up_to_global_phase: bool) -> float:
-
-    if up_to_global_phase:
-        a_shape = a.shape
-
-        # cvt. to vector
-        a = np.ravel(a)
-        b = np.ravel(b)
-
-        # rm. global phase
-        a, b = _remove_global_phase_from_two_vectors(a, b)
-
-        # back to matrix
-        a = np.reshape(a, newshape=a_shape)
-        b = np.reshape(b, newshape=a_shape)
-
-    m = a - b
-
-    if matrix_norm_type == "operator_norm_1":
-        matrix_norm_value = np.linalg.norm(m, 1)
-
-    elif matrix_norm_type == "operator_norm_2":
-        matrix_norm_value = np.linalg.norm(m, 2)
-
-    elif matrix_norm_type == "operator_norm_inf":
-        matrix_norm_value = np.linalg.norm(m, np.inf)
-
-    elif matrix_norm_type == "Frobenius_norm":
-        matrix_norm_value = np.linalg.norm(m, "fro")
-
-    elif matrix_norm_type == "max_norm":
-        matrix_norm_value = np.max(np.abs(m))
-
-    else:
-        raise
-
-    return matrix_norm_value
-
-
 def assert_equal(
         circuit_a: Union[TestCircuit, str],
         circuit_b: Union[TestCircuit, str],
@@ -322,41 +281,13 @@ def assert_equal(
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
 
-    if matrix_norm_type is None:
-        # assert equal exact or equal up to a global phase
-        operator.assert_equal(
-            whole_gates_a,
-            whole_gates_b,
-            rtol,
-            atol,
-            up_to_global_phase,
-            msg)
-
-    else:
-        # assert check matrix norm as a distance
-        matrix_norm_a_minus_b = _get_matrix_norm(
-            whole_gates_a,
-            whole_gates_b,
-            matrix_norm_type,
-            up_to_global_phase
-        )
-
-        if rtol != 0.:
-            matrix_norm_b = _get_matrix_norm(
-                whole_gates_b,
-                np.zeros_like(whole_gates_b),
-                matrix_norm_type,
-                False
-            )
-
-        else:
-            matrix_norm_b = 0.
-
-        if matrix_norm_a_minus_b >= atol + rtol * matrix_norm_b:
-
-            error_msg = "matrix norm ||A-B|| " \
-                + format(matrix_norm_a_minus_b, ".15g") \
-                + " is larger than (atol + rtol*||B||) " \
-                + format(atol + rtol * matrix_norm_b, ".15g") + "."
-            msg = ut_test_case._formatMessage(msg, error_msg)
-            raise QuantestPyAssertionError(msg)
+    # call operator.assert_equal
+    operator.assert_equal(
+        whole_gates_a,
+        whole_gates_b,
+        rtol,
+        atol,
+        up_to_global_phase,
+        matrix_norm_type,
+        msg
+    )
