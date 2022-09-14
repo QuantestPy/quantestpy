@@ -28,7 +28,7 @@ QuantestPy provides several assert methods to check for and report failures. The
 
 Method | Checks that
 --- | ---
-[state_vector.assert_is_normalized(state_vec)](./examples/state_vector_assert_is_normalized.md) | `state_vec is normalized`
+[state_vector.assert_is_normalized(state_vec)](./doc/state_vector_assert_is_normalized.md) | `state_vec is normalized`
 state_vector.assert_equal(state_vec_a, state_vec_b) | `state_vec_a == state_vec_b`
 operator.assert_is_unitary(operator) | `operator is unitary`
 operator.assert_equal(operator_a, operator_b) | `operator_a == operator_b`
