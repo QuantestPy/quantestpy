@@ -39,7 +39,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyError: " \
-                + "circuit_a must be one of the following: " \
+                + "Input circuit must be one of the following: " \
                 + "qasm, qiskit.QuantumCircuit and TestCircuit.\n"
 
             actual_error_msg = \
@@ -64,7 +64,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyError: " \
-                + "circuit_b must be one of the following: " \
+                + "Input circuit must be one of the following: " \
                 + "qasm, qiskit.QuantumCircuit and TestCircuit.\n"
 
             actual_error_msg = \

@@ -15,15 +15,8 @@ from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
 ut_test_case = unittest.TestCase()
 
 
-def assert_equal_to_operator(
-        circuit: Union[TestCircuit, str],
-        operator_: Union[np.ndarray, np.matrix],
-        from_right_to_left_for_qubit_ids: bool = False,
-        rtol: float = 0.,
-        atol: float = 1e-8,
-        up_to_global_phase: bool = False,
-        matrix_norm_type: Union[str, None] = None,
-        msg=None) -> None:
+def _get_test_circuit_from_input_circuit(circuit: Union[TestCircuit, str]) \
+        -> TestCircuit:
 
     # test_circuit
     if isinstance(circuit, TestCircuit):
@@ -42,6 +35,21 @@ def assert_equal_to_operator(
             "Input circuit must be one of the following: "
             "qasm, qiskit.QuantumCircuit and TestCircuit."
         )
+
+    return test_circuit
+
+
+def assert_equal_to_operator(
+        circuit: Union[TestCircuit, str],
+        operator_: Union[np.ndarray, np.matrix],
+        from_right_to_left_for_qubit_ids: bool = False,
+        rtol: float = 0.,
+        atol: float = 1e-8,
+        up_to_global_phase: bool = False,
+        matrix_norm_type: Union[str, None] = None,
+        msg=None) -> None:
+
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     test_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
@@ -64,28 +72,12 @@ def assert_is_zero(circuit: Union[TestCircuit, str],
                    atol: float = 1e-8,
                    msg=None) -> None:
 
-    # test_circuit
-    if isinstance(circuit, TestCircuit):
-        test_circuit = circuit
-
-    # qasm
-    elif isinstance(circuit, str):
-        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
-
-    # qiskit.QuantumCircuit()
-    elif _is_instance_of_qiskit_quantumcircuit(circuit):
-        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
-
-    else:
-        raise QuantestPyError(
-            "Input circuit must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and TestCircuit."
-        )
-
     if not isinstance(qubits, list) and qubits is not None:
         raise QuantestPyError(
             "qubits must be a list of integer(s) as qubit's ID(s)."
         )
+
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     state_vec = test_circuit._get_state_vector()
     num_qubit = test_circuit._num_qubit
@@ -130,28 +122,12 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
                            atol: float = 1e-8,
                            msg=None) -> None:
 
-    # test_circuit
-    if isinstance(circuit, TestCircuit):
-        test_circuit = circuit
-
-    # qasm
-    elif isinstance(circuit, str):
-        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
-
-    # qiskit.QuantumCircuit()
-    elif _is_instance_of_qiskit_quantumcircuit(circuit):
-        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
-
-    else:
-        raise QuantestPyError(
-            "Input circuit must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and TestCircuit."
-        )
-
     if not isinstance(ancilla_qubits, list):
         raise QuantestPyError(
             "ancilla_qubits must be a list of integer(s) as qubit's ID(s)."
         )
+
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     num_qubit = test_circuit._num_qubit
 
@@ -220,44 +196,6 @@ def assert_equal(
         matrix_norm_type: Union[str, None] = None,
         msg: Union[str, None] = None):
 
-    # Check inputs for circuit A
-    # test_circuit
-    if isinstance(circuit_a, TestCircuit):
-        test_circuit_a = circuit_a
-
-    # qasm
-    elif isinstance(circuit_a, str):
-        test_circuit_a = _cvt_openqasm_to_test_circuit(circuit_a)
-
-    # qiskit.QuantumCircuit()
-    elif _is_instance_of_qiskit_quantumcircuit(circuit_a):
-        test_circuit_a = _cvt_qiskit_to_test_circuit(circuit_a)
-
-    else:
-        raise QuantestPyError(
-            "circuit_a must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and TestCircuit."
-        )
-
-    # Check inputs for circuit B
-    # test_circuit
-    if isinstance(circuit_b, TestCircuit):
-        test_circuit_b = circuit_b
-
-    # qasm
-    elif isinstance(circuit_b, str):
-        test_circuit_b = _cvt_openqasm_to_test_circuit(circuit_b)
-
-    # qiskit.QuantumCircuit()
-    elif _is_instance_of_qiskit_quantumcircuit(circuit_b):
-        test_circuit_b = _cvt_qiskit_to_test_circuit(circuit_b)
-
-    else:
-        raise QuantestPyError(
-            "circuit_b must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and TestCircuit."
-        )
-
     if matrix_norm_type is not None and matrix_norm_type not in \
         ["operator_norm_1", "operator_norm_2",
          "operator_norm_inf", "Frobenius_norm", "max_norm"]:
@@ -277,6 +215,9 @@ def assert_equal(
         raise QuantestPyError(
             "Type of rtol must be float."
         )
+
+    test_circuit_a = _get_test_circuit_from_input_circuit(circuit_a)
+    test_circuit_b = _get_test_circuit_from_input_circuit(circuit_b)
 
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
