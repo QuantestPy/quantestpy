@@ -16,7 +16,8 @@ dependencies = [
 
 [project.optional-dependencies]
 ci = [
-  "flake8 == 5.*"
+  "flake8 == 5.*",
+  "flake8-pyproject"
 ]
 qiskit = [
   "qiskit == 0.*"
@@ -25,3 +26,6 @@ qiskit = [
 [tool.setuptools]
 include-package-data = true
 zip-safe = false
+
+[tool.flake8]
+per-file-ignores = "__init__.py:F401"
