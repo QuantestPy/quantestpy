@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
+import traceback
 
-from quantestpy import operator
+from quantestpy.operator import assert_equal
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -11,9 +12,9 @@ class TestOperatorAssertEqual(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_operator_assert_equal
-    ..
+    ...
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.007s
+    Ran 3 tests in 0.012s
 
     OK
     $
@@ -35,7 +36,7 @@ class TestOperatorAssertEqual(unittest.TestCase):
         ) / np.sqrt(2.) * np.exp(0.4j)
 
         self.assertIsNone(
-            operator.assert_equal(
+            assert_equal(
                 op_a,
                 op_b,
                 up_to_global_phase=True
@@ -58,7 +59,67 @@ class TestOperatorAssertEqual(unittest.TestCase):
         ) / np.sqrt(2.) * np.exp(0.7j)
 
         with self.assertRaises(QuantestPyAssertionError):
-            operator.assert_equal(
+            assert_equal(
                 op_a,
                 op_b
             )
+
+    def test_matrix_norms(self,):
+        op_a = np.array(
+            [[0, 0, 0, 1],
+             [0, 0, 1j, 0],
+             [0, 1, 0, 0],
+             [1j, 0, 0, 0]]
+        )
+
+        op_b = np.array(
+            [[0., 0, 0, 1],
+             [0, 0, 1, 0],
+             [0, 1, 0, 0],
+             [1, 0, 0, 0]]
+        )
+
+        test_patterns = [
+            {"matrix_norm_type": "operator_norm_1",
+             "atol": 1.,
+             "expected_matrix_norm_value": np.sqrt(2.)},
+            {"matrix_norm_type": "operator_norm_2",
+             "atol": 1.,
+             "expected_matrix_norm_value": np.sqrt(2.)},
+            {"matrix_norm_type": "operator_norm_inf",
+             "atol": 1.4,
+             "expected_matrix_norm_value": np.sqrt(2.)},
+            {"matrix_norm_type": "Frobenius_norm",
+             "atol": 1.9,
+             "expected_matrix_norm_value": 2.},
+            {"matrix_norm_type": "max_norm",
+             "atol": 0.1,
+             "expected_matrix_norm_value": np.sqrt(2.)}
+        ]
+
+        for pattern in test_patterns:
+
+            try:
+                self.assertIsNotNone(
+                    assert_equal(
+                        operator_a=op_a,
+                        operator_b=op_b,
+                        matrix_norm_type=pattern["matrix_norm_type"],
+                        atol=pattern["atol"]
+                    )
+                )
+
+            except QuantestPyAssertionError as e:
+
+                expected_error_msg = \
+                    "quantestpy.exceptions.QuantestPyAssertionError: " \
+                    + "matrix norm ||A-B|| " \
+                    + format(pattern["expected_matrix_norm_value"], ".15g") \
+                    + " is larger than (atol + rtol*||B||) " \
+                    + format(pattern["atol"], ".15g") \
+                    + "."
+
+                actual_error_msg = \
+                    traceback.format_exception_only(type(e), e)[0].rstrip("\n")
+
+                self.assertEqual(expected_error_msg, actual_error_msg)

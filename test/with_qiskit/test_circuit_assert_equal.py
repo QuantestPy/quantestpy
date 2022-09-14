@@ -14,10 +14,10 @@ class TestCircuitAssertEqual(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_circuit_assert_equal
-    ...
+    $ python -m unittest test.with_qiskit.test_circuit_assert_equal
+    ...........
     ----------------------------------------------------------------------
-    Ran 3 tests in 0.006s
+    Ran 11 tests in 0.015s
 
     OK
     """
@@ -258,32 +258,6 @@ class TestCircuitAssertEqual(unittest.TestCase):
             circuit.assert_equal(
                 test_circuit_a=test_circuit_a,
                 test_circuit_b=test_circuit_b
-            )
-        )
-
-    @unittest.skip("Skip until RY gate is implemented.")
-    def test_exact_equal_up_to_a_global_phase(self,):
-        """Check Toffoli up to a global phase; see Nielsen-Chuang p.183"""
-        qc = QuantumCircuit(3)
-        qc.ry(theta=np.pi/4., qubit=2)
-        qc.cx(1, 2)
-        qc.ry(theta=np.pi/4., qubit=2)
-        qc.cx(0, 2)
-        qc.ry(theta=-np.pi/4., qubit=2)
-        qc.cx(1, 2)
-        qc.ry(theta=-np.pi/4., qubit=2)
-
-        test_circuit = TestCircuit(3)
-        test_circuit.add_gate(
-            {"name": "cx", "target_qubit": [2], "control_qubit": [0, 1],
-                "control_value": [1, 1], "parameter": []}
-        )
-
-        self.assertIsNone(
-            circuit.assert_equal(
-                qiskit_circuit_a=qc,
-                test_circuit_b=test_circuit,
-                check_including_global_phase=False
             )
         )
 
