@@ -1,7 +1,7 @@
-import unittest
-import numpy as np
 import traceback
+import unittest
 
+import numpy as np
 from quantestpy import state_vector
 from quantestpy.exceptions import QuantestPyAssertionError
 

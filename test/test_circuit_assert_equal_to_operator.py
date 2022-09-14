@@ -1,8 +1,7 @@
 import unittest
-import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy import circuit
+import numpy as np
+from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 

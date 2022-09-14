@@ -1,6 +1,6 @@
 import unittest
-import numpy as np
 
+import numpy as np
 from quantestpy import TestCircuit
 from quantestpy.test_circuit import _u3
 

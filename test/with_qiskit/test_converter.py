@@ -1,10 +1,10 @@
-import numpy as np
 import unittest
-from qiskit import QuantumCircuit
 
+import numpy as np
+from qiskit import QuantumCircuit
 from quantestpy import TestCircuit
-from quantestpy.converter import _cvt_qiskit_to_test_circuit
-from quantestpy.converter import _cvt_openqasm_to_test_circuit
+from quantestpy.converter import (_cvt_openqasm_to_test_circuit,
+                                  _cvt_qiskit_to_test_circuit)
 
 
 class TestConverter(unittest.TestCase):

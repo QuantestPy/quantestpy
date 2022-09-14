@@ -1,16 +1,16 @@
-import unittest
-import numpy as np
-from typing import Union
 import itertools
-import traceback
 import re
+import traceback
+import unittest
+from typing import Union
 
-from quantestpy import operator
-from quantestpy import TestCircuit
-from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
-from quantestpy.converter import _cvt_qiskit_to_test_circuit
-from quantestpy.converter import _cvt_openqasm_to_test_circuit
-from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
+import numpy as np
+
+from quantestpy import TestCircuit, operator
+from quantestpy.converter import (_cvt_openqasm_to_test_circuit,
+                                  _cvt_qiskit_to_test_circuit,
+                                  _is_instance_of_qiskit_quantumcircuit)
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 ut_test_case = unittest.TestCase()
 

@@ -1,5 +1,5 @@
-import unittest
 import traceback
+import unittest
 
 from quantestpy.converter import _cvt_openqasm_to_test_circuit
 from quantestpy.exceptions import QuantestPyError
