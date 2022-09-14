@@ -9,10 +9,13 @@ license = { text = "Apache 2.0"}
 description = "Software for testing quantum computing programs."
 authors = [{name="Quantestpy Development Team"}]
 requires-python = ">=3.7"
-urls = {key="https://github.com/QuantestPy/quantestpy", value="https://github.com/QuantestPy/quantestpy"}
 dependencies = [
   "numpy == 1.*"
 ]
+
+[project.urls]
+homepage ="https://github.com/QuantestPy/quantestpy"
+repository = "https://github.com/QuantestPy/quantestpy"
 
 [project.optional-dependencies]
 ci = [
