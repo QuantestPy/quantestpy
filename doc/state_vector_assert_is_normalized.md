@@ -1,7 +1,12 @@
 # quantestpy.state_vector.assert_is_normalized
 
-### state_vector.assert_is_normalized(state_vector_subject_to_test, atol=1e-8, msg=None)
+## state_vector.assert_is_normalized(state_vector_subject_to_test, atol=1e-8, msg=None)
 
+Raises a QuantestPyAssertionError if the state vector is not normalized up to desired precision.
+The test verifies that `state_vector_subject_to_test` satisfies the following:
+```
+sqrt(|state_vector_subject_to_test|^2) - 1 <= atol
+```
 
 ### Parameters
 
