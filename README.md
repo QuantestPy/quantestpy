@@ -1,5 +1,5 @@
 # QuantestPy
-QuantestPy is collecting several assert methods dedicated to quantum programing.
+QuantestPy is an unit testing framework for quantum computing programs.
 
 
 # Installation
@@ -23,8 +23,28 @@ qp.state_vector.assert_is_normalized(state_vector_subject_to_test=state_vec)
 
 ...
 ```
+
+QuantestPy provides several assert methods to check for and report failures. The following table lists the available methods:
+
+Method | Checks that
+--- | ---
+[state_vector.assert_is_normalized(state_vec)](./examples/state_vector_assert_is_normalized.md) | `state_vec is normalized`
+state_vector.assert_equal(state_vec_a, state_vec_b) | `state_vec_a == state_vec_b`
+operator.assert_is_unitary(operator) | `operator is unitary`
+operator.assert_equal(operator_a, operator_b) | `operator_a == operator_b`
+circuit.assert_equal_to_operator(circuit, operator) | `circuit == operator`
+circuit.assert_is_zero(circuit, qubits) | `qubits in circuit are |0>`
+circuit.assert_ancilla_is_zero(circuit, ancilla_qubits) | `ancilla_qubits in circuit are always |0>`
+circuit.assert_equal(circuit_a, circuit_b) | `circuit_a == circuit_b`
+
+All the assert methods accept a msg argument that, if specified, is added to the error message on failure. The hyperlinks bring you to details of the methods.
+
+# License
+[Apache License 2.0](LICENSE.txt)
+
+
 ## how to create a quantum circuit
-A quantum circuit is created via TestCircuit. 
+A quantum circuit is created via TestCircuit.
 You can use qiskit or OpenQASM 2.0, which are converted into TestCircuit in QuantestPy.
 ```Py
 from quantestpy import TestCircuit
@@ -56,7 +76,7 @@ a = np.array([1,0,0,0])
 b = np.array([0,1,0,0])
 state_vector.assert_equal(a, b)
 # The error message is below:
-# quantestpy.exceptions.QuantestPyAssertionError: 
+# quantestpy.exceptions.QuantestPyAssertionError:
 # 0th element:
 # a: 1
 # b: 0
@@ -86,7 +106,7 @@ a = np.array([[1,1],[1,1]])
 b = np.array([[0,1],[1,1]])
 operator.assert_equal(a, b)
 # The error message is below:
-# quantestpy.exceptions.QuantestPyAssertionError: 
+# quantestpy.exceptions.QuantestPyAssertionError:
 # 0th element:
 # a: 1
 # b: 0
@@ -212,5 +232,3 @@ circuit.assert_ancilla_is_zero(
 # quantestpy.exceptions.QuantestPyAssertionError: qubit(s) [2] are either non-zero or entangled with other qubits.
 ```
 
-# License
-[Apache License 2.0](LICENSE.txt)

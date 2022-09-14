@@ -1,0 +1,31 @@
+# quantestpy.state_vector.assert_is_normalized
+
+### state_vector.assert_is_normalized(state_vector_subject_to_test, atol=1e-8, msg=None)
+
+
+### Parameters
+
+#### state_vector_subject_to_test : numpy.ndarray or list
+The state vector desired to be normalized.
+
+#### atol : float, optional
+Absolute tolerance.
+
+#### msg : str, optional
+The message to be added to the error message on failure.
+
+
+### Examples
+```py
+>>>> vec_ini = np.array([1., 0., 0., 0.])
+>>>> op = np.array([[1., 1., 0., 1j],
+...:                [0., 1., 0., 1.],
+...:                [1j, 0., 1., 0.],
+...:                [0., -1., -1j, 0.]])
+>>>> vec = np.matmul(op, vec_ini)
+>>>> qp.state_vector.assert_is_normalized(vec)
+Traceback (most recent call last):
+     ...
+QuantestPyAssertionError: The state vector is not normalized.
+Norm: 1.4142135623730951
+```
