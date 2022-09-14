@@ -11,9 +11,9 @@ class TestCircuitAssertIsZero(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_circuit_assert_is_zero
-    ...
+    ....
     ----------------------------------------------------------------------
-    Ran 3 tests in 0.006s
+    Ran 4 tests in 0.008s
 
     OK
     """
@@ -31,7 +31,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
 
         self.assertIsNone(
             circuit.assert_is_zero(
-                test_circuit=test_circuit,
+                circuit=test_circuit,
                 qubits=[1]
             )
         )
@@ -49,7 +49,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
 
         self.assertIsNone(
             circuit.assert_is_zero(
-                test_circuit=test_circuit,
+                circuit=test_circuit,
                 qubits=[1, 2]
             )
         )
@@ -67,7 +67,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
 
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_is_zero(
-                test_circuit=test_circuit
+                circuit=test_circuit
             )
 
     def test_large_a_tol_raise_no_error(self,):
@@ -86,7 +86,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         # no error
         self.assertIsNone(
             circuit.assert_is_zero(
-                test_circuit=test_circuit,
+                circuit=test_circuit,
                 atol=0.71
             )
         )
@@ -94,6 +94,6 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         # error
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_is_zero(
-                test_circuit=test_circuit,
+                circuit=test_circuit,
                 atol=0.7
             )

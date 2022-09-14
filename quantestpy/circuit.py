@@ -15,11 +15,33 @@ from quantestpy.converter import _is_instance_of_qiskit_quantumcircuit
 ut_test_case = unittest.TestCase()
 
 
+def _get_test_circuit_from_input_circuit(circuit: Union[TestCircuit, str]) \
+        -> TestCircuit:
+
+    # test_circuit
+    if isinstance(circuit, TestCircuit):
+        test_circuit = circuit
+
+    # qasm
+    elif isinstance(circuit, str):
+        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
+
+    # qiskit.QuantumCircuit()
+    elif _is_instance_of_qiskit_quantumcircuit(circuit):
+        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
+
+    else:
+        raise QuantestPyError(
+            "Input circuit must be one of the following: "
+            "qasm, qiskit.QuantumCircuit and TestCircuit."
+        )
+
+    return test_circuit
+
+
 def assert_equal_to_operator(
+        circuit: Union[TestCircuit, str],
         operator_: Union[np.ndarray, np.matrix],
-        qasm: str = None,
-        qiskit_circuit=None,
-        test_circuit: TestCircuit = None,
         from_right_to_left_for_qubit_ids: bool = False,
         rtol: float = 0.,
         atol: float = 1e-8,
@@ -27,24 +49,7 @@ def assert_equal_to_operator(
         matrix_norm_type: Union[str, None] = None,
         msg=None) -> None:
 
-    if qasm is None and qiskit_circuit is None and test_circuit is None:
-        raise QuantestPyError(
-            "Missing qasm or qiskit_circuit or test circuit."
-        )
-
-    if (qasm is not None and qiskit_circuit is not None) \
-            or (qasm is not None and test_circuit is not None) \
-            or (qiskit_circuit is not None and test_circuit is not None):
-        raise QuantestPyError(
-            "You need to choose one parameter of Qasm, \
-                qiskit_circuit and test circuit."
-        )
-
-    if qasm is not None:
-        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
-
-    if qiskit_circuit is not None:
-        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     test_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
@@ -62,38 +67,17 @@ def assert_equal_to_operator(
     )
 
 
-def assert_is_zero(qasm: str = None,
-                   qiskit_circuit=None,
-                   test_circuit: TestCircuit = None,
+def assert_is_zero(circuit: Union[TestCircuit, str],
                    qubits: list = None,
                    atol: float = 1e-8,
                    msg=None) -> None:
-
-    # Memo220805JN: the following input checker may be common for the other
-    # functions in this module, thus can be one function.
-    if qasm is None and qiskit_circuit is None and test_circuit is None:
-        raise QuantestPyError(
-            "Missing qasm or qiskit_circuit or test circuit."
-        )
-
-    if (qasm is not None and qiskit_circuit is not None) \
-            or (qasm is not None and test_circuit is not None) \
-            or (qiskit_circuit is not None and test_circuit is not None):
-        raise QuantestPyError(
-            "You need to choose one parameter of Qasm, \
-                qiskit_circuit and test circuit."
-        )
-
-    if qasm is not None:
-        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
-
-    if qiskit_circuit is not None:
-        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(qubits, list) and qubits is not None:
         raise QuantestPyError(
             "qubits must be a list of integer(s) as qubit's ID(s)."
         )
+
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     state_vec = test_circuit._get_state_vector()
     num_qubit = test_circuit._num_qubit
@@ -133,36 +117,17 @@ def assert_is_zero(qasm: str = None,
         raise QuantestPyAssertionError(msg)
 
 
-def assert_ancilla_is_zero(ancilla_qubits: list,
-                           qasm: str = None,
-                           qiskit_circuit=None,
-                           test_circuit: TestCircuit = None,
+def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
+                           ancilla_qubits: list,
                            atol: float = 1e-8,
                            msg=None) -> None:
-
-    if qasm is None and qiskit_circuit is None and test_circuit is None:
-        raise QuantestPyError(
-            "Missing qasm or qiskit_circuit or test circuit."
-        )
-
-    if (qasm is not None and qiskit_circuit is not None) \
-            or (qasm is not None and test_circuit is not None) \
-            or (qiskit_circuit is not None and test_circuit is not None):
-        raise QuantestPyError(
-            "You need to choose one parameter of Qasm, \
-                qiskit_circuit and test circuit."
-        )
-
-    if qasm is not None:
-        test_circuit = _cvt_openqasm_to_test_circuit(qasm)
-
-    if qiskit_circuit is not None:
-        test_circuit = _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
     if not isinstance(ancilla_qubits, list):
         raise QuantestPyError(
             "ancilla_qubits must be a list of integer(s) as qubit's ID(s)."
         )
+
+    test_circuit = _get_test_circuit_from_input_circuit(circuit)
 
     num_qubit = test_circuit._num_qubit
 
@@ -192,7 +157,7 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
 
         # assertion using assert_is_zero
         try:
-            assert_is_zero(test_circuit=test_circuit,
+            assert_is_zero(circuit=test_circuit,
                            qubits=ancilla_qubits,
                            atol=atol)
 
@@ -223,89 +188,13 @@ def assert_ancilla_is_zero(ancilla_qubits: list,
 
 
 def assert_equal(
-        qasm_a: Union[str, None] = None,
-        qiskit_circuit_a=None,
-        test_circuit_a: Union[TestCircuit, None] = None,
-        qasm_b: Union[str, None] = None,
-        qiskit_circuit_b=None,
-        test_circuit_b: Union[TestCircuit, None] = None,
+        circuit_a: Union[TestCircuit, str],
+        circuit_b: Union[TestCircuit, str],
         rtol: float = 0.,
         atol: float = 1e-8,
         up_to_global_phase: bool = False,
         matrix_norm_type: Union[str, None] = None,
         msg: Union[str, None] = None):
-
-    # Check inputs for circuit A
-    if qasm_a is None and qiskit_circuit_a is None and test_circuit_a is None:
-        raise QuantestPyError(
-            "Missing information for circuit A. "
-            "One of the following must be given: "
-            "qasm_a, qiskit_circuit_a and test_circuit_a."
-        )
-
-    if (qasm_a is not None and qiskit_circuit_a is not None) \
-            or (qasm_a is not None and test_circuit_a is not None) \
-            or (qiskit_circuit_a is not None and test_circuit_a is not None):
-        raise QuantestPyError(
-            "Too much information for circuit A. "
-            "Only one of the following should be given: "
-            "qasm_a, qiskit_circuit_a and test_circuit_a."
-        )
-
-    if qasm_a is not None and not isinstance(qasm_a, str):
-        raise QuantestPyError(
-            "Type of qasm_a must be str."
-        )
-
-    if qiskit_circuit_a is not None \
-            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_a):
-        raise QuantestPyError(
-            "Type of qiskit_circuit_a must be an instance of "
-            "qiskit.QuantumCircuit class."
-        )
-
-    if test_circuit_a is not None \
-            and not isinstance(test_circuit_a, TestCircuit):
-        raise QuantestPyError(
-            "Type of test_circuit_a must be an instance of "
-            "quantestpy.TestCircuit class."
-        )
-
-    # Check inputs for circuit B
-    if qasm_b is None and qiskit_circuit_b is None and test_circuit_b is None:
-        raise QuantestPyError(
-            "Missing information for circuit B. "
-            "One of the following must be given: "
-            "qasm_b, qiskit_circuit_b and test_circuit_b."
-        )
-
-    if (qasm_b is not None and qiskit_circuit_b is not None) \
-            or (qasm_b is not None and test_circuit_b is not None) \
-            or (qiskit_circuit_b is not None and test_circuit_b is not None):
-        raise QuantestPyError(
-            "Too much information for circuit B. "
-            "Only one of the following should be given: "
-            "qasm_b, qiskit_circuit_b and test_circuit_b."
-        )
-
-    if qasm_b is not None and not isinstance(qasm_b, str):
-        raise QuantestPyError(
-            "Type of qasm_b must be str."
-        )
-
-    if qiskit_circuit_b is not None \
-            and not _is_instance_of_qiskit_quantumcircuit(qiskit_circuit_b):
-        raise QuantestPyError(
-            "Type of qiskit_circuit_b must be an instance of "
-            "qiskit.QuantumCircuit class."
-        )
-
-    if test_circuit_b is not None \
-            and not isinstance(test_circuit_b, TestCircuit):
-        raise QuantestPyError(
-            "Type of test_circuit_b must be an instance of "
-            "quantestpy.TestCircuit class."
-        )
 
     if matrix_norm_type is not None and matrix_norm_type not in \
         ["operator_norm_1", "operator_norm_2",
@@ -327,19 +216,8 @@ def assert_equal(
             "Type of rtol must be float."
         )
 
-    # cvt. to test_circuit_a
-    if qasm_a is not None:
-        test_circuit_a = _cvt_openqasm_to_test_circuit(qasm_a)
-
-    elif qiskit_circuit_a is not None:
-        test_circuit_a = _cvt_qiskit_to_test_circuit(qiskit_circuit_a)
-
-    # cvt. to test_circuit_b
-    if qasm_b is not None:
-        test_circuit_b = _cvt_openqasm_to_test_circuit(qasm_b)
-
-    elif qiskit_circuit_b is not None:
-        test_circuit_b = _cvt_qiskit_to_test_circuit(qiskit_circuit_b)
+    test_circuit_a = _get_test_circuit_from_input_circuit(circuit_a)
+    test_circuit_b = _get_test_circuit_from_input_circuit(circuit_b)
 
     whole_gates_a = test_circuit_a._get_whole_gates()
     whole_gates_b = test_circuit_b._get_whole_gates()
