@@ -31,6 +31,7 @@ jobs:
 
       - name: Run isort
         uses: isort/isort-action@master
+        configuration: --check-only
         with:
           requirementsFiles: "requirements.txt"
 
