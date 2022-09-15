@@ -30,7 +30,7 @@ jobs:
           python3 -m flake8 ./*.py
 
       - name: Run isort
-        uses: isort/isort-action@master --check-only
+        uses: isort/isort-action@master
         with:
           requirementsFiles: "requirements.txt"
 
