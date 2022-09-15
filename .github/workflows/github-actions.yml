@@ -29,6 +29,9 @@ jobs:
           python3 -m flake8 ./examples/*.py
           python3 -m flake8 ./*.py
 
+      - name: Run isort
+        uses: jamescurtin/isort-action@master
+
       - name: Run unit test
         run: |
           python3 -m unittest discover -v ./test/
