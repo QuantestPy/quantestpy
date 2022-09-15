@@ -33,8 +33,8 @@ Method | Checks that
 [operator.assert_is_unitary(operator)](./doc/operator_assert_is_unitary.md) | `operator is unitary`
 [operator.assert_equal(operator_a, operator_b)](./doc/operator_assert_equal.md) | `operator_a == operator_b`
 [circuit.assert_equal_to_operator(circuit, operator)](./doc/circuit_assert_equal_to_operator.md) | `circuit == operator`
-[circuit.assert_is_zero(circuit, qubits)](./doc/circuit_assert_is_zero.md) | `qubits in circuit are |0>`
-[circuit.assert_ancilla_is_zero(circuit, ancilla_qubits)](./doc/circuit_assert_ancilla_is_zero.md) | `ancilla_qubits in circuit are always |0>`
+[circuit.assert_is_zero(circuit, qubits)](./doc/circuit_assert_is_zero.md) | `qubits in circuit are 0 states`
+[circuit.assert_ancilla_is_zero(circuit, ancilla_qubits)](./doc/circuit_assert_ancilla_is_zero.md) | `ancilla_qubits in circuit are always 0 states`
 [circuit.assert_equal(circuit_a, circuit_b)](./doc/circuit_assert_equal.md) | `circuit_a == circuit_b`
 
 The hyperlinks bring you to details of the methods.
