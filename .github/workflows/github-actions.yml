@@ -30,7 +30,7 @@ jobs:
           python3 -m flake8 ./*.py
 
       - name: Run isort
-        uses: actions/isort-action@master
+        uses: isort/isort-action@master
 
       - name: Run unit test
         run: |
