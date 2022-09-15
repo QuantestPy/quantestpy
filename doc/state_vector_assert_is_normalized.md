@@ -2,21 +2,22 @@
 
 ## state_vector.assert_is_normalized(state_vector_subject_to_test, atol=1e-8, msg=None)
 
-Raises a QuantestPyAssertionError if the state vector is not normalized up to desired precision.
+Raises a QuantestPyAssertionError if the state vector is not normalized up to desired tolerance.
+
 The test verifies that `state_vector_subject_to_test` satisfies the following:
-```
+```py
 sqrt(|state_vector_subject_to_test|^2) - 1 <= atol
 ```
 
 ### Parameters
 
-#### state_vector_subject_to_test : numpy.ndarray or list
+#### state_vector_subject_to_test : \{numpy.ndarray, list\}
 The state vector desired to be normalized.
 
 #### atol : float, optional
 Absolute tolerance.
 
-#### msg : str, optional
+#### msg : \{None, str}, optional
 The message to be added to the error message on failure.
 
 
