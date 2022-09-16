@@ -16,7 +16,7 @@ where `operator_from_circuit_a` and `operator_from_circuit_b` denote the operato
 
 ### Parameters
 
-#### circuit_a, circuit_b: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM string\}
+#### circuit_a, circuit_b: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
 The circuits to compare. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
 
 #### rtol : float, optional

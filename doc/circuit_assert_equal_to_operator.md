@@ -16,7 +16,7 @@ where `operator_from_circuit` denotes the operator converted from `circuit`.
 
 ### Parameters
 
-#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM string\}
+#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
 The circuit converted to an operator. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
 
 #### operator_ : \{numpy.ndarray, numpy.matrix\}

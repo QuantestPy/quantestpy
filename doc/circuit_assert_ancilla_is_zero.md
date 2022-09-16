@@ -8,10 +8,10 @@ Internally [quantestpy.circuit.assert_is_zero](./circuit_assert_is_zero.md) is c
 
 ### Parameters
 
-#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM string\}
+#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
 The circuit to test. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
 
-#### ancilla_qubits: list
+#### ancilla_qubits: list(int)
 The qubit(s) desired to be `|0>` state.
 
 #### atol : float, optional
