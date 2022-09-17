@@ -20,7 +20,7 @@ def assert_is_unitary(
 
     a = m * m.H
 
-    if np.all(a - np.eye(m.shape[0]) <= atol):
+    if np.all(np.abs(a - np.eye(m.shape[0])) <= atol):
         return
 
     else:
