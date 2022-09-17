@@ -26,4 +26,3 @@ Create a new circuit object with 5 qubits:
 ```py
 ts = qp.TestCircuit(5)
 ```
-
