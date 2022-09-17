@@ -2,7 +2,7 @@
 
 ## circuit.assert_equal_to_operator(circuit, operator_, from_right_to_left_for_qubit_ids=False, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
 
-Raises a QuantestPyAssertionError if the circuit, which is internally converted to an operator, is not equal to the operator up to desired tolerance.
+Raises a QuantestPyAssertionError if the circuit, which is internally converted to an operator, is not equal to the given operator up to desired tolerance.
 
 The test verifies that the following equation is element-wise true:
 ```py
@@ -17,7 +17,7 @@ where `operator_from_circuit` denotes the operator converted from `circuit`.
 ### Parameters
 
 #### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
-The circuit converted to an operator. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
+The circuit to check. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
 
 #### operator_ : \{numpy.ndarray, numpy.matrix\}
 The operator desired.

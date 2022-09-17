@@ -2,7 +2,7 @@
 
 ## circuit.assert_ancilla_is_zero(circuit, ancilla_qubits, atol=1e-8, msg=None)
 
-Raises a QuantestPyAssertionError if ancilla qubits of the circuit are either not `|0>` states or entangled with other qubits up to desired tolerance.
+Raises a QuantestPyAssertionError if ancilla qubits of the circuit are either not 0 or entangled with other qubits up to desired tolerance.
 
 Internally [quantestpy.circuit.assert_is_zero](./circuit_assert_is_zero.md) is called repeatedly for all possible states of the non-ancilla qubit(s) in the computation basis.
 
@@ -12,7 +12,7 @@ Internally [quantestpy.circuit.assert_is_zero](./circuit_assert_is_zero.md) is c
 The circuit to test. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
 
 #### ancilla_qubits: list(int)
-The qubit(s) desired to be `|0>` state.
+The qubit(s) desired to be 0.
 
 #### atol : float, optional
 Absolute tolerance.

@@ -4,7 +4,7 @@
 
 Raises a QuantestPyAssertionError if the operator is not an unitary matrix up to desired tolerance.
 
-The test verifies that the following equation is true for all the elements:
+The test verifies that the following equation is true for all the matrix elements:
 ```py
 abs(operator_subject_to_test * operator_subject_to_test^dagger - I) <= atol
 ```

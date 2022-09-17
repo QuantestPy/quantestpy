@@ -37,7 +37,7 @@ The message to be added to the error message on failure.
 ### Examples
 
 ```py
->>>> qc_desired = QuantumCircuit(1)
+>>>> qc_desired = qiskit.QuantumCircuit(1)
 ...: qc_desired.rz(phi=np.pi/128, qubit=0)
 >>>> gridsynth_output = "HTHTSHTHTSHTHTHTHTSHTSHTHTSHTHTSHTHTSHTHTSHTHTSHTSHTHTHTHTSHTHTSHTHTSW"
 ...: qc_approx = cvt_gridsynth_to_qiskit_circuit(gridsynth_output)
@@ -64,4 +64,4 @@ Traceback (most recent call last):
 QuantestPyAssertionError: matrix norm ||A-B|| 0.000970126226409132 is larger than (atol + rtol*||B||) 1e-08.
 ```
 
-Note that `gridsynth_output` in the above example is generated with a program [gridsynth](https://www.mathstat.dal.ca/~selinger/newsynth/).
+Note that `gridsynth_output` in the above example is generated with the program [gridsynth](https://www.mathstat.dal.ca/~selinger/newsynth/).

@@ -4,7 +4,7 @@ QuantestPy is an unit testing framework for quantum computing programs.
 
 # Installation
 We encourage installing QuantestPy via the pip tool(a python package manager).
-The folllowing command installs the core QuantestPy component.
+The following command installs the core QuantestPy component.
 ```bash
 pip install git+https://github.com/QuantestPy/quantestpy.git
 ```
