@@ -54,7 +54,7 @@ tc.add_gate({
     "parameter": []
 })
 ```
-CX gate, conditional on the control qubit being set to 1.
+CX gate, conditional on the control qubit being set to 1:
 ```py
 q_0: ──■──
      ┌─┴─┐
@@ -69,7 +69,7 @@ tc.add_gate({
     "parameter": []
 })
 ```
-CX gate, conditional on the control qubit being set to 0.
+CX gate, conditional on the control qubit being set to 0:
 ```py
 q_0: ──O──
      ┌─┴─┐
