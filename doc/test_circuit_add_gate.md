@@ -16,7 +16,7 @@ key | value | type of value
 "control_value" | control value(s) | list({0, 1})
 "parameter" | parameter(s) | list(float)
 
-Users can always put multi-indices in "target_qubit", "control_qubit" and "control_value" for any gate as long as they are not out of range for circuit size. Controlled gates can be defined by specifying a gate name being performed on a single target qubit (such as "x") and giving a non-empty list to "control_qubit". By providing a non-empty list of 0 and 1 to "control_value", users can define the condition on the control qubit(s) for the gate to be applied on the target qubit(s). By definition, the length of "control_value" must be equal to that of "control_qubit". A non-empty list for "parameter" is allowed only for gates which have parameters such as rotation gates. For better understanding, see examples below.
+Users can always put multi-indices in "target_qubit", "control_qubit" and "control_value" for any gate as long as they are not out of range for the circuit size. Controlled gates can be defined by specifying a gate name being performed on a single target qubit (such as "x") and giving a non-empty list to "control_qubit". By providing a non-empty list of 0 and 1 to "control_value", users can define the condition on the control qubit(s) for the gate to be applied on the target qubit(s). By definition, the length of "control_value" must be equal to that of "control_qubit". A non-empty list for "parameter" is allowed only for gates which have parameters such as rotation gates. For better understanding, see examples below.
 
 The following table lists the currently available gates:
 
@@ -117,3 +117,4 @@ tc.add_gate({
     "parameter": [np.pi/128]
 })
 ```
+The circuit diagrams above are drawn with the help of `qiskit`.

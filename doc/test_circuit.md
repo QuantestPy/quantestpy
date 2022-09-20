@@ -4,7 +4,7 @@
 
 Creates a new circuit.
 
-Currently the assert methods accept only quantestpy.TestCircuit, qiskit.QuantumCircuit and OpenQASM 2.0 string as circuits. For those who do not have qiskit.QuantumCircuit or OpenQASM 2.0 string at hand, it is suggested to convert their circuit objects to quantestpy.TestCircuit objects. This can be done easily by using the [add_gate](./test_circuit_add_gate.md) method. The [converter](../quantestpy/converter.py) from `QasmQobj` to quantestpy.TestCircuit is a good reference for doing this systematically.
+Currently the assert methods accept only `quantestpy.TestCircuit`, `qiskit.QuantumCircuit` and `OpenQASM 2.0 string` as circuits. For those who use their own circuit class, it is suggested to write a converter from it to `quantestpy.TestCircuit`. This can be done easily by using the [add_gate](./test_circuit_add_gate.md) method. The [converter](../quantestpy/converter.py) from `QasmQobj` to `quantestpy.TestCircuit` is a good reference for this.
 
 ### Parameters
 #### num_qubit : int

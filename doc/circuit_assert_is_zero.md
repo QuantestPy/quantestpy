@@ -4,11 +4,11 @@
 
 Raises a QuantestPyAssertionError if qubits of the circuit are either not 0 or entangled with other qubits up to desired tolerance.
 
-The circuit `circuit` is converted to an operator and eventually to a state vector. The test verifies
+The circuit `circuit` is converted to an operator and eventually to a state vector by applying the operator to the initial state vector. It can be shown that, when some qubits are 0 and not entangled with other qubit(s), certain elements of the state vector are also 0. This is verified by the assert method, namely
 ```py
-abs(selected elements of the state vector) <= atol
+abs(certain element(s) of the state_vector) <= atol
 ```
-where `selected elements of the state vector` can be anticipated from `qubits`.
+where `certain element(s)` are uniquely determined from `qubits`.
 
 ### Parameters
 

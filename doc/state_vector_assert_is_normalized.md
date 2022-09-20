@@ -6,7 +6,7 @@ Raises a QuantestPyAssertionError if the state vector is not normalized up to de
 
 The test verifies that `state_vector_subject_to_test` satisfies the following:
 ```py
-abs(sqrt(|state_vector_subject_to_test|^2) - 1) <= atol
+abs(sqrt(|state_vector_subject_to_test|**2) - 1) <= atol
 ```
 
 ### Parameters
