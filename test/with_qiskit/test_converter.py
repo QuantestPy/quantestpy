@@ -1,10 +1,10 @@
-import numpy as np
 import unittest
-from qiskit import QuantumCircuit
 
+import numpy as np
+from qiskit import QuantumCircuit
 from quantestpy import TestCircuit
-from quantestpy.converter import _cvt_qiskit_to_test_circuit
-from quantestpy.converter import _cvt_openqasm_to_test_circuit
+from quantestpy.converter import (_cvt_openqasm_to_test_circuit,
+                                  _cvt_qiskit_to_test_circuit)
 
 
 class TestConverter(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestConverter(unittest.TestCase):
         expected_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []})
-        expected_circuit.add_gate({"name": "cx", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "x", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
 
@@ -47,7 +47,7 @@ class TestConverter(unittest.TestCase):
         expected_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []})
-        expected_circuit.add_gate({"name": "cx", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "x", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
 
@@ -62,16 +62,16 @@ class TestConverter(unittest.TestCase):
         actual_circuit = _cvt_qiskit_to_test_circuit(qc)
 
         expected_circuit = TestCircuit(3)
-        expected_circuit.add_gate({"name": "cx", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "x", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
-        expected_circuit.add_gate({"name": "cy", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "y", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
-        expected_circuit.add_gate({"name": "cz", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "z", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
-        expected_circuit.add_gate({"name": "ch", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "h", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
         self.assertEqual(vars(actual_circuit), vars(expected_circuit))
@@ -86,13 +86,13 @@ class TestConverter(unittest.TestCase):
         actual_circuit = _cvt_qiskit_to_test_circuit(qc)
 
         expected_circuit = TestCircuit(3)
-        expected_circuit.add_gate({"name": "crx", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "rx", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta]})
-        expected_circuit.add_gate({"name": "cry", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "ry", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta]})
-        expected_circuit.add_gate({"name": "crz", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "rz", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta]})
 
@@ -106,17 +106,17 @@ class TestConverter(unittest.TestCase):
         qc = QuantumCircuit(3)
         qc.cu1(theta, 0, 1)
         qc.cu3(theta, phi, lambda_, 0, 1)
-        qc.ccx(0, 1, 2)
+        qc.cx(0, 1, 2)
         actual_circuit = _cvt_qiskit_to_test_circuit(qc)
 
         expected_circuit = TestCircuit(3)
-        expected_circuit.add_gate({"name": "cu1", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "p", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta]})
-        expected_circuit.add_gate({"name": "cu3", "target_qubit": [1],
+        expected_circuit.add_gate({"name": "u", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta, phi, lambda_]})
-        expected_circuit.add_gate({"name": "cx", "target_qubit": [2],
+        expected_circuit.add_gate({"name": "x", "target_qubit": [2],
                                    "control_qubit": [0, 1],
                                    "control_value": [1, 1],
                                    "parameter": []})
@@ -136,7 +136,7 @@ class TestConverter(unittest.TestCase):
                                    "control_qubit": [],
                                    "control_value": [],
                                    "parameter": []})
-        expected_circuit.add_gate({"name": "cx",
+        expected_circuit.add_gate({"name": "x",
                                    "target_qubit": [2],
                                    "control_qubit": [0, 1],
                                    "control_value": [1, 1],

@@ -29,25 +29,46 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
     global_phase = experiments["header"]["global_phase"]
     circuit = TestCircuit(num_qubits)
 
-    # When num_qubits > 2, we must change the below for statement.
     for gate in gates:
+
         if "params" in gate:
             parameter = gate["params"]
         else:
             parameter = []
 
+        if gate["name"] in ["swap", "cswap", "iswap"]:
+            target_qubit = gate["qubits"][-2:]
+            control_qubit = gate["qubits"][:-2]
+        else:
+            target_qubit = gate["qubits"][-1:]
+            control_qubit = gate["qubits"][:-1]
+
         if gate["name"] in ["cx", "cy", "cz", "ch",
-                            "crx", "cry", "crz", "cu1", "cu3"]:
+                            "crx", "cry", "crz", "cswap"]:
+            name = gate["name"][1:]
             control_value = [1]
         elif gate["name"] == "ccx":
-            gate["name"] = "cx"
+            name = "x"
             control_value = [1, 1]
+        elif gate["name"] in ["cp", "cu1"]:
+            name = "p"
+            control_value = [1]
+        elif gate["name"] in ["cu", "cu3"]:
+            name = "u"
+            control_value = [1]
+        elif gate["name"] == "u1":
+            name = "p"
+            control_value = []
+        elif gate["name"] == "u3":
+            name = "u"
+            control_value = []
         else:
+            name = gate["name"]
             control_value = []
 
-        gate_test = dict(name=gate["name"],
-                         target_qubit=[gate["qubits"][-1]],
-                         control_qubit=gate["qubits"][:-1],
+        gate_test = dict(name=name,
+                         target_qubit=target_qubit,
+                         control_qubit=control_qubit,
                          control_value=control_value,
                          parameter=parameter)
         circuit.add_gate(gate_test)
