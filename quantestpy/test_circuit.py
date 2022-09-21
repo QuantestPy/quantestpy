@@ -313,11 +313,7 @@ class TestCircuit:
 
         # apply each gate to state vector
         for gate in self._gates:
-            if gate["name"] == "swap":
-                # 以下に変えたいけど、gate = gateがおかしい。controlの値と比較する必要がある。
-                #            if gate["name"] == "swap" and \
-                #                (len(gate["control_qubit"]) == 0 or
-                #                    gate["control_qubit"] == gate["control_value"]):
+            if gate["name"] == "swap" and len(gate["control_qubit"]) == 0:
                 all_qubit_gate1 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
                         _X, gate["target_qubit"][:0],
@@ -326,6 +322,18 @@ class TestCircuit:
                     self._create_all_qubit_gate_from_original_qubit_gate(
                         _X, gate["target_qubit"][1:],
                         gate["target_qubit"][:0], control_value=[1])
+                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate2, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
+            elif gate["name"] == "swap" and len(gate["control_qubit"]) > 0:
+                all_qubit_gate1 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X, gate["target_qubit"][1:],
+                        gate["target_qubit"][:0], control_value=[1])
+                all_qubit_gate2 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X, gate["target_qubit"][1:]+gate["control_qubit"],
+                        gate["target_qubit"][1:], control_value=[1])
                 whole_gates = np.matmul(all_qubit_gate1, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate2, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate1, whole_gates)

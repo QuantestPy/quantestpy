@@ -472,3 +472,31 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                   [0, 0, 0, 1]])
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_cswap(self,):
+        circ = TestCircuit(3)
+        circ.add_gate(
+            {"name": "swap", "target_qubit": [1, 2], "control_qubit": [0],
+             "control_value": [1], "parameter": []})
+        actual_gate = circ._get_whole_gates()
+        # need to change the expected_gate
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 0, 1]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_iswap(self,):
+        circ = TestCircuit(2)
+        circ.add_gate(
+            {"name": "iswap", "target_qubit": [0, 1], "control_qubit": [],
+             "control_value": [], "parameter": []})
+        actual_gate = circ._get_whole_gates()
+        # need to change the expected_gate
+        expected_gate = np.array([[1, 0, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 0, 1]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
