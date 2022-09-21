@@ -2,6 +2,7 @@ import traceback
 import unittest
 
 import numpy as np
+
 from quantestpy.exceptions import QuantestPyAssertionError
 from quantestpy.operator import assert_equal
 
