@@ -2,6 +2,7 @@ import traceback
 import unittest
 
 import numpy as np
+
 from quantestpy import operator
 from quantestpy.exceptions import QuantestPyAssertionError
 
