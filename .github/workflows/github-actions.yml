@@ -29,9 +29,8 @@ jobs:
           python3 -m flake8 ./*.py
 
       - name: Run isort
-        uses: isort/isort-action@master
-        with:
-          requirementsFiles: "requirements.txt"
+        run: |
+          python3 -m isort . --check-only
 
       - name: Run unit test
         run: |
