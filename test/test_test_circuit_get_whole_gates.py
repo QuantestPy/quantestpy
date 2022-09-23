@@ -10,9 +10,9 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_test_circuit_get_whole_gates
-    .........................
+    ............................
     ----------------------------------------------------------------------
-    Ran 25 tests in 0.012s
+    Ran 28 tests in 0.012s
 
     OK
     $
@@ -479,11 +479,14 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             {"name": "swap", "target_qubit": [1, 2], "control_qubit": [0],
              "control_value": [1], "parameter": []})
         actual_gate = circ._get_whole_gates()
-        # need to change the expected_gate
-        expected_gate = np.array([[1, 0, 0, 0],
-                                  [0, 0, 1, 0],
-                                  [0, 1, 0, 0],
-                                  [0, 0, 0, 1]])
+        expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
+                                  [0, 1, 0, 0, 0, 0, 0, 0],
+                                  [0, 0, 1, 0, 0, 0, 0, 0],
+                                  [0, 0, 0, 1, 0, 0, 0, 0],
+                                  [0, 0, 0, 0, 1, 0, 0, 0],
+                                  [0, 0, 0, 0, 0, 0, 1, 0],
+                                  [0, 0, 0, 0, 0, 1, 0, 0],
+                                  [0, 0, 0, 0, 0, 0, 0, 1]])
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
@@ -493,10 +496,10 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             {"name": "iswap", "target_qubit": [0, 1], "control_qubit": [],
              "control_value": [], "parameter": []})
         actual_gate = circ._get_whole_gates()
-        # need to change the expected_gate
         expected_gate = np.array([[1, 0, 0, 0],
-                                  [0, 0, 1, 0],
-                                  [0, 1, 0, 0],
+                                  [0, 0, 1j, 0],
+                                  [0, 1j, 0, 0],
                                   [0, 0, 0, 1]])
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-16))
