@@ -1,5 +1,5 @@
-import unittest
 import traceback
+import unittest
 
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError

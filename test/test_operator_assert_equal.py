@@ -1,9 +1,10 @@
-import unittest
-import numpy as np
 import traceback
+import unittest
 
-from quantestpy.operator import assert_equal
+import numpy as np
+
 from quantestpy.exceptions import QuantestPyAssertionError
+from quantestpy.operator import assert_equal
 
 
 class TestOperatorAssertEqual(unittest.TestCase):

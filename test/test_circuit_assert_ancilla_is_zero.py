@@ -1,8 +1,7 @@
-import unittest
 import traceback
+import unittest
 
-from quantestpy import TestCircuit
-from quantestpy import circuit
+from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 

@@ -1,7 +1,9 @@
 import unittest
-import numpy as np
 from typing import Union
-from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
+
+import numpy as np
+
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 ut_test_case = unittest.TestCase()
 

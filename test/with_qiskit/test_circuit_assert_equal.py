@@ -1,12 +1,11 @@
-import unittest
 import traceback
+import unittest
+
 import numpy as np
-
-from quantestpy import TestCircuit
-from quantestpy import circuit
-from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
-
 from qiskit import QuantumCircuit
+
+from quantestpy import TestCircuit, circuit
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 
 class TestCircuitAssertEqual(unittest.TestCase):
