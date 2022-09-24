@@ -12,10 +12,10 @@ class TestConverter(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_converter
-    ...
+    $ python -m unittest test.with_qiskit.test_converter
+    ..
     ----------------------------------------------------------------------
-    Ran 5 tests in 0.041s
+    Ran 6 tests in 0.046s
 
     OK
     """
@@ -106,7 +106,7 @@ class TestConverter(unittest.TestCase):
         qc = QuantumCircuit(3)
         qc.cu1(theta, 0, 1)
         qc.cu3(theta, phi, lambda_, 0, 1)
-        qc.cx(0, 1, 2)
+        qc.ccx(0, 1, 2)
         actual_circuit = _cvt_qiskit_to_test_circuit(qc)
 
         expected_circuit = TestCircuit(3)
