@@ -3,8 +3,6 @@ import unittest
 
 import numpy as np
 from qiskit import QuantumCircuit
-from quantestpy import TestCircuit, circuit
-from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
