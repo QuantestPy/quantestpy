@@ -18,26 +18,26 @@ _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
 
 
 def _u(parameter: list) -> np.ndarray:
-    theta, phi, lambda_ = parameter
+    theta, phi, lambda_, gamma = parameter
     return np.array([
         [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
         [np.exp(1j*phi)*np.sin(theta/2),
-         np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
+            np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])*np.exp(1j*gamma)
 
 
 def _p(parameter: list) -> np.ndarray:
     lambda_ = parameter[0]
-    return _u([0, 0, lambda_])
+    return _u([0, 0, lambda_, 0])
 
 
 def _rx(parameter: list) -> np.ndarray:
     theta = parameter[0]
-    return _u([theta, -np.pi/2, np.pi/2])
+    return _u([theta, -np.pi/2, np.pi/2, 0])
 
 
 def _ry(parameter: list) -> np.ndarray:
     theta = parameter[0]
-    return _u([theta, 0, 0])
+    return _u([theta, 0, 0, 0])
 
 
 def _rz(parameter: list) -> np.ndarray:
@@ -55,9 +55,9 @@ _IMPLEMENTED_GATES_WITHOUT_PARAM = [
     "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg", "swap", "iswap"]
 _IMPLEMENTED_GATES_WITH_ONE_PARAM = [
     "rx", "ry", "rz", "p", "scalar"]
-_IMPLEMENTED_GATES_WITH_THREE_PARAM = ["u"]
+_IMPLEMENTED_GATES_WITH_FOUR_PARAM = ["u"]
 _IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_GATES_WITH_ONE_PARAM \
-    + _IMPLEMENTED_GATES_WITH_THREE_PARAM
+    + _IMPLEMENTED_GATES_WITH_FOUR_PARAM
 _IMPLEMENTED_GATES = _IMPLEMENTED_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_GATES_WITH_PARAM
 
@@ -214,11 +214,11 @@ class TestCircuit:
                 f"containing exactly 1 element for 'parameter'."
             )
 
-        if gate["name"] in _IMPLEMENTED_GATES_WITH_THREE_PARAM and \
-                len(gate["parameter"]) != 3:
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_FOUR_PARAM and \
+                len(gate["parameter"]) not in [3, 4]:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} gate must have a list '
-                f"containing exactly 3 elements for 'parameter'."
+                f"containing exactly 4 elements for 'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:

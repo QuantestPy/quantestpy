@@ -14,9 +14,9 @@ class TestConverter(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.with_qiskit.test_converter
-    ..
+    ......
     ----------------------------------------------------------------------
-    Ran 6 tests in 0.046s
+    Ran 6 tests in 0.060s
 
     OK
     """
@@ -35,7 +35,10 @@ class TestConverter(unittest.TestCase):
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
 
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__cvt_openqasm_to_test_circuit(self,):
         qc = QuantumCircuit(2, 2)
@@ -52,7 +55,10 @@ class TestConverter(unittest.TestCase):
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
 
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__cvt_qiskit_to_test_circuit_control_gates_1(self,):
         qc = QuantumCircuit(3)
@@ -75,7 +81,11 @@ class TestConverter(unittest.TestCase):
         expected_circuit.add_gate({"name": "h", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": []})
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__cvt_qiskit_to_test_circuit_control_gates_2(self,):
         theta = np.pi/4
@@ -97,16 +107,20 @@ class TestConverter(unittest.TestCase):
                                    "control_qubit": [0], "control_value": [1],
                                    "parameter": [theta]})
 
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test__cvt_qiskit_to_test_circuit_control_gates_3(self,):
         theta = np.pi/4
         phi = np.pi/8
         lambda_ = np.pi/16
+        gamma = 0
 
         qc = QuantumCircuit(3)
-        qc.cu1(theta, 0, 1)
-        qc.cu3(theta, phi, lambda_, 0, 1)
+        qc.cp(theta, 0, 1)
+        qc.cu(theta, phi, lambda_, gamma, 0, 1)
         qc.ccx(0, 1, 2)
         actual_circuit = _cvt_qiskit_to_test_circuit(qc)
 
@@ -116,13 +130,16 @@ class TestConverter(unittest.TestCase):
                                    "parameter": [theta]})
         expected_circuit.add_gate({"name": "u", "target_qubit": [1],
                                    "control_qubit": [0], "control_value": [1],
-                                   "parameter": [theta, phi, lambda_]})
+                                   "parameter": [theta, phi, lambda_, gamma]})
         expected_circuit.add_gate({"name": "x", "target_qubit": [2],
                                    "control_qubit": [0, 1],
                                    "control_value": [1, 1],
                                    "parameter": []})
 
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
     def test__cvt_qiskit_to_test_circuit_global_phase(self,):
 
@@ -148,4 +165,7 @@ class TestConverter(unittest.TestCase):
                                    "control_value": [],
                                    "parameter": [np.pi/7.]})
 
-        self.assertEqual(vars(actual_circuit), vars(expected_circuit))
+        actual_gate = actual_circuit._get_whole_gates()
+        expected_gate = expected_circuit._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))

@@ -1,3 +1,5 @@
+import numpy as np
+
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyError
 
@@ -21,6 +23,7 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
 
     _raise_error_if_not_qiskit_installed()
 
+    qiskit_circuit = qiskit_circuit.decompose()
     qobj = assemble(qiskit_circuit)
     qobj_dict = qobj.to_dict()
     experiments = qobj_dict["experiments"][0]  # [0] changes list into dict.
@@ -32,7 +35,12 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
     for gate in gates:
 
         if "params" in gate:
-            parameter = gate["params"]
+            if gate["name"] in ["u", "u3", "cu3"]:
+                parameter = gate["params"] + [0]
+            elif gate["name"] == "u2":
+                parameter = [np.pi/2] + gate["params"] + [0]
+            else:
+                parameter = gate["params"]
         else:
             parameter = []
 
@@ -53,13 +61,13 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
         elif gate["name"] in ["cp", "cu1"]:
             name = "p"
             control_value = [1]
-        elif gate["name"] in ["cu", "cu3"]:
+        elif gate["name"] in ["cu", "cu3", "cu2"]:
             name = "u"
             control_value = [1]
         elif gate["name"] == "u1":
             name = "p"
             control_value = []
-        elif gate["name"] == "u3":
+        elif gate["name"] in ["u3", "u2"]:
             name = "u"
             control_value = []
         else:
