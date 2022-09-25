@@ -6,6 +6,9 @@ from qiskit import QuantumCircuit
 from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
+from quantestpy import TestCircuit, circuit
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
+
 
 class TestCircuitAssertEqual(unittest.TestCase):
     """

@@ -1,7 +1,9 @@
 import unittest
-import numpy as np
 from typing import Union
-from quantestpy.exceptions import QuantestPyError, QuantestPyAssertionError
+
+import numpy as np
+
+from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
@@ -20,7 +22,7 @@ def assert_is_unitary(
 
     a = m * m.H
 
-    if np.all(a - np.eye(m.shape[0]) <= atol):
+    if np.all(np.abs(a - np.eye(m.shape[0])) <= atol):
         return
 
     else:
