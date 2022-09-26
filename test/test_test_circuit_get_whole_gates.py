@@ -229,9 +229,10 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
         theta = np.pi/16
         phi = np.pi/8
         lambda_ = np.pi/4
+        gamma = 0
         circ.add_gate(
             {"name": "u", "target_qubit": [1], "control_qubit": [],
-             "control_value": [], "parameter": [theta, phi, lambda_]})
+             "control_value": [], "parameter": [theta, phi, lambda_, gamma]})
 
         actual_gate = circ._get_whole_gates()
 
@@ -381,9 +382,10 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
         theta = np.pi/16
         phi = np.pi/8
         lambda_ = np.pi/4
+        gamma = 0
         circ.add_gate(
             {"name": "u", "target_qubit": [1], "control_qubit": [0],
-             "control_value": [1], "parameter": [theta, phi, lambda_]})
+             "control_value": [1], "parameter": [theta, phi, lambda_, gamma]})
 
         actual_gate = circ._get_whole_gates()
 

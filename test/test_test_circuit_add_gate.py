@@ -297,7 +297,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
 
             self.assertEqual(expected_error_msg, actual_error_msg)
 
-    def test_parameter_with_three_param(self,):
+    def test_parameter_with_four_param(self,):
         test_circuit = TestCircuit(1)
 
         try:
@@ -315,7 +315,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
                 + "u gate must have a list containing " \
-                + "exactly 3 elements for 'parameter'.\n"
+                + "exactly 4 elements for 'parameter'.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
