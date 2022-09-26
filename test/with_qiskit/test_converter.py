@@ -85,7 +85,7 @@ class TestConverter(unittest.TestCase):
         actual_gate = actual_circuit._get_whole_gates()
         expected_gate = expected_circuit._get_whole_gates()
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
     def test__cvt_qiskit_to_test_circuit_control_gates_2(self,):
         theta = np.pi/4
@@ -110,7 +110,7 @@ class TestConverter(unittest.TestCase):
         actual_gate = actual_circuit._get_whole_gates()
         expected_gate = expected_circuit._get_whole_gates()
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
     def test__cvt_qiskit_to_test_circuit_control_gates_3(self,):
         theta = np.pi/4
