@@ -236,18 +236,6 @@ class TestCircuit:
                 f"containing exactly 2 elements for 'target_qubit'."
             )
 
-        if gate["name"] == "swap" and len(gate["control_qubit"]) > 1:
-            raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have a list '
-                f"containing less than 2 elements for 'control_qubit'."
-            )
-
-        if gate["name"] == "iswap" and len(gate["control_qubit"]) != 0:
-            raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have an empty '
-                f"list for 'control_qubit'."
-            )
-
         self._gates.append(gate)
 
     def _create_all_qubit_gate_from_original_qubit_gate(
@@ -332,62 +320,67 @@ class TestCircuit:
 
         # apply each gate to state vector
         for gate in self._gates:
-            if gate["name"] == "swap" and len(gate["control_qubit"]) == 0:
+            if gate["name"] == "swap":
                 all_qubit_gate1 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, gate["target_qubit"][:1],
-                        gate["target_qubit"][1:], control_value=[1])
+                        _X,
+                        gate["target_qubit"][1:],
+                        gate["target_qubit"][:1],
+                        [1]
+                    )
                 all_qubit_gate2 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, gate["target_qubit"][1:],
-                        gate["target_qubit"][:1], control_value=[1])
-                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
-                whole_gates = np.matmul(all_qubit_gate2, whole_gates)
-                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
-            elif gate["name"] == "swap" and len(gate["control_qubit"]) > 0:
-                # need to check the decomposed gates
-                all_qubit_gate1 = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, gate["target_qubit"][1:],
-                        gate["target_qubit"][:1], control_value=[1])
-                all_qubit_gate2 = \
-                    self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, gate["control_qubit"]+gate["target_qubit"][:1],
-                        gate["target_qubit"][1:], control_value=[1, 1])
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][:1],
+                        gate["target_qubit"][1:],
+                        gate["control_value"] + [1]
+                    )
                 whole_gates = np.matmul(all_qubit_gate1, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate2, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate1, whole_gates)
             elif gate["name"] == "iswap":
                 all_qubit_gate1 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _S, control_qubit=[],
-                        target_qubit=gate["target_qubit"][:1],
-                        control_value=[])
+                        _S,
+                        gate["control_qubit"],
+                        gate["target_qubit"][:1],
+                        gate["control_value"]
+                    )
                 all_qubit_gate2 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _S, control_qubit=[],
-                        target_qubit=gate["target_qubit"][1:],
-                        control_value=[])
+                        _S,
+                        gate["control_qubit"],
+                        gate["target_qubit"][1:],
+                        gate["control_value"]
+                    )
                 all_qubit_gate3 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _H, control_qubit=[],
-                        target_qubit=gate["target_qubit"][:1],
-                        control_value=[])
+                        _H,
+                        gate["control_qubit"],
+                        gate["target_qubit"][:1],
+                        gate["control_value"]
+                    )
                 all_qubit_gate4 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, control_qubit=gate["target_qubit"][:1],
-                        target_qubit=gate["target_qubit"][1:],
-                        control_value=[1])
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][:1],
+                        gate["target_qubit"][1:],
+                        gate["control_value"] + [1]
+                    )
                 all_qubit_gate5 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _X, control_qubit=gate["target_qubit"][1:],
-                        target_qubit=gate["target_qubit"][:1],
-                        control_value=[1])
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][1:],
+                        gate["target_qubit"][:1],
+                        gate["control_value"] + [1]
+                    )
                 all_qubit_gate6 = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        _H, control_qubit=[],
-                        target_qubit=gate["target_qubit"][1:],
-                        control_value=[])
+                        _H,
+                        gate["control_qubit"],
+                        gate["target_qubit"][1:],
+                        gate["control_value"]
+                    )
                 whole_gates = np.matmul(all_qubit_gate1, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate2, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate3, whole_gates)
@@ -406,8 +399,11 @@ class TestCircuit:
                     raise
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
-                        original_qubit_gate, gate["control_qubit"],
-                        gate["target_qubit"], gate["control_value"])
+                        original_qubit_gate,
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"]
+                    )
                 whole_gates = np.matmul(all_qubit_gate, whole_gates)
 
         return whole_gates

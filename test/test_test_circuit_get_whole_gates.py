@@ -506,3 +506,48 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate,
                                        atol=1e-16))
+
+    def test_get_whole_gates_ccswap(self,):
+        circ = TestCircuit(4)
+        circ.add_gate(
+            {"name": "swap", "target_qubit": [2, 3], "control_qubit": [0, 1],
+             "control_value": [1, 1], "parameter": []})
+        actual_gate = circ._get_whole_gates()
+        expected_gate = np.array([
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+        ])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_get_whole_gates_ciswap(self,):
+        circ = TestCircuit(3)
+        circ.add_gate(
+            {"name": "iswap", "target_qubit": [1, 2], "control_qubit": [0],
+             "control_value": [1], "parameter": []})
+        actual_gate = circ._get_whole_gates()
+        expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
+                                  [0, 1, 0, 0, 0, 0, 0, 0],
+                                  [0, 0, 1, 0, 0, 0, 0, 0],
+                                  [0, 0, 0, 1, 0, 0, 0, 0],
+                                  [0, 0, 0, 0, 1, 0, 0, 0],
+                                  [0, 0, 0, 0, 0, 0, 1j, 0],
+                                  [0, 0, 0, 0, 0, 1j, 0, 0],
+                                  [0, 0, 0, 0, 0, 0, 0, 1]])
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate,
+                                       atol=1e-16))
