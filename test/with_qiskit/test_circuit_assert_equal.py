@@ -79,7 +79,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
                 "control_value": [], "parameter": []}
         )
         test_circuit_a.add_gate(
-            {"name": "cx", "target_qubit": [1], "control_qubit": [0],
+            {"name": "x", "target_qubit": [1], "control_qubit": [0],
                 "control_value": [1], "parameter": []}
         )
         test_circuit_a.add_gate(
@@ -89,7 +89,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         test_circuit_b = TestCircuit(2)
         test_circuit_b.add_gate(
-            {"name": "cx", "target_qubit": [0], "control_qubit": [1],
+            {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
 
@@ -147,7 +147,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         test_circuit_b = TestCircuit(2)
         test_circuit_b.add_gate(
-            {"name": "cx", "target_qubit": [0], "control_qubit": [1],
+            {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
 
@@ -244,7 +244,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         test_circuit_b = TestCircuit(2)
         test_circuit_b.add_gate(
-            {"name": "cx", "target_qubit": [0], "control_qubit": [1],
+            {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
 

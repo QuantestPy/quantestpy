@@ -42,7 +42,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
              "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "target_qubit": [0], "control_qubit": [3],
+            {"name": "x", "target_qubit": [0], "control_qubit": [3],
              "control_value": [1], "parameter": []}
         )
 
@@ -60,7 +60,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
              "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "target_qubit": [1], "control_qubit": [0],
+            {"name": "x", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []}
         )
 
@@ -78,7 +78,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
              "control_value": [], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "target_qubit": [1], "control_qubit": [0],
+            {"name": "x", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []}
         )
 
