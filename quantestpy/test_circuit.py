@@ -180,7 +180,7 @@ class TestCircuit:
             if value not in [0, 1]:
                 raise QuantestPyTestCircuitError(
                     f"Value {value} in control_value is not acceptable. "
-                    f"It must be either 0 or 1."
+                    "It must be either 0 or 1."
                 )
 
         if len(gate["target_qubit"]) != len(set(gate["target_qubit"])):
@@ -203,22 +203,22 @@ class TestCircuit:
         if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
                 len(gate["parameter"]) != 0:
             raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have an empty '
-                f"list for 'parameter'."
+                f'{gate["name"]} gate must have an empty list for '
+                "'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
                 len(gate["parameter"]) != 1:
             raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have a list '
-                f"containing exactly 1 element for 'parameter'."
+                f'{gate["name"]} gate must have a list containing '
+                "exactly 1 element for 'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_FOUR_PARAM and \
-                len(gate["parameter"]) not in [3, 4]:
+                len(gate["parameter"]) != 4:
             raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have a list '
-                f"containing exactly 4 elements for 'parameter'."
+                f'{gate["name"]} gate must have a list containing '
+                "exactly 4 elements for 'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:
@@ -226,14 +226,14 @@ class TestCircuit:
                 if not isinstance(param, float) and not isinstance(param, int):
                     raise QuantestPyTestCircuitError(
                         f'Parameter(s) in {gate["name"]} gate must be '
-                        f'float or integer type.'
+                        'float or integer type.'
                     )
 
         if gate["name"] in ["swap", "iswap"] and \
                 len(gate["target_qubit"]) != 2:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} gate must have a list '
-                f"containing exactly 2 elements for 'target_qubit'."
+                "containing exactly 2 elements for 'target_qubit'."
             )
 
         self._gates.append(gate)
