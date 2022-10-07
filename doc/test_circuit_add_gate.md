@@ -16,28 +16,31 @@ key | value | type of value
 "control_value" | control value(s) | list({0, 1})
 "parameter" | parameter(s) | list(float)
 
-Users can always put multi-indices in "target_qubit", "control_qubit" and "control_value" for any gate as long as they are not out of range for the circuit size. Controlled gates can be defined by specifying a gate name being performed on a single target qubit (such as "x") and giving a non-empty list to "control_qubit". By providing a non-empty list of 0 and 1 to "control_value", users can define the condition on the control qubit(s) for the gate to be applied on the target qubit(s). By definition, the length of "control_value" must be equal to that of "control_qubit". A non-empty list for "parameter" is allowed only for gates which have parameters such as rotation gates. For better understanding, see examples below.
+Users can always put multi-indices in "target_qubit", "control_qubit" and "control_value" for any gate as long as they are not out of range for the circuit size. Exceptions are "swap" and "iswap" gates, which restrict themselves to two indices in "target_qubit". Controlled gates can be defined by specifying a gate name being performed on a single target qubit (such as "x") and giving a non-empty list to "control_qubit". By providing a non-empty list of 0 and 1 to "control_value", users can define the condition on the control qubit(s) for the gate to be applied on the target qubit(s). By definition, the length of "control_value" must be equal to that of "control_qubit". A non-empty list for "parameter" is allowed only for gates which have parameters such as rotation gates. For better understanding, see examples below.
 
 The following table lists the currently available gates:
 
 name | description | parameter
 --- | --- | ---
+"id" | Identity gate | []
 "x" | X gate | []
 "y" | Y gate | []
 "z" | Z gate | []
 "h" | Hadamard gate | []
-"s" | Phase gate | []
+"s" | Phase gate (\pi/2 phase) | []
 "sdg" | Hermitian conjugate of Phase gate | []
 "t" | T gate | []
 "tdg" | Hermitian conjugate of T gate | []
+"swap" | Swap gate | []
+"iswap" | iSwap gate | []
 "rx" | Rx gate | [theta]
 "ry" | Ry gate | [theta]
 "rz" | Rz gate | [theta]
-"u1" | U1 gate | [theta]
-"u2" | U2 gate | [phi, lambda]
-"u3" | U3 gate | [theta, phi, lambda]
+"p" | Phase gate | [lambda]
+"u" | U gate | [theta, phi, lambda, gamma]
 "scalar" | exp(i*theta) * Identity gate | [theta]
 
+For the definitions of the Phase gate and the U gate users are referred to the Qiskit document.
 ### Examples
 X gate:
 ```py
