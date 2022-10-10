@@ -27,7 +27,7 @@ name | description | parameter
 "y" | Y gate | []
 "z" | Z gate | []
 "h" | Hadamard gate | []
-"s" | Phase gate (\pi/2 phase) | []
+"s" | S gate | []
 "sdg" | Hermitian conjugate of Phase gate | []
 "t" | T gate | []
 "tdg" | Hermitian conjugate of T gate | []
