@@ -20,27 +20,26 @@ Users can always put multi-indices in "target_qubit", "control_qubit" and "contr
 
 The following table lists the currently available gates:
 
-name | description | parameter
---- | --- | ---
-"id" | Identity gate | []
-"x" | X gate | []
-"y" | Y gate | []
-"z" | Z gate | []
-"h" | Hadamard gate | []
-"s" | S gate | []
-"sdg" | Hermitian conjugate of Phase gate | []
-"t" | T gate | []
-"tdg" | Hermitian conjugate of T gate | []
-"swap" | Swap gate | []
-"iswap" | iSwap gate | []
-"rx" | Rx gate | [theta]
-"ry" | Ry gate | [theta]
-"rz" | Rz gate | [theta]
-"p" | Phase gate | [lambda]
-"u" | U gate | [theta, phi, lambda, gamma]
-"scalar" | exp(i*theta) * Identity gate | [theta]
+name | description | parameter | matrix representation
+--- | --- | --- | ---
+"id" | Identity gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$
+"x" | X gate | [] | $$\begin{bmatrix} 0& 1 \\ 1 & 0 \end{bmatrix}$$
+"y" | Y gate | [] | $$\begin{bmatrix} 0 & -i \\ i & 0 \end{bmatrix}$$
+"z" | Z gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$
+"h" | Hadamard gate | [] | $$\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+"s" | S gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & i \end{bmatrix}$$
+"sdg" | Hermitian conjugate of Phase gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & -i \end{bmatrix}$$
+"t" | T gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{bmatrix}$$
+"tdg" | Hermitian conjugate of T gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{-i\pi/4} \end{bmatrix}$$
+"swap" | Swap gate | [] | $$\begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+"iswap" | iSwap gate | [] | $$\begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & i & 0 \\ 0 & i & 0 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+"rx" | Rx gate | [$\theta$] | $$\begin{bmatrix} \cos{\frac{\theta}{2}} & -i\sin{\frac{\theta}{2}} \\ -i\sin{\frac{\theta}{2}} & \cos{\frac{\theta}{2}} \end{bmatrix}$$
+"ry" | Ry gate | [$\theta$] | $$\begin{bmatrix} \cos{\frac{\theta}{2}} & -\sin{\frac{\theta}{2}} \\ \sin{\frac{\theta}{2}} & \cos{\frac{\theta}{2}} \end{bmatrix}$$
+"rz" | Rz gate | [$\theta$] | $$\begin{bmatrix} e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2} \end{bmatrix}$$
+"p" | Phase gate | [$\lambda$] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{i\lambda} \end{bmatrix}$$
+"u" | U gate | [$\theta, \phi, \lambda, \gamma$] | $$e^{i\gamma}\begin{bmatrix} \cos{\frac{\theta}{2}} & -e^{i\lambda}\sin{\frac{\theta}{2}} \\ e^{i\phi}\sin{\frac{\theta}{2}} & e^{i(\phi+\lambda)}\cos{\frac{\theta}{2}} \end{bmatrix}$$
+"scalar" | exp($i\theta$) * Identity gate | [$\theta$] | $$e^{i\theta}\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$
 
-For the definitions of the Phase gate and the U gate users are referred to the Qiskit document.
 ### Examples
 X gate:
 ```py
