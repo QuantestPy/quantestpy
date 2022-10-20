@@ -15,18 +15,15 @@ jobs:
         with:
           python-version: "3.8"
           cache: "pip"
-          cache-dependency-path: "./test/requirements.txt"
+          cache-dependency-path: "pyproject.toml"
 
       - name: Install library
         run: |
-          pip install -r ./test/requirements.txt
+          pip install .[ci]
 
       - name: Run flake8
         run: |
-          python3 -m flake8 --exclude ./quantestpy/__init__.py ./quantestpy/*.py
-          python3 -m flake8 --exclude ./test/__init__.py ./test/*.py
-          python3 -m flake8 --exclude ./test/__init__.py ./test/with_qiskit/*.py
-          python3 -m flake8 ./*.py
+          python3 -m flake8
 
       - name: Run isort
         run: |
@@ -48,11 +45,11 @@ jobs:
         with:
           python-version: "3.8"
           cache: "pip"
-          cache-dependency-path: "./test/with_qiskit/requirements.txt"
+          cache-dependency-path: "pyproject.toml"
 
       - name: Install library
         run: |
-          pip install -r ./test/with_qiskit/requirements.txt
+          pip install .[qiskit]
 
       - name: Run unit test
         run: |
