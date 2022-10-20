@@ -1,8 +1,7 @@
-import unittest
 import traceback
+import unittest
 
-from quantestpy import TestCircuit
-from quantestpy import circuit
+from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -23,27 +22,27 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         test_circuit = TestCircuit(4)
         # V
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [2],
+            {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
 
         # uncomputation
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [3],
+            {"name": "x", "control_qubit": [1], "target_qubit": [3],
              "control_value": [1], "parameter": []}
         )
 
         # V^{-1}
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [2],
+            {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
 
@@ -58,27 +57,27 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         test_circuit = TestCircuit(4)
         # V
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [2],
+            {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
 
         # uncomputation
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [3],
+            {"name": "x", "control_qubit": [1], "target_qubit": [3],
              "control_value": [1], "parameter": []}
         )
 
         # V^{-1}: Wrong order!!
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx", "control_qubit": [1], "target_qubit": [2],
+            {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
 

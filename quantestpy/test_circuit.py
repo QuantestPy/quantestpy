@@ -1,5 +1,7 @@
 import itertools
+
 import numpy as np
+
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 # inside of test unit
@@ -14,74 +16,50 @@ _Sdg = np.array([[1, 0], [0, -1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
 _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
 
-# U gates
 
-
-def _u3(parameter: list) -> np.ndarray:
-    theta, phi, lambda_ = parameter
+def _u(parameter: list) -> np.ndarray:
+    theta, phi, lambda_, gamma = parameter
     return np.array([
         [np.cos(theta/2), -np.exp(1j*lambda_) * np.sin(theta/2)],
         [np.exp(1j*phi)*np.sin(theta/2),
-         np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])
+            np.exp(1j*(lambda_ + phi))*np.cos(theta/2)]])*np.exp(1j*gamma)
 
 
-def _u2(parameter: list) -> np.ndarray:
-    phi, lambda_ = parameter
-    return _u3([np.pi/2, phi, lambda_])
-
-
-def _u1(parameter: list) -> np.ndarray:
+def _p(parameter: list) -> np.ndarray:
     lambda_ = parameter[0]
-    return _u3([0, 0, lambda_])
+    return _u([0, 0, lambda_, 0])
 
 
-# rotation gates
 def _rx(parameter: list) -> np.ndarray:
     theta = parameter[0]
-    return _u3([theta, -np.pi/2, np.pi/2])
+    return _u([theta, -np.pi/2, np.pi/2, 0])
 
 
 def _ry(parameter: list) -> np.ndarray:
     theta = parameter[0]
-    return _u3([theta, 0, 0])
+    return _u([theta, 0, 0, 0])
 
 
 def _rz(parameter: list) -> np.ndarray:
     phi = parameter[0]
-    return _u1(parameter)*np.exp(-1j*phi/2)
+    return _p(parameter)*np.exp(-1j*phi/2)
 
 
-# scalar gate
 def _scalar(parameter: list) -> np.ndarray:
     theta = parameter[0]
     return _ID * np.exp(1j*theta)
 
 
 # gates lists
-_IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM = [
-    "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg"]
-_IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM = [
-    "rx", "ry", "rz", "u1", "u2", "u3", "scalar"]
-_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM = ["cx", "cy", "cz", "ch"]
-_IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM = [
-    "crx", "cry", "crz", "cu1", "cu3"]
-_IMPLEMENTED_SINGLE_QUBIT_GATES = \
-    _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
-    + _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM
-_IMPLEMENTED_MULTIPLE_QUBIT_GATES = \
-    _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM \
-    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM
-_IMPLEMENTED_GATES_WITHOUT_PARAM = \
-    _IMPLEMENTED_SINGLE_QUBIT_GATES_WITHOUT_PARAM \
-    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITHOUT_PARAM
+_IMPLEMENTED_GATES_WITHOUT_PARAM = [
+    "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg", "swap", "iswap"]
 _IMPLEMENTED_GATES_WITH_ONE_PARAM = [
-    "rx", "ry", "rz", "u1", "crx", "cry", "crz", "cu1", "scalar"]
-_IMPLEMENTED_GATES_WITH_TWO_PARAM = ["u2"]
-_IMPLEMENTED_GATES_WITH_THREE_PARAM = ["u3", "cu3"]
-_IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_SINGLE_QUBIT_GATES_WITH_PARAM \
-    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES_WITH_PARAM
-_IMPLEMENTED_GATES = _IMPLEMENTED_SINGLE_QUBIT_GATES \
-    + _IMPLEMENTED_MULTIPLE_QUBIT_GATES
+    "rx", "ry", "rz", "p", "scalar"]
+_IMPLEMENTED_GATES_WITH_FOUR_PARAM = ["u"]
+_IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_GATES_WITH_ONE_PARAM \
+    + _IMPLEMENTED_GATES_WITH_FOUR_PARAM
+_IMPLEMENTED_GATES = _IMPLEMENTED_GATES_WITHOUT_PARAM \
+    + _IMPLEMENTED_GATES_WITH_PARAM
 
 
 class TestCircuit:
@@ -104,8 +82,8 @@ class TestCircuit:
         Example
         gate = {"name": "x", "target_qubit": [1], "control_qubit": [],
                 "control_value": [], "parameter": []}
-        gate = {"name": "cx", "target_qubit": [1], "control_qubit": [0],
-                "control_value": [1], "parameter": []}
+        gate = {"name": "rx", "target_qubit": [1], "control_qubit": [0],
+                "control_value": [1], "parameter": [np.pi/8]}
         """
         if not isinstance(gate, dict):
             raise QuantestPyTestCircuitError(
@@ -169,26 +147,6 @@ class TestCircuit:
                 "'target_qubit' must not an empty list."
             )
 
-        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
-                len(gate["control_qubit"]) != 0:
-            raise QuantestPyTestCircuitError(
-                "single qubit gate must have an empty list for "
-                "'control_qubit'."
-            )
-
-        if gate["name"] in _IMPLEMENTED_SINGLE_QUBIT_GATES and \
-                len(gate["control_value"]) != 0:
-            raise QuantestPyTestCircuitError(
-                "single qubit gate must have an empty list for "
-                "'control_value'."
-            )
-
-        if gate["name"] == "cx" and len(gate["control_qubit"]) < 1:
-            raise QuantestPyTestCircuitError(
-                "cx gate must not have an empty list for "
-                "'control_qubit' and 'control_value'."
-            )
-
         for qubit in gate["target_qubit"]:
             if not isinstance(qubit, int):
                 raise QuantestPyTestCircuitError(
@@ -222,7 +180,7 @@ class TestCircuit:
             if value not in [0, 1]:
                 raise QuantestPyTestCircuitError(
                     f"Value {value} in control_value is not acceptable. "
-                    f"It must be either 0 or 1."
+                    "It must be either 0 or 1."
                 )
 
         if len(gate["target_qubit"]) != len(set(gate["target_qubit"])):
@@ -245,35 +203,38 @@ class TestCircuit:
         if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
                 len(gate["parameter"]) != 0:
             raise QuantestPyTestCircuitError(
-                "Gates with no parameters must have an empty list for "
+                f'{gate["name"]} gate must have an empty list for '
                 "'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
                 len(gate["parameter"]) != 1:
             raise QuantestPyTestCircuitError(
-                "Gates with one parameters must have a list containing "
+                f'{gate["name"]} gate must have a list containing '
                 "exactly 1 element for 'parameter'."
             )
 
-        if gate["name"] in _IMPLEMENTED_GATES_WITH_TWO_PARAM and \
-                len(gate["parameter"]) != 2:
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_FOUR_PARAM and \
+                len(gate["parameter"]) != 4:
             raise QuantestPyTestCircuitError(
-                "Gates with two parameters must have a list containing "
-                "exactly 2 elements for 'parameter'."
+                f'{gate["name"]} gate must have a list containing '
+                "exactly 4 elements for 'parameter'."
             )
 
-        if gate["name"] in _IMPLEMENTED_GATES_WITH_THREE_PARAM and \
-                len(gate["parameter"]) != 3:
-            raise QuantestPyTestCircuitError(
-                "Gates with three parameters must have a list containing "
-                "exactly 3 elements for 'parameter'."
-            )
         if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:
             for param in gate["parameter"]:
                 if not isinstance(param, float) and not isinstance(param, int):
                     raise QuantestPyTestCircuitError(
-                        "Parameters must be float or integer type.")
+                        f'Parameter(s) in {gate["name"]} gate must be '
+                        'float or integer type.'
+                    )
+
+        if gate["name"] in ["swap", "iswap"] and \
+                len(gate["target_qubit"]) != 2:
+            raise QuantestPyTestCircuitError(
+                f'{gate["name"]} gate must have a list '
+                "containing exactly 2 elements for 'target_qubit'."
+            )
 
         self._gates.append(gate)
 
@@ -285,8 +246,8 @@ class TestCircuit:
             control_value: list) -> np.ndarray:
 
         all_qubit_gate = np.zeros((2**self._num_qubit, 2**self._num_qubit))
-        bit_patterns_for_control_qubit = \
-            list(itertools.product([0, 1], repeat=len(control_qubit)))
+        bit_patterns_for_control_qubit = list(
+            itertools.product([0, 1], repeat=len(control_qubit)))
         for bit_pattern in bit_patterns_for_control_qubit:
             term = 1
             for i in range(self._num_qubit):
@@ -359,47 +320,91 @@ class TestCircuit:
 
         # apply each gate to state vector
         for gate in self._gates:
-            if gate["name"] == "id":
-                original_qubit_gate = _ID
-            elif gate["name"] in ("x", "cx"):
-                original_qubit_gate = _X
-            elif gate["name"] in ("y", "cy"):
-                original_qubit_gate = _Y
-            elif gate["name"] in ("z", "cz"):
-                original_qubit_gate = _Z
-            elif gate["name"] in ("h", "ch"):
-                original_qubit_gate = _H
-            elif gate["name"] == "s":
-                original_qubit_gate = _S
-            elif gate["name"] == "sdg":
-                original_qubit_gate = _Sdg
-            elif gate["name"] == "t":
-                original_qubit_gate = _T
-            elif gate["name"] == "tdg":
-                original_qubit_gate = _Tdg
-            elif gate["name"] in ("rx", "crx"):
-                original_qubit_gate = _rx(gate["parameter"])
-            elif gate["name"] in ("ry", "cry"):
-                original_qubit_gate = _ry(gate["parameter"])
-            elif gate["name"] in ("rz", "crz"):
-                original_qubit_gate = _rz(gate["parameter"])
-            elif gate["name"] in ("u1", "cu1"):
-                original_qubit_gate = _u1(gate["parameter"])
-            elif gate["name"] in ("u2", "cu2"):
-                original_qubit_gate = _u2(gate["parameter"])
-            elif gate["name"] in ("u3", "cu3"):
-                original_qubit_gate = _u3(gate["parameter"])
-            elif gate["name"] == "scalar":
-                original_qubit_gate = _scalar(gate["parameter"])
+            if gate["name"] == "swap":
+                all_qubit_gate1 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X,
+                        gate["target_qubit"][1:],
+                        gate["target_qubit"][:1],
+                        [1]
+                    )
+                all_qubit_gate2 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][:1],
+                        gate["target_qubit"][1:],
+                        gate["control_value"] + [1]
+                    )
+                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate2, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
+            elif gate["name"] == "iswap":
+                all_qubit_gate1 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _S,
+                        gate["control_qubit"],
+                        gate["target_qubit"][:1],
+                        gate["control_value"]
+                    )
+                all_qubit_gate2 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _S,
+                        gate["control_qubit"],
+                        gate["target_qubit"][1:],
+                        gate["control_value"]
+                    )
+                all_qubit_gate3 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _H,
+                        gate["control_qubit"],
+                        gate["target_qubit"][:1],
+                        gate["control_value"]
+                    )
+                all_qubit_gate4 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][:1],
+                        gate["target_qubit"][1:],
+                        gate["control_value"] + [1]
+                    )
+                all_qubit_gate5 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _X,
+                        gate["control_qubit"] + gate["target_qubit"][1:],
+                        gate["target_qubit"][:1],
+                        gate["control_value"] + [1]
+                    )
+                all_qubit_gate6 = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        _H,
+                        gate["control_qubit"],
+                        gate["target_qubit"][1:],
+                        gate["control_value"]
+                    )
+                whole_gates = np.matmul(all_qubit_gate1, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate2, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate3, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate4, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate5, whole_gates)
+                whole_gates = np.matmul(all_qubit_gate6, whole_gates)
             else:
-                raise
-
-            all_qubit_gate = \
-                self._create_all_qubit_gate_from_original_qubit_gate(
-                    original_qubit_gate, gate["control_qubit"],
-                    gate["target_qubit"], gate["control_value"])
-
-            whole_gates = np.matmul(all_qubit_gate, whole_gates)
+                if gate["name"] in ("id", "x", "y", "z", "h", "s", "t"):
+                    original_qubit_gate = eval("_" + gate["name"].upper())
+                elif gate["name"] in ("sdg", "tdg"):
+                    original_qubit_gate = eval("_" + gate["name"].capitalize())
+                elif gate["name"] in ("rx", "ry", "rz", "u", "p", "scalar"):
+                    original_qubit_gate = eval("_" + gate["name"]
+                                               + '(gate["parameter"])')
+                else:
+                    raise
+                all_qubit_gate = \
+                    self._create_all_qubit_gate_from_original_qubit_gate(
+                        original_qubit_gate,
+                        gate["control_qubit"],
+                        gate["target_qubit"],
+                        gate["control_value"]
+                    )
+                whole_gates = np.matmul(all_qubit_gate, whole_gates)
 
         return whole_gates
 
@@ -411,7 +416,7 @@ if __name__ == "__main__":
     test_circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
                         "control_value": [], "parameter": []})
     test_circ.add_gate(
-        {"name": "cx", "target_qubit": [2], "control_qubit": [0],
+        {"name": "x", "target_qubit": [2], "control_qubit": [0],
          "control_value": [1], "parameter": []})
     test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
                         "control_value": [], "parameter": []})

@@ -1,8 +1,8 @@
 import unittest
+
 import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy import circuit
+from quantestpy import TestCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -27,7 +27,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []})
         self.test_circ.add_gate(
-            {"name": "cx", "control_qubit": [0],  "target_qubit": [1],
+            {"name": "x", "control_qubit": [0],  "target_qubit": [1],
              "control_value": [1], "parameter": []})
 
     def tearDown(self) -> None:

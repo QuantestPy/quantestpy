@@ -20,6 +20,7 @@ repository = "https://github.com/QuantestPy/quantestpy"
 [project.optional-dependencies]
 ci = [
   "flake8 == 5.*",
+  "isort == 5.*",
   "flake8-pyproject"
 ]
 qiskit = [

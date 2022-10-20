@@ -1,4 +1,5 @@
 import unittest
+
 import numpy as np
 
 from quantestpy import TestCircuit
@@ -10,9 +11,9 @@ class TestTestCircuit(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_test_circuit
-    ........
+    ......
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.009s
+    Ran 6 tests in 0.006s
 
     OK
     $
@@ -32,7 +33,7 @@ class TestTestCircuit(unittest.TestCase):
         circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 
@@ -48,7 +49,7 @@ class TestTestCircuit(unittest.TestCase):
         circ.add_gate({"name": "x", "target_qubit": [1], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 
@@ -62,7 +63,7 @@ class TestTestCircuit(unittest.TestCase):
         circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [2],
+            {"name": "x", "control_qubit": [0], "target_qubit": [2],
              "control_value": [1], "parameter": []})
         circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
@@ -89,7 +90,7 @@ class TestTestCircuit(unittest.TestCase):
         init_vec = np.array([1, 0, 1, 0]) / np.sqrt(2.)
         circ.set_initial_state_vector(init_vec)
         circ.add_gate(
-            {"name": "cx", "control_qubit": [0], "target_qubit": [1],
+            {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []})
         actual_vec = circ._get_state_vector()
 

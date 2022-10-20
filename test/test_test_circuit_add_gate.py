@@ -1,5 +1,5 @@
-import unittest
 import traceback
+import unittest
 
 from quantestpy import TestCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
@@ -11,9 +11,9 @@ class TestTestCircuitAddGate(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_test_circuit_add_gate
-    .........
+    ................
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.003s
+    Ran 16 tests in 0.001s
 
     OK
     $
@@ -29,7 +29,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
                 "parameter": []}
         )
         test_circuit.add_gate(
-            {"name": "cx",
+            {"name": "x",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
                 "control_value": [1, 1],
@@ -42,7 +42,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
                 "control_qubit": [],
                 "control_value": [],
                 "parameter": []},
-            {"name": "cx",
+            {"name": "x",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
                 "control_value": [1, 1],
@@ -56,7 +56,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
     def test_all_pass_multi_target(self,):
         test_circuit = TestCircuit(3)
         test_circuit.add_gate(
-            {"name": "cx",
+            {"name": "x",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
                 "control_value": [1],
@@ -71,7 +71,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         )
 
         expected_gates = [
-            {"name": "cx",
+            {"name": "x",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
                 "control_value": [1],
@@ -139,7 +139,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [1],
                      "control_qubit": [2, 10],
                      "control_value": [1, 1],
@@ -162,7 +162,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1.2],
                      "control_value": [1],
@@ -185,7 +185,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1, 2],
                      "control_value": [0, 2],
@@ -209,7 +209,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [0, 2],
                      "control_value": [1., 0],
@@ -266,7 +266,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "Gates with no parameters must have " \
+                + "x gate must have " \
                 + "an empty list for 'parameter'.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
@@ -279,7 +279,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "u1",
+                    {"name": "p",
                      "target_qubit": [0],
                      "control_qubit": [],
                      "control_value": [],
@@ -290,20 +290,20 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "Gates with one parameters must have a list containing " \
+                + "p gate must have a list containing " \
                 + "exactly 1 element for 'parameter'.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
             self.assertEqual(expected_error_msg, actual_error_msg)
 
-    def test_parameter_with_two_param(self,):
+    def test_parameter_with_four_param(self,):
         test_circuit = TestCircuit(1)
 
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "u2",
+                    {"name": "u",
                      "target_qubit": [0],
                      "control_qubit": [],
                      "control_value": [],
@@ -314,32 +314,8 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "Gates with two parameters must have a list containing " \
-                + "exactly 2 elements for 'parameter'.\n"
-
-            actual_error_msg = traceback.format_exception_only(type(e), e)[0]
-
-            self.assertEqual(expected_error_msg, actual_error_msg)
-
-    def test_parameter_with_three_param(self,):
-        test_circuit = TestCircuit(1)
-
-        try:
-            self.assertIsNotNone(
-                test_circuit.add_gate(
-                    {"name": "u3",
-                     "target_qubit": [0],
-                     "control_qubit": [],
-                     "control_value": [],
-                     "parameter": []}
-                )
-            )
-
-        except QuantestPyTestCircuitError as e:
-            expected_error_msg = \
-                "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "Gates with three parameters must have a list containing " \
-                + "exactly 3 elements for 'parameter'.\n"
+                + "u gate must have a list containing " \
+                + "exactly 4 elements for 'parameter'.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
@@ -351,7 +327,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "u1",
+                    {"name": "p",
                      "target_qubit": [0],
                      "control_qubit": [],
                      "control_value": [],
@@ -362,7 +338,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         except QuantestPyTestCircuitError as e:
             expected_error_msg = \
                 "quantestpy.exceptions.QuantestPyTestCircuitError: " \
-                + "Parameters must be float or integer type.\n"
+                + "Parameter(s) in p gate must be float or integer type.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
@@ -375,7 +351,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0, 0, 2],
                      "control_qubit": [4],
                      "control_value": [1],
@@ -399,7 +375,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1, 2, 3, 4, 4],
                      "control_value": [1, 0, 1, 0, 1],
@@ -423,7 +399,7 @@ class TestTestCircuitAddGate(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 test_circuit.add_gate(
-                    {"name": "cx",
+                    {"name": "x",
                      "target_qubit": [0, 1, 2, 3],
                      "control_qubit": [3, 4],
                      "control_value": [1, 0],

@@ -1,8 +1,8 @@
 import unittest
+
 import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy import test_circuit
+from quantestpy import TestCircuit, test_circuit
 
 
 class TestTestCircuitSingleQubitGate(unittest.TestCase):

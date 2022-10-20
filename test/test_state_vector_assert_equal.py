@@ -1,6 +1,7 @@
-import unittest
-import numpy as np
 import traceback
+import unittest
+
+import numpy as np
 
 from quantestpy import state_vector
 from quantestpy.exceptions import QuantestPyAssertionError
@@ -12,9 +13,9 @@ class TestStateVectorAssertEqual(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_state_vector_assert_equal
-    ....
+    .....
     ----------------------------------------------------------------------
-    Ran 4 tests in 0.003s
+    Ran 5 tests in 0.009s
 
     OK
     $

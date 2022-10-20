@@ -25,6 +25,10 @@ jobs:
         run: |
           python3 -m flake8
 
+      - name: Run isort
+        run: |
+          python3 -m isort . --check-only
+
       - name: Run unit test
         run: |
           python3 -m unittest discover -v ./test/
