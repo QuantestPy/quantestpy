@@ -1,3 +1,0 @@
-numpy == 1.*
-flake8 == 5.*
-isort == 5.*

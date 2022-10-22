@@ -1,0 +1,35 @@
+[build-system]
+requires = ["wheel", "setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantestpy"
+version = "0.1.0"
+license = { text = "Apache 2.0"}
+description = "Software for testing quantum computing programs."
+authors = [{name="Quantestpy Development Team"}]
+requires-python = ">=3.7"
+dependencies = [
+  "numpy == 1.*"
+]
+
+[project.urls]
+homepage ="https://github.com/QuantestPy/quantestpy"
+repository = "https://github.com/QuantestPy/quantestpy"
+
+[project.optional-dependencies]
+ci = [
+  "flake8 == 5.*",
+  "isort == 5.*",
+  "flake8-pyproject"
+]
+qiskit = [
+  "qiskit == 0.*"
+]
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.flake8]
+per-file-ignores = "__init__.py:F401"
