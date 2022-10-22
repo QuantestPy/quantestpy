@@ -22,23 +22,23 @@ The following table lists the currently available gates:
 
 name | description | parameter | matrix representation
 --- | --- | --- | ---
-"id" | Identity gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$
-"x" | X gate | [] | $$\begin{bmatrix} 0& 1 \\ 1 & 0 \end{bmatrix}$$
-"y" | Y gate | [] | $$\begin{bmatrix} 0 & -i \\ i & 0 \end{bmatrix}$$
-"z" | Z gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$
-"h" | Hadamard gate | [] | $$\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
-"s" | S gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & i \end{bmatrix}$$
-"sdg" | Hermitian conjugate of Phase gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & -i \end{bmatrix}$$
-"t" | T gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{bmatrix}$$
-"tdg" | Hermitian conjugate of T gate | [] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{-i\pi/4} \end{bmatrix}$$
-"swap" | Swap gate | [] | $$\begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
-"iswap" | iSwap gate | [] | $$\begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & i & 0 \\ 0 & i & 0 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
-"rx" | Rx gate | [$\theta$] | $$\begin{bmatrix} \cos{\frac{\theta}{2}} & -i\sin{\frac{\theta}{2}} \\ -i\sin{\frac{\theta}{2}} & \cos{\frac{\theta}{2}} \end{bmatrix}$$
-"ry" | Ry gate | [$\theta$] | $$\begin{bmatrix} \cos{\frac{\theta}{2}} & -\sin{\frac{\theta}{2}} \\ \sin{\frac{\theta}{2}} & \cos{\frac{\theta}{2}} \end{bmatrix}$$
-"rz" | Rz gate | [$\theta$] | $$\begin{bmatrix} e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2} \end{bmatrix}$$
-"p" | Phase gate | [$\lambda$] | $$\begin{bmatrix} 1 & 0 \\ 0 & e^{i\lambda} \end{bmatrix}$$
-"u" | U gate | [$\theta, \phi, \lambda, \gamma$] | $$e^{i\gamma}\begin{bmatrix} \cos{\frac{\theta}{2}} & -e^{i\lambda}\sin{\frac{\theta}{2}} \\ e^{i\phi}\sin{\frac{\theta}{2}} & e^{i(\phi+\lambda)}\cos{\frac{\theta}{2}} \end{bmatrix}$$
-"scalar" | exp($i\theta$) * Identity gate | [$\theta$] | $$e^{i\theta}\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$
+"id" | Identity gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;1&space;\end{bmatrix}" />
+"x" | X gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;0&&space;1&space;\\&space;1&space;&&space;0&space;\end{bmatrix}" />
+"y" | Y gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;0&space;&&space;-i&space;\\&space;i&space;&&space;0&space;\end{bmatrix}" />
+"z" | Z gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;-1&space;\end{bmatrix}" />
+"h" | Hadamard gate | [] | <img src="https://latex.codecogs.com/svg.image?\frac{1}{\sqrt{2}}\begin{bmatrix}&space;1&space;&&space;1&space;\\&space;1&space;&&space;-1&space;\end{bmatrix}" />
+"s" | S gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;i&space;\end{bmatrix}" />
+"sdg" | Hermitian conjugate of Phase gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;-i&space;\end{bmatrix}" />
+"t" | T gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;e^{i\pi/4}&space;\end{bmatrix}" />
+"tdg" | Hermitian conjugate of T gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;e^{-i\pi/4}&space;\end{bmatrix}" />
+"swap" | Swap gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;0&space;&&space;1&space;&&space;0&space;\\&space;0&space;&&space;1&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;0&space;&&space;0&space;&&space;1&space;\end{bmatrix}" />
+"iswap" | iSwap gate | [] | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;0&space;&&space;i&space;&&space;0&space;\\&space;0&space;&&space;i&space;&&space;0&space;&&space;0&space;\\&space;0&space;&&space;0&space;&&space;0&space;&&space;1&space;\end{bmatrix}" />
+"rx" | Rx gate | $[\theta]$ | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;\cos{\frac{\theta}{2}}&space;&&space;-i\sin{\frac{\theta}{2}}&space;\\&space;-i\sin{\frac{\theta}{2}}&space;&&space;\cos{\frac{\theta}{2}}&space;\end{bmatrix}" />
+"ry" | Ry gate | $[\theta]$ | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;\cos{\frac{\theta}{2}}&space;&&space;-\sin{\frac{\theta}{2}}&space;\\&space;\sin{\frac{\theta}{2}}&space;&&space;\cos{\frac{\theta}{2}}&space;\end{bmatrix}" />
+"rz" | Rz gate | $[\theta]$ | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;e^{-i\theta/2}&space;&&space;0&space;\\&space;0&space;&&space;e^{i\theta/2}&space;\end{bmatrix}" />
+"p" | Phase gate | $[\lambda]$ | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;e^{i\lambda}&space;\end{bmatrix}" />
+"u" | U gate | $[\theta, \phi, \lambda, \gamma]$ | <img src="https://latex.codecogs.com/svg.image?e^{i\gamma}\begin{bmatrix}&space;\cos{\frac{\theta}{2}}&space;&&space;-e^{i\lambda}\sin{\frac{\theta}{2}}&space;\\&space;e^{i\phi}\sin{\frac{\theta}{2}}&space;&&space;e^{i(\phi&plus;\lambda)}\cos{\frac{\theta}{2}}&space;\end{bmatrix}" />
+"scalar" | $\exp{(i\theta)}$ * Identity gate | $[\theta]$ | <img src="https://latex.codecogs.com/svg.image?e^{i\theta}\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;1&space;\end{bmatrix}" />
 
 ### Examples
 X gate:
