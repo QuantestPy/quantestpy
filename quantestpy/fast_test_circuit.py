@@ -62,41 +62,6 @@ class FastTestCircuit(TestCircuit):
 
         self._qubit_value[qubit_id] = qubit_value
 
-    def set_qubit_phase(self, qubit_id: list, qubit_phase: list):
-        if not isinstance(qubit_id, list):
-            raise QuantestPyTestCircuitError(
-                "qubit_id must be a list."
-            )
-
-        if not isinstance(qubit_phase, list):
-            raise QuantestPyTestCircuitError(
-                "qubit_phase must be a list."
-            )
-
-        if len(qubit_id) != len(qubit_phase):
-            raise QuantestPyTestCircuitError(
-                "size of qubit_id must be the same with that of qubit_phase."
-            )
-
-        for id in qubit_id:
-            if not isinstance(id, int):
-                raise QuantestPyTestCircuitError(
-                    "elements in qubit_id must be integer."
-                )
-
-            if id >= self._num_qubit:
-                raise QuantestPyTestCircuitError(
-                    f"qubit_id {id} is out of range."
-                )
-
-        for phase in qubit_phase:
-            if not isinstance(phase, int) and not isinstance(phase, float):
-                raise QuantestPyTestCircuitError(
-                    "elements in qubit_value must be real number."
-                )
-
-        self._qubit_phase[qubit_id] = qubit_phase
-
     def _execute_x_gate(self, target_qubit: list) -> None:
         self._qubit_value[target_qubit] ^= 1
 
