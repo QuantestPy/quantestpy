@@ -14,6 +14,7 @@ class FastTestCircuit(TestCircuit):
         self._qubit_phase = np.array([0. for _ in range(num_qubit)])
 
     def add_gate(self, gate: dict) -> None:
+        gate["parameter"] = []  # to avoid error
         if gate["name"] not in _IMPLEMENTED_GATES:
             raise QuantestPyTestCircuitError(
                 f'{gate["name"]} is not implemented.'
