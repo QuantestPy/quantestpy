@@ -9,12 +9,12 @@ from quantestpy.exceptions import QuantestPyAssertionError
 ut_test_case = unittest.TestCase()
 
 
-def assert_equal_unary_iteration(
+def assert_equal_single_operation(
         circuit: FastTestCircuit,
-        control_qubits: list,
-        control_values: list,
         selection_register_qubits: list,
         system_register_qubits: list,
+        control_qubits: list = [],
+        control_values: list = [],
         ancilla_register_qubits: list = [],
         verbose: bool = False,
         msg=None):
@@ -57,7 +57,7 @@ def assert_equal_unary_iteration(
         user_ftc.execute_all_gates()
 
         if verbose:
-            print(user_ftc._qubit_value[system_register_qubits])
+            print(l_, user_ftc._qubit_value[system_register_qubits])
 
         expected_qubit_value_of_system_register_qubits = \
             np.array([0]*size_system_register)
