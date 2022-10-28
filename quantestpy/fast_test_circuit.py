@@ -1,6 +1,6 @@
 import numpy as np
 
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.exceptions import QuantestPyTestCircuitError, QuantestPyError
 from quantestpy.test_circuit import TestCircuit
 
 _IMPLEMENTED_GATES = ["x", "y", "z", "swap"]
@@ -80,22 +80,36 @@ class FastTestCircuit(TestCircuit):
         self._qubit_value[target_qubit[0]] = b
         self._qubit_value[target_qubit[1]] = a
 
-    def execute_all_gates(self,) -> None:
-        for gate in self._gates:
-            if len(gate["control_qubit"]) == 0 or \
-                np.all(self._qubit_value[gate["control_qubit"]]
-                       == gate["control_value"]):
+    def execute_one_gate(self, gate_number: int) -> None:
+        if not isinstance(gate_number, int):
+            raise QuantestPyTestCircuitError(
+                "gate_number must be an integer."
+            )
 
-                if gate["name"] == "x":
-                    self._execute_x_gate(gate["target_qubit"])
-                elif gate["name"] == "y":
-                    self._execute_y_gate(gate["target_qubit"])
-                elif gate["name"] == "z":
-                    self._execute_z_gate(gate["target_qubit"])
-                elif gate["name"] == "swap":
-                    self._execute_swap_gate(gate["target_qubit"])
-                else:
-                    raise
+        if gate_number >= len(self._gates) or gate_number < 0:
+            raise QuantestPyTestCircuitError(
+                "gate_number is out of range."
+            )
+
+        gate = self._gates[gate_number]
+        if len(gate["control_qubit"]) == 0 or \
+            np.all(self._qubit_value[gate["control_qubit"]]
+                   == gate["control_value"]):
+
+            if gate["name"] == "x":
+                self._execute_x_gate(gate["target_qubit"])
+            elif gate["name"] == "y":
+                self._execute_y_gate(gate["target_qubit"])
+            elif gate["name"] == "z":
+                self._execute_z_gate(gate["target_qubit"])
+            elif gate["name"] == "swap":
+                self._execute_swap_gate(gate["target_qubit"])
+            else:
+                raise QuantestPyError("Unexpected error. Please report.")
+
+    def execute_all_gates(self,) -> None:
+        for i in range(len(self._gates)):
+            self.execute_ith_gate(i)
 
 
 if __name__ == "__main__":
