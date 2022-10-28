@@ -244,3 +244,61 @@ def assert_equal_Majorana_operation(
                 + f"input to selection register is {l_binary_rep}."
             msg = ut_test_case._formatMessage(msg, error_msg)
             raise QuantestPyAssertionError(msg)
+
+
+def assert_check_control_values_for_operations_on_system_register(
+        circuit: FastTestCircuit,
+        selection_register_qubits: list,
+        system_register_qubits: list,
+        accumulator_qubits: list = [],
+        control_qubits: list = [],
+        control_values: list = [],
+        ancilla_register_qubits: list = [],
+        loop_over_all_selection_register_inputs: bool = True):
+
+    user_ftc = copy.deepcopy(circuit)
+    size_selection_register = len(selection_register_qubits)
+
+    selection_register_bound = 2**size_selection_register if \
+        loop_over_all_selection_register_inputs else \
+        len(system_register_qubits)
+
+    for l_ in range(selection_register_bound):
+        l_binary_rep = ("0" * size_selection_register +
+                        bin(l_)[2:])[-size_selection_register:]
+
+        # set all control qubits to active in user circuit
+        user_ftc.set_qubit_value(
+            qubit_id=control_qubits,
+            qubit_value=control_values
+        )
+        # initialize all the ancilla qubits to 0 in user circuit
+        user_ftc.set_qubit_value(
+            qubit_id=ancilla_register_qubits,
+            qubit_value=[0] * len(ancilla_register_qubits)
+        )
+        # initialize the accumulator to 0 in user circuit
+        user_ftc.set_qubit_value(
+            qubit_id=accumulator_qubits,
+            qubit_value=[0] * len(accumulator_qubits)
+        )
+        # initialize the selection register to l_binary_rep
+        user_ftc.set_qubit_value(
+            qubit_id=selection_register_qubits,
+            qubit_value=[int(i) for i in l_binary_rep]
+        )
+
+        control_qubit_values = []
+        for i, gate in enumerate(user_ftc._gates):
+
+            if np.all([qubit in system_register_qubits for qubit
+                       in gate["target_qubit"]]):
+                control_qubit = gate["control_qubit"]
+                control_qubit_values.append(
+                    user_ftc._qubit_value[control_qubit].tolist())
+
+            else:
+                user_ftc.execute_one_gate(i)
+
+        print(f"l_binary rep.: {l_binary_rep},",
+              f"control qubit values: {control_qubit_values}")
