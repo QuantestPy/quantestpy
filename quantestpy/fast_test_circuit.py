@@ -1,6 +1,6 @@
 import numpy as np
 
-from quantestpy.exceptions import QuantestPyTestCircuitError, QuantestPyError
+from quantestpy.exceptions import QuantestPyError, QuantestPyTestCircuitError
 from quantestpy.test_circuit import TestCircuit
 
 _IMPLEMENTED_GATES = ["x", "y", "z", "swap"]
