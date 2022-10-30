@@ -149,15 +149,18 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
         del self.ftc
 
     def test_regular(self,):
-        assert_equal_ctrl_val_of_all_ops_on_syst_reg(
-            circuit=self.ftc,
-            select_reg=self.select_reg,
-            system_reg=self.system_reg,
-            accumulate_reg=self.accumulate_reg,
-            ctrl_reg=self.ctrl_reg,
-            ctrl_val=self.ctrl_val,
-            ancilla_reg=self.ancilla_reg,
-            expected_val_in_select_reg_to_ctrl_val=self.val_in_select_to_ctrl
+        val_in_select_to_ctrl = self.val_in_select_to_ctrl
+        self.assertIsNone(
+            assert_equal_ctrl_val_of_all_ops_on_syst_reg(
+                circuit=self.ftc,
+                select_reg=self.select_reg,
+                system_reg=self.system_reg,
+                accumulate_reg=self.accumulate_reg,
+                ctrl_reg=self.ctrl_reg,
+                ctrl_val=self.ctrl_val,
+                ancilla_reg=self.ancilla_reg,
+                expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
+            )
         )
 
     def test_raise_from_inappropriate_input_type(self,):
