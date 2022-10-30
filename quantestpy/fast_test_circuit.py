@@ -39,43 +39,63 @@ class FastTestCircuit(TestCircuit):
         gate["parameter"] = []  # to avoid raise in TestCircuit.add_gate()
         super().add_gate(gate=gate)
 
-    def set_qubit_value(self, qubit_id: list, qubit_value: list):
-        if not isinstance(qubit_id, list):
+    @staticmethod
+    def _assert_is_fast_test_circuit(circuit, circuit_name: str):
+        if not isinstance(circuit, FastTestCircuit):
             raise QuantestPyTestCircuitError(
-                "qubit_id must be a list."
+                f"{circuit_name} must be an instance of FastTestCircuit class."
             )
 
-        if not isinstance(qubit_value, list):
+    def _assert_is_correct_reg(self, reg, reg_name: str):
+        if not isinstance(reg, list):
+            raise QuantestPyTestCircuitError(f"{reg_name} must be a list.")
+
+        for idx in reg:
+            if not isinstance(idx, int):
+                raise QuantestPyTestCircuitError(
+                    f"Indices in {reg_name} must be integer type."
+                )
+            if idx >= self._num_qubit or idx < 0:
+                raise QuantestPyTestCircuitError(
+                    f"Qubit index {idx} in {reg_name} is out of range."
+                )
+
+    @staticmethod
+    def _assert_is_correct_qubit_val(qubit_val, qubit_val_name: str):
+        if not isinstance(qubit_val, list):
             raise QuantestPyTestCircuitError(
-                "qubit_value must be a list."
+                f"{qubit_val_name} must be a list."
             )
 
-        if len(qubit_id) != len(qubit_value):
+        for val in qubit_val:
+            if not isinstance(val, int):
+                raise QuantestPyTestCircuitError(
+                    f"Values in {qubit_val_name} must be integer type."
+                )
+            if val not in [0, 1]:
+                raise QuantestPyTestCircuitError(
+                    f"Values in {qubit_val_name} must be either 0 or 1."
+                )
+
+    def _assert_is_correct_reg_and_qubit_val(
+            self, reg, reg_name, qubit_val, qubit_val_name):
+        self._assert_is_correct_reg(reg, reg_name)
+        self._assert_is_correct_qubit_val(qubit_val, qubit_val_name)
+
+        if len(reg) != len(qubit_val):
             raise QuantestPyTestCircuitError(
-                "Lenght of qubit_id and that of qubit_value must be same."
+                f"Length of {reg_name} and that of {qubit_val_name} "
+                "must be the same."
             )
 
-        for id in qubit_id:
-            if not isinstance(id, int):
-                raise QuantestPyTestCircuitError(
-                    "Elements in qubit_id must be integer type."
-                )
-            if id >= self._num_qubit or id < 0:
-                raise QuantestPyTestCircuitError(
-                    f"qubit_id {id} is out of range."
-                )
-
-        for value in qubit_value:
-            if not isinstance(value, int):
-                raise QuantestPyTestCircuitError(
-                    "Elements in qubit_value must be integer type."
-                )
-            if value not in [0, 1]:
-                raise QuantestPyTestCircuitError(
-                    "Elements in qubit_value must be either 0 or 1."
-                )
-
-        self._qubit_value[qubit_id] = qubit_value
+    def set_qubit_value(self, qubit_idx: list, qubit_val: list):
+        self._assert_is_correct_reg_and_qubit_val(
+            reg=qubit_idx,
+            reg_name="qubit_idx",
+            qubit_val=qubit_val,
+            qubit_val_name="qubit_val"
+        )
+        self._qubit_value[qubit_idx] = qubit_val
 
     def _execute_x_gate(self, target_qubit: list) -> None:
         self._qubit_value[target_qubit] ^= 1
