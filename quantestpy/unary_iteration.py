@@ -14,7 +14,6 @@ def _get_ctrl_val_of_all_ops_on_syst_reg_for_given_val_in_select_reg(
         ftc: FastTestCircuit,
         select_reg: list,
         system_reg: list,
-        accumulate_reg: list,
         ctrl_reg: list,
         ctrl_val: list,
         ancilla_reg: list) -> list:
@@ -23,8 +22,6 @@ def _get_ctrl_val_of_all_ops_on_syst_reg_for_given_val_in_select_reg(
     ftc.set_qubit_value(ctrl_reg, ctrl_val)
     # init ancilla reg to 0
     ftc.set_qubit_value(ancilla_reg, [0] * len(ancilla_reg))
-    # init accumulator to 0
-    ftc.set_qubit_value(accumulate_reg, [0] * len(accumulate_reg))
     # init select reg to val_in_select_reg
     ftc.set_qubit_value(select_reg, [int(i) for i in val_in_select_reg])
 
@@ -48,7 +45,6 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
         circuit: FastTestCircuit,
         select_reg: list,
         system_reg: list,
-        accumulate_reg: list = [],
         ctrl_reg: list = [],
         ctrl_val: list = [],
         ancilla_reg: list = [],
@@ -59,7 +55,6 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
     ftc = copy.deepcopy(circuit)
     ftc._assert_is_correct_reg(select_reg, "select_reg")
     ftc._assert_is_correct_reg(system_reg, "system_reg")
-    ftc._assert_is_correct_reg(accumulate_reg, "accumulate_reg")
     ftc._assert_is_correct_reg(ancilla_reg, "ancilla_reg")
     ftc._assert_is_correct_reg_and_qubit_val(
         ctrl_reg, "ctrl_reg", ctrl_val, "ctrl_val"
@@ -85,7 +80,6 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
                 ftc,
                 select_reg,
                 system_reg,
-                accumulate_reg,
                 ctrl_reg,
                 ctrl_val,
                 ancilla_reg
@@ -100,11 +94,10 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
         select_reg: list,
         system_reg: list,
         expected_val_in_select_reg_to_ctrl_val: dict,
-        accumulate_reg: list = [],
         ctrl_reg: list = [],
         ctrl_val: list = [],
         ancilla_reg: list = [],
-        assert_is_uncomputated: bool = True,
+        assert_is_ancilla_uncomputated: bool = True,
         msg=None):
 
     # check inputs
@@ -112,7 +105,6 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
     ftc = copy.deepcopy(circuit)
     ftc._assert_is_correct_reg(select_reg, "select_reg")
     ftc._assert_is_correct_reg(system_reg, "system_reg")
-    ftc._assert_is_correct_reg(accumulate_reg, "accumulate_reg")
     ftc._assert_is_correct_reg(ancilla_reg, "ancilla_reg")
     ftc._assert_is_correct_reg_and_qubit_val(
         ctrl_reg, "ctrl_reg", ctrl_val, "ctrl_val"
@@ -154,7 +146,6 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
                 ftc,
                 select_reg,
                 system_reg,
-                accumulate_reg,
                 ctrl_reg,
                 ctrl_val,
                 ancilla_reg
@@ -176,15 +167,9 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
             msg = ut_test_case._formatMessage(msg, err_msg)
             raise QuantestPyAssertionError(msg)
 
-        if assert_is_uncomputated:
+        if assert_is_ancilla_uncomputated:
             if not np.all(ftc._qubit_value[ancilla_reg] == 0):
                 err_msg = "ancilla reg is not uncomputated to 0 " \
-                    + f"when val in select reg is {bin_val_in_select_reg}."
-                msg = ut_test_case._formatMessage(msg, err_msg)
-                raise QuantestPyAssertionError(msg)
-
-            if not np.all(ftc._qubit_value[accumulate_reg] == 0):
-                err_msg = "accumulate reg is not uncomputated to 0 " \
                     + f"when val in select reg is {bin_val_in_select_reg}."
                 msg = ut_test_case._formatMessage(msg, err_msg)
                 raise QuantestPyAssertionError(msg)

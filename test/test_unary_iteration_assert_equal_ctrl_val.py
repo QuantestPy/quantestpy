@@ -124,7 +124,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
         self.select_reg = [1, 2, 3, 4]
         self.system_reg = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         self.ancilla_reg = [16, 17, 18, 19]
-        self.accumulate_reg = []
 
         self.val_in_select_to_ctrl = {
             "0000": [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
@@ -155,7 +154,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -174,7 +172,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -194,7 +191,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -214,7 +210,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -236,7 +231,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -259,7 +253,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
@@ -281,7 +274,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                accumulate_reg=self.accumulate_reg,
                 ctrl_reg=self.ctrl_reg,
                 ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,

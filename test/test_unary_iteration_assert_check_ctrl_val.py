@@ -125,7 +125,6 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
         self.select_reg = [1, 2, 3, 4]
         self.system_reg = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         self.ancilla_reg = [16, 17, 18, 19]
-        self.accumulate_reg = []
 
         self.captor = StringIO()
         sys.stdout = self.captor
@@ -173,7 +172,6 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
             circuit=self.ftc,
             select_reg=self.select_reg,
             system_reg=self.system_reg,
-            accumulate_reg=self.accumulate_reg,
             ctrl_reg=self.ctrl_reg,
             ctrl_val=self.ctrl_val,
             ancilla_reg=self.ancilla_reg
@@ -209,7 +207,6 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
             circuit=self.ftc,
             select_reg=self.select_reg,
             system_reg=self.system_reg,
-            accumulate_reg=self.accumulate_reg,
             ctrl_reg=self.ctrl_reg,
             ctrl_val=self.ctrl_val,
             ancilla_reg=self.ancilla_reg,
