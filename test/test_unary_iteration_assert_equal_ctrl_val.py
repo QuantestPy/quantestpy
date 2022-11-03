@@ -14,7 +14,7 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
     $ python -m unittest test.test_unary_iteration_assert_equal_ctrl_val
     .......
     ----------------------------------------------------------------------
-    Ran 7 tests in 0.041s
+    Ran 7 tests in 0.037s
 
     OK
     $
@@ -119,29 +119,27 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
         self.ftc.add_gate({"name": "x", "target_qubit": [16],
                            "control_qubit": [0, 1], "control_value": [1, 1]})
 
-        self.ctrl_reg = [0]
-        self.ctrl_val = [1]
-        self.select_reg = [1, 2, 3, 4]
+        self.select_reg = [0, 1, 2, 3, 4]
         self.system_reg = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         self.ancilla_reg = [16, 17, 18, 19]
 
         self.val_in_select_to_ctrl = {
-            "0000": [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
-            "0001": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
-            "0010": [[0], [0], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
-            "0011": [[0], [0], [0], [1], [0], [0], [0], [0], [0], [0], [0]],
-            "0100": [[0], [0], [0], [0], [1], [0], [0], [0], [0], [0], [0]],
-            "0101": [[0], [0], [0], [0], [0], [1], [0], [0], [0], [0], [0]],
-            "0110": [[0], [0], [0], [0], [0], [0], [1], [0], [0], [0], [0]],
-            "0111": [[0], [0], [0], [0], [0], [0], [0], [1], [0], [0], [0]],
-            "1000": [[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]],
-            "1001": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]],
-            "1010": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
-            "1011": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
-            "1100": [[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]],
-            "1101": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]],
-            "1110": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
-            "1111": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]
+            "10000": [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
+            "10001": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
+            "10010": [[0], [0], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
+            "10011": [[0], [0], [0], [1], [0], [0], [0], [0], [0], [0], [0]],
+            "10100": [[0], [0], [0], [0], [1], [0], [0], [0], [0], [0], [0]],
+            "10101": [[0], [0], [0], [0], [0], [1], [0], [0], [0], [0], [0]],
+            "10110": [[0], [0], [0], [0], [0], [0], [1], [0], [0], [0], [0]],
+            "10111": [[0], [0], [0], [0], [0], [0], [0], [1], [0], [0], [0]],
+            "11000": [[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]],
+            "11001": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]],
+            "11010": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
+            "11011": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
+            "11100": [[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]],
+            "11101": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]],
+            "11110": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]],
+            "11111": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]
         }
 
     def tearDown(self) -> None:
@@ -154,8 +152,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -172,8 +168,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -181,7 +175,7 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
 
     def test_raise_from_inappropriate_key_type(self,):
         val_in_select_to_ctrl = \
-            {1111: [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]}
+            {11111: [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]}
         expected_err_msg = \
             "val_in_select_reg as keys in " \
             + "expected_val_in_select_reg_to_ctrl_val must be string type."
@@ -191,8 +185,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -200,7 +192,7 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
 
     def test_raise_from_inappropriate_key_length(self,):
         val_in_select_to_ctrl = \
-            {"00001": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]}
+            {"0001": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]}
         expected_err_msg = "Length of val_in_select_reg as keys in " \
             + "expected_val_in_select_reg_to_ctrl_val is not " \
             + "consistent with length of select_reg."
@@ -210,8 +202,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -219,10 +209,10 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
 
     def test_raise_from_non_consistent_ops_number(self,):
         val_in_select_to_ctrl = \
-            {"0000": [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
-             "0011": [[0], [0], [0], [1], [0], [0], [0], [0], [0], [0]]}
+            {"10000": [[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]],
+             "10011": [[0], [0], [0], [1], [0], [0], [0], [0], [0], [0]]}
         expected_err_msg = "The numbers of ops are not consistent " \
-            + "when val in select reg is 0011:\n" \
+            + "when val in select reg is 10011:\n" \
             + "expect: 10\n" \
             + "actual: 11"
 
@@ -231,8 +221,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -240,9 +228,9 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
 
     def test_raise_from_assertion_non_equal(self,):
         val_in_select_to_ctrl = \
-            {"0000": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]}
+            {"10000": [[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]}
         expected_err_msg = "Ctrl val(s) do not agree with your expectation " \
-            + "when val in select reg is 0000:\n" \
+            + "when val in select reg is 10000:\n" \
             + "expect: " \
             + "[[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]].\n" \
             + "actual: " \
@@ -253,8 +241,6 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )
@@ -262,20 +248,18 @@ class TestUnaryIterAssertEqualCtrlVal(unittest.TestCase):
 
     def test_raise_from_ancilla_not_uncomputated(self,):
         val_in_select_to_ctrl = \
-            {"1111": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]}
+            {"11111": [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]}
         self.ftc._gates[-1] = \
             {"name": "x", "target_qubit": [16],
              "control_qubit": [0, 1], "control_value": [0, 0]}
         expected_err_msg = "ancilla reg is not uncomputated to 0 " \
-            + "when val in select reg is 1111."
+            + "when val in select reg is 11111."
 
         with self.assertRaises(QuantestPyAssertionError) as cm:
             assert_equal_ctrl_val_of_all_ops_on_syst_reg(
                 circuit=self.ftc,
                 select_reg=self.select_reg,
                 system_reg=self.system_reg,
-                ctrl_reg=self.ctrl_reg,
-                ctrl_val=self.ctrl_val,
                 ancilla_reg=self.ancilla_reg,
                 expected_val_in_select_reg_to_ctrl_val=val_in_select_to_ctrl
             )

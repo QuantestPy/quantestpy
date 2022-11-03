@@ -14,12 +14,8 @@ def _get_ctrl_val_of_all_ops_on_syst_reg_for_given_val_in_select_reg(
         ftc: FastTestCircuit,
         select_reg: list,
         system_reg: list,
-        ctrl_reg: list,
-        ctrl_val: list,
         ancilla_reg: list) -> list:
 
-    # activate the ctrl reg
-    ftc.set_qubit_value(ctrl_reg, ctrl_val)
     # init ancilla reg to 0
     ftc.set_qubit_value(ancilla_reg, [0] * len(ancilla_reg))
     # init select reg to val_in_select_reg
@@ -45,10 +41,7 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
         circuit: FastTestCircuit,
         select_reg: list,
         system_reg: list,
-        ctrl_reg: list = [],
-        ctrl_val: list = [],
-        ancilla_reg: list = [],
-        loop_over_all_possible_vals_in_select_reg: bool = True):
+        ancilla_reg: list = []):
 
     # check inputs
     FastTestCircuit._assert_is_fast_test_circuit(circuit, "Input circuit")
@@ -56,19 +49,10 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
     ftc._assert_is_correct_reg(select_reg, "select_reg")
     ftc._assert_is_correct_reg(system_reg, "system_reg")
     ftc._assert_is_correct_reg(ancilla_reg, "ancilla_reg")
-    ftc._assert_is_correct_reg_and_qubit_val(
-        ctrl_reg, "ctrl_reg", ctrl_val, "ctrl_val"
-    )
-    if not isinstance(loop_over_all_possible_vals_in_select_reg, bool):
-        raise QuantestPyError(
-            "loop_over_all_possible_vals_in_select_reg must be bool type."
-        )
 
     len_select_reg = len(select_reg)
-    upper_lim_on_val_in_select_reg = 2**len_select_reg if \
-        loop_over_all_possible_vals_in_select_reg else len(system_reg)
 
-    for dec_val_in_select_reg in range(upper_lim_on_val_in_select_reg):
+    for dec_val_in_select_reg in range(2**len_select_reg):
 
         bin_val_in_select_reg = \
             ("0" * len_select_reg + bin(dec_val_in_select_reg)[2:])[
@@ -80,8 +64,6 @@ def assert_check_ctrl_val_of_all_ops_on_syst_reg(
                 ftc,
                 select_reg,
                 system_reg,
-                ctrl_reg,
-                ctrl_val,
                 ancilla_reg
             )
 
@@ -94,8 +76,6 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
         select_reg: list,
         system_reg: list,
         expected_val_in_select_reg_to_ctrl_val: dict,
-        ctrl_reg: list = [],
-        ctrl_val: list = [],
         ancilla_reg: list = [],
         assert_is_ancilla_uncomputated: bool = True,
         msg=None):
@@ -106,9 +86,6 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
     ftc._assert_is_correct_reg(select_reg, "select_reg")
     ftc._assert_is_correct_reg(system_reg, "system_reg")
     ftc._assert_is_correct_reg(ancilla_reg, "ancilla_reg")
-    ftc._assert_is_correct_reg_and_qubit_val(
-        ctrl_reg, "ctrl_reg", ctrl_val, "ctrl_val"
-    )
     if not isinstance(expected_val_in_select_reg_to_ctrl_val, dict):
         raise QuantestPyError(
             "expected_val_in_select_reg_to_ctrl_val must be dict type."
@@ -146,8 +123,6 @@ def assert_equal_ctrl_val_of_all_ops_on_syst_reg(
                 ftc,
                 select_reg,
                 system_reg,
-                ctrl_reg,
-                ctrl_val,
                 ancilla_reg
             )
 

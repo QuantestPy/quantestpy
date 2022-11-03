@@ -13,9 +13,9 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.test_unary_iteration_assert_check_ctrl_val
-    ..
+    .
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.070s
+    Ran 1 tests in 0.044s
 
     OK
     $
@@ -120,9 +120,7 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
         self.ftc.add_gate({"name": "x", "target_qubit": [16],
                            "control_qubit": [0, 1], "control_value": [1, 1]})
 
-        self.ctrl_reg = [0]
-        self.ctrl_val = [1]
-        self.select_reg = [1, 2, 3, 4]
+        self.select_reg = [0, 1, 2, 3, 4]
         self.system_reg = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         self.ancilla_reg = [16, 17, 18, 19]
 
@@ -135,81 +133,75 @@ class TestUnaryIterAssertCheckCtrlVal(unittest.TestCase):
 
     def test_regular(self,):
         expected_out = \
-            "val in select reg: 0000, ctrl val of all ops: " \
+            "val in select reg: 00000, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00001, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00010, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00011, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00100, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00101, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00110, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 00111, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01000, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01001, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01010, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01011, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01100, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01101, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01110, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 01111, ctrl val of all ops: " \
+            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
+            + "val in select reg: 10000, ctrl val of all ops: " \
             + "[[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0001, ctrl val of all ops: " \
+            + "val in select reg: 10001, ctrl val of all ops: " \
             + "[[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0010, ctrl val of all ops: " \
+            + "val in select reg: 10010, ctrl val of all ops: " \
             + "[[0], [0], [1], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0011, ctrl val of all ops: " \
+            + "val in select reg: 10011, ctrl val of all ops: " \
             + "[[0], [0], [0], [1], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0100, ctrl val of all ops: " \
+            + "val in select reg: 10100, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [1], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0101, ctrl val of all ops: " \
+            + "val in select reg: 10101, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [1], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0110, ctrl val of all ops: " \
+            + "val in select reg: 10110, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [1], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0111, ctrl val of all ops: " \
+            + "val in select reg: 10111, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [1], [0], [0], [0]]\n" \
-            + "val in select reg: 1000, ctrl val of all ops: " \
+            + "val in select reg: 11000, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]]\n" \
-            + "val in select reg: 1001, ctrl val of all ops: " \
+            + "val in select reg: 11001, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]]\n" \
-            + "val in select reg: 1010, ctrl val of all ops: " \
+            + "val in select reg: 11010, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]\n" \
-            + "val in select reg: 1011, ctrl val of all ops: " \
+            + "val in select reg: 11011, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]\n" \
-            + "val in select reg: 1100, ctrl val of all ops: " \
+            + "val in select reg: 11100, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]]\n" \
-            + "val in select reg: 1101, ctrl val of all ops: " \
+            + "val in select reg: 11101, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]]\n" \
-            + "val in select reg: 1110, ctrl val of all ops: " \
+            + "val in select reg: 11110, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]\n" \
-            + "val in select reg: 1111, ctrl val of all ops: " \
+            + "val in select reg: 11111, ctrl val of all ops: " \
             + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]\n"
 
         assert_check_ctrl_val_of_all_ops_on_syst_reg(
             circuit=self.ftc,
             select_reg=self.select_reg,
             system_reg=self.system_reg,
-            ctrl_reg=self.ctrl_reg,
-            ctrl_val=self.ctrl_val,
             ancilla_reg=self.ancilla_reg
-        )
-        self.assertEqual(self.captor.getvalue(), expected_out)
-
-    def test_false_for_loop_over_all_possible_vals_in_select_reg(self,):
-        expected_out = \
-            "val in select reg: 0000, ctrl val of all ops: " \
-            + "[[1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0001, ctrl val of all ops: " \
-            + "[[0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0010, ctrl val of all ops: " \
-            + "[[0], [0], [1], [0], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0011, ctrl val of all ops: " \
-            + "[[0], [0], [0], [1], [0], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0100, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [1], [0], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0101, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [1], [0], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0110, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [0], [1], [0], [0], [0], [0]]\n" \
-            + "val in select reg: 0111, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [0], [0], [1], [0], [0], [0]]\n" \
-            + "val in select reg: 1000, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [0], [0], [0], [1], [0], [0]]\n" \
-            + "val in select reg: 1001, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [1], [0]]\n" \
-            + "val in select reg: 1010, ctrl val of all ops: " \
-            + "[[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [1]]\n"
-
-        assert_check_ctrl_val_of_all_ops_on_syst_reg(
-            circuit=self.ftc,
-            select_reg=self.select_reg,
-            system_reg=self.system_reg,
-            ctrl_reg=self.ctrl_reg,
-            ctrl_val=self.ctrl_val,
-            ancilla_reg=self.ancilla_reg,
-            loop_over_all_possible_vals_in_select_reg=False
         )
         self.assertEqual(self.captor.getvalue(), expected_out)
