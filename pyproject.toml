@@ -35,4 +35,4 @@ zip-safe = false
 per-file-ignores = "__init__.py:F401"
 
 [tool.isort]
-extend_skip_glob = ["__init__.py"]
+extend_skip_glob = ["*__init__.py"]
