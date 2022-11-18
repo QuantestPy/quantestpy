@@ -1,7 +1,6 @@
 import unittest
 
-from quantestpy import PauliCircuit
-from quantestpy import assert_get_ctrl_val
+from quantestpy import PauliCircuit, assert_get_ctrl_val
 
 
 class TestAssertGetCtrlVal(unittest.TestCase):
