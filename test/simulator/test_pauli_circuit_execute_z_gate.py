@@ -3,15 +3,15 @@ import unittest
 
 import numpy as np
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 
 
-class TestFastTestCircuitExecuteZgate(unittest.TestCase):
+class TestPauliCircuitExecuteZgate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_fast_test_circuit_execute_z_gate
+    $ python -m unittest test.simulator.test_pauli_circuit_execute_z_gate
     ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.007s
@@ -21,7 +21,7 @@ class TestFastTestCircuitExecuteZgate(unittest.TestCase):
     """
 
     def test_qubit_value_after_z_operation_on_0(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         target_qubit = random.sample(range(0, 100), k=20)
         circ._execute_z_gate(target_qubit)
         qubit_value = circ._qubit_value
@@ -29,7 +29,7 @@ class TestFastTestCircuitExecuteZgate(unittest.TestCase):
         self.assertTrue(np.all(qubit_value == 0))
 
     def test_qubit_value_after_z_operation_on_1(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         circ._qubit_value = np.array([1]*100)
         target_qubit = random.sample(range(0, 100), k=20)
         circ._execute_z_gate(target_qubit)
@@ -38,7 +38,7 @@ class TestFastTestCircuitExecuteZgate(unittest.TestCase):
         self.assertTrue(np.all(qubit_value == 1))
 
     def test_qubit_phase_after_z_operation_on_0(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         target_qubit = random.sample(range(0, 100), k=60)
         circ._execute_z_gate(target_qubit)
         qubit_phase = circ._qubit_phase
@@ -46,7 +46,7 @@ class TestFastTestCircuitExecuteZgate(unittest.TestCase):
         self.assertTrue(np.all(qubit_phase == 0.))
 
     def test_qubit_phase_after_z_operation_on_1(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         circ._qubit_value = np.array([1]*100)
         target_qubit = random.sample(range(0, 100), k=60)
         circ._execute_z_gate(target_qubit)

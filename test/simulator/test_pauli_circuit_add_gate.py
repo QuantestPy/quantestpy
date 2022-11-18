@@ -1,16 +1,16 @@
 import unittest
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
-from quantestpy.fast_test_circuit import _IMPLEMENTED_GATES
+from quantestpy.simulator.pauli_circuit import _IMPLEMENTED_GATES
 
 
-class TestFastTestCircuitAddGate(unittest.TestCase):
+class TestPauliCircuitAddGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_fast_test_circuit_add_gate
+    $ python -m unittest test.simulator.test_pauli_circuit_add_gate
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s
@@ -20,7 +20,7 @@ class TestFastTestCircuitAddGate(unittest.TestCase):
     """
 
     def test_regular(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         circ.add_gate(
             {"name": "x",
              "target_qubit": [3],
@@ -51,7 +51,7 @@ class TestFastTestCircuitAddGate(unittest.TestCase):
         self.assertEqual(expected_gates, actual_gates)
 
     def test_raise_from_non_existing_gate_name(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         expected_error_msg = \
             'rz gate is not implemented.\n' \
             + f'Implemented gates: {_IMPLEMENTED_GATES}'

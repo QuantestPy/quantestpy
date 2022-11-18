@@ -6,7 +6,7 @@ from quantestpy.test_circuit import TestCircuit
 _IMPLEMENTED_GATES = ["x", "y", "z", "swap"]
 
 
-class FastTestCircuit(TestCircuit):
+class PauliCircuit(TestCircuit):
 
     def __init__(self, num_qubit: int):
         if not isinstance(num_qubit, int) or num_qubit < 1:
@@ -40,10 +40,10 @@ class FastTestCircuit(TestCircuit):
         super().add_gate(gate=gate)
 
     @staticmethod
-    def _assert_is_fast_test_circuit(circuit, circuit_name: str):
-        if not isinstance(circuit, FastTestCircuit):
+    def _assert_is_pauli_circuit(circuit, circuit_name: str):
+        if not isinstance(circuit, PauliCircuit):
             raise QuantestPyTestCircuitError(
-                f"{circuit_name} must be an instance of FastTestCircuit class."
+                f"{circuit_name} must be an instance of PauliCircuit class."
             )
 
     def _assert_is_correct_reg(self, reg, reg_name: str):

@@ -3,15 +3,15 @@ import unittest
 
 import numpy as np
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 
 
-class TestFastTestCircuitSetQubitValue(unittest.TestCase):
+class TestPauliCircuitSetQubitValue(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_fast_test_circuit_set_qubit_value
+    $ python -m unittest test.simulator.test_pauli_circuit_set_qubit_value
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.001s
@@ -21,7 +21,7 @@ class TestFastTestCircuitSetQubitValue(unittest.TestCase):
     """
 
     def test_regular(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         qubit_id = random.sample(range(0, 100), k=20)
         qubit_value = [random.randint(0, 1) for _ in range(20)]
         circ.set_qubit_value(qubit_id, qubit_value)

@@ -1,17 +1,17 @@
 import random
 import unittest
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 
-class TestFastTestCircuitAssertIsCorrectRegAndQubitVal(unittest.TestCase):
+class TestPauliCircuitAssertIsCorrectRegAndQubitVal(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
-        test.test_fast_test_circuit_assert_is_correct_reg_and_qubit_val
+        test.simulator.test_pauli_circuit_assert_is_correct_reg_and_qubit_val
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s
@@ -21,7 +21,7 @@ class TestFastTestCircuitAssertIsCorrectRegAndQubitVal(unittest.TestCase):
     """
 
     def test_regular(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         register = random.sample(range(0, 100), k=20)
         qubit_value = [random.randint(0, 1) for _ in range(20)]
         self.assertIsNone(
@@ -34,7 +34,7 @@ class TestFastTestCircuitAssertIsCorrectRegAndQubitVal(unittest.TestCase):
         )
 
     def test_raise_from_nonconsistent_length(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         register = random.sample(range(0, 100), k=20)
         qubit_value = [random.randint(0, 1) for _ in range(19)]
         expected_error_msg = "Length of test_register and that of " \

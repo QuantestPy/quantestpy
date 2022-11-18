@@ -1,16 +1,16 @@
 import unittest
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 
-class TestFastTestCircuitAssertIsFastTestCircuit(unittest.TestCase):
+class TestPauliCircuitAssertIsPauliCircuit(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
-        test.test_fast_test_circuit_assert_is_fast_test_circuit
+        test.simulator.test_pauli_circuit_assert_is_fast_test_circuit
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s
@@ -20,9 +20,9 @@ class TestFastTestCircuitAssertIsFastTestCircuit(unittest.TestCase):
     """
 
     def test_regular(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         self.assertIsNone(
-            FastTestCircuit._assert_is_fast_test_circuit(
+            PauliCircuit._assert_is_pauli_circuit(
                 circuit=circ,
                 circuit_name="test_circuit"
             )
@@ -31,10 +31,10 @@ class TestFastTestCircuitAssertIsFastTestCircuit(unittest.TestCase):
     def test_raise(self,):
         circ = "dummy circuit"
         expected_error_msg = \
-            "test_circuit must be an instance of FastTestCircuit class."
+            "test_circuit must be an instance of PauliCircuit class."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
-            FastTestCircuit._assert_is_fast_test_circuit(
+            PauliCircuit._assert_is_pauli_circuit(
                 circuit=circ,
                 circuit_name="test_circuit"
             )

@@ -32,6 +32,8 @@ jobs:
       - name: Run unit test
         run: |
           python3 -m unittest discover -v ./test/
+          python3 -m unittest discover -v ./test/assertion/
+          python3 -m unittest discover -v ./test/simulator/
 
   test_with_qiskit:
     runs-on: ubuntu-latest

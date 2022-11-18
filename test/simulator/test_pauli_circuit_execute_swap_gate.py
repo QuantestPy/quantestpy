@@ -3,15 +3,15 @@ import unittest
 
 import numpy as np
 
-from quantestpy import FastTestCircuit
+from quantestpy import PauliCircuit
 
 
-class TestFastTestCircuitExecuteSwapgate(unittest.TestCase):
+class TestPauliCircuitExecuteSwapgate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_fast_test_circuit_execute_swap_gate
+    $ python -m unittest test.simulator.test_pauli_circuit_execute_swap_gate
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.002s
@@ -21,7 +21,7 @@ class TestFastTestCircuitExecuteSwapgate(unittest.TestCase):
     """
 
     def test_qubit_value_and_phase_after_swap_operation(self,):
-        circ = FastTestCircuit(100)
+        circ = PauliCircuit(100)
         qubit_ids = random.sample(range(0, 100), k=50)
         circ._qubit_value[qubit_ids] = 1
         qubit_ids = random.sample(range(0, 100), k=50)
