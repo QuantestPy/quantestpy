@@ -6,12 +6,12 @@ import numpy as np
 from quantestpy import PauliCircuit
 
 
-class TestPauliCircuitExecuteSwapgate(unittest.TestCase):
+class TestExecuteSwapgate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.test_pauli_circuit_execute_swap_gate
+    $ python -m unittest test.simulator.pauli_circuit.test_execute_swap_gate
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.002s

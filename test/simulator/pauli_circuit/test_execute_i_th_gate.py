@@ -5,15 +5,15 @@ import numpy as np
 from quantestpy import PauliCircuit
 
 
-class TestPauliCircuitExecuteIAllGates(unittest.TestCase):
+class TestExecuteIthGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.test_pauli_circuit_execute_all_gates
-    .
+    $ python -m unittest test.simulator.pauli_circuit.test_execute_i_th_gate
+    .....
     ----------------------------------------------------------------------
-    Ran 1 test in 0.001s
+    Ran 5 tests in 0.002s
 
     OK
     $
@@ -40,17 +40,28 @@ class TestPauliCircuitExecuteIAllGates(unittest.TestCase):
     def tearDown(self) -> None:
         del self.circ
 
-    def test_regular(self,):
-        self.circ._execute_all_gates()
-
-        self.assertEqual(self.circ._qubit_value[0], 0)
+    def test_x_gate(self,):
+        self.circ._execute_i_th_gate(i=0)
+        self.assertEqual(self.circ._qubit_value[0], 1)
         self.assertEqual(self.circ._qubit_phase[0], 0.)
 
+    def test_y_gate(self,):
+        self.circ._execute_i_th_gate(i=1)
         self.assertEqual(self.circ._qubit_value[3], 1)
         self.assertEqual(self.circ._qubit_phase[3], np.pi/2.)
 
+    def test_z_gate(self,):
+        self.circ._execute_i_th_gate(i=2)
         self.assertEqual(self.circ._qubit_value[6], 0)
         self.assertEqual(self.circ._qubit_phase[6], 0.)
 
+    def test_swap_gate(self,):
+        self.circ._execute_i_th_gate(i=0)
+        self.circ._execute_i_th_gate(i=3)
         self.assertEqual(self.circ._qubit_value[0], 0)
         self.assertEqual(self.circ._qubit_value[10], 1)
+
+    def test_no_gate(self,):
+        self.circ._execute_i_th_gate(i=4)
+        self.assertEqual(self.circ._qubit_value[0], 0)
+        self.assertEqual(self.circ._qubit_phase[0], 0.)

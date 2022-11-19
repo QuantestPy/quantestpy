@@ -4,13 +4,13 @@ from quantestpy import PauliCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 
-class TestPauliCircuitAssertIsPauliCircuit(unittest.TestCase):
+class TestAssertIsPauliCircuit(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
-        test.simulator.test_pauli_circuit_assert_is_fast_test_circuit
+        test.simulator.pauli_circuit.test_assert_is_pauli_circuit
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s

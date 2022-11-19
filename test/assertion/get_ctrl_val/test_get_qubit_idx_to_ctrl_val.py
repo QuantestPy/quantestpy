@@ -1,17 +1,20 @@
 import unittest
 
-from quantestpy import PauliCircuit, assert_get_ctrl_val
+from quantestpy import PauliCircuit
+from quantestpy.assertion.get_ctrl_val import \
+    _get_qubit_idx_to_ctrl_val_for_given_val_in_select_reg as get_ctrl_val
 
 
-class TestAssertGetCtrlVal(unittest.TestCase):
+class TestGetQubitIdxToCtrlVal(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.assertion.test_get_ctrl_val_assert
+    $ python -m unittest \
+        test.assertion.get_ctrl_val.test_get_qubit_idx_to_ctrl_val
     .
     ----------------------------------------------------------------------
-    Ran 1 tests in 0.044s
+    Ran 1 test in 0.001s
 
     OK
     $
@@ -124,39 +127,42 @@ class TestAssertGetCtrlVal(unittest.TestCase):
         del self.pc
 
     def test_regular(self,):
-        qubit_idx_to_val_in_select_reg_to_ctrl_val = \
-            assert_get_ctrl_val(
-                circuit=self.pc,
-                select_reg=self.select_reg,
-                ancilla_reg=self.ancilla_reg,
-                verbose=False,
-                assert_is_ancilla_uncomputated=True
-            )
-
-        # check qubit idx 19
-        expected_ctrl_val_for_qubit_idx_19 = {
-            "10000": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            "10001": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            "10010": [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-            "10011": [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-            "10100": [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            "10101": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-            "10110": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-            "10111": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-            "11000": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-            "11001": [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            "11010": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        val_in_select_reg_to_ctrl_val = {
+            "10000": {0: [1, 1, 1],
+                      1: [0, 0],
+                      2: [0, 0],
+                      3: [0, 0, 0, 0, 0, 0],
+                      4: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      16: [1, 1, 1, 0, 0, 0],
+                      17: [1, 1, 1, 0, 0, 0],
+                      18: [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      19: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+            "11001": {0: [1, 1, 1],
+                      1: [1, 1],
+                      2: [0, 0],
+                      3: [0, 0, 0, 0, 0, 0],
+                      4: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                      16: [0, 0, 0, 1, 1, 1],
+                      17: [0, 0, 0, 0, 0, 0],
+                      18: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+                      19: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]},
+            "11010": {0: [1, 1, 1],
+                      1: [1, 1],
+                      2: [0, 0],
+                      3: [1, 1, 1, 1, 1, 1],
+                      4: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      16: [0, 0, 0, 1, 1, 1],
+                      17: [0, 0, 0, 0, 0, 0],
+                      18: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      19: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
         }
-        for val_in_select_reg, ctrl_val in \
-                expected_ctrl_val_for_qubit_idx_19.items():
-            self.assertEqual(
-                ctrl_val,
-                qubit_idx_to_val_in_select_reg_to_ctrl_val[19][
-                    val_in_select_reg]
-            )
+        for val_in_select_reg, expect_ctrl_val in \
+                val_in_select_reg_to_ctrl_val.items():
 
-        # check qubit idx 18
-        self.assertEqual(
-            1,
-            qubit_idx_to_val_in_select_reg_to_ctrl_val[18]["11010"][-1]
-        )
+            actual_ctrl_val = get_ctrl_val(
+                val_in_select_reg=val_in_select_reg,
+                pc=self.pc,
+                select_reg=self.select_reg,
+                ancilla_reg=self.ancilla_reg
+            )
+            self.assertDictEqual(expect_ctrl_val, actual_ctrl_val)

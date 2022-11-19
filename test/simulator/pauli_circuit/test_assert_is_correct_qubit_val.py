@@ -5,13 +5,13 @@ from quantestpy import PauliCircuit
 from quantestpy.exceptions import QuantestPyTestCircuitError
 
 
-class TestPauliCircuitAssertIsCorrectQubitVal(unittest.TestCase):
+class TestAssertIsCorrectQubitVal(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
-        test.simulator.test_pauli_circuit_assert_is_correct_qubit_val
+        test.simulator.pauli_circuit.test_assert_is_correct_qubit_val
     ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.002s

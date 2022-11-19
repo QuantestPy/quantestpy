@@ -6,12 +6,12 @@ import numpy as np
 from quantestpy import PauliCircuit
 
 
-class TestPauliCircuitSetQubitValue(unittest.TestCase):
+class TestSetQubitValue(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.test_pauli_circuit_set_qubit_value
+    $ python -m unittest test.simulator.pauli_circuit.test_set_qubit_value
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.001s
