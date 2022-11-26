@@ -22,21 +22,15 @@ class TestAssertIsPauliCircuit(unittest.TestCase):
     def test_regular(self,):
         circ = PauliCircuit(100)
         self.assertIsNone(
-            PauliCircuit._assert_is_pauli_circuit(
-                circuit=circ,
-                circuit_name="test_circuit"
-            )
+            PauliCircuit._assert_is_pauli_circuit(circuit=circ)
         )
 
     def test_raise(self,):
         circ = "dummy circuit"
         expected_error_msg = \
-            "test_circuit must be an instance of PauliCircuit class."
+            "circuit must be an instance of PauliCircuit class."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
-            PauliCircuit._assert_is_pauli_circuit(
-                circuit=circ,
-                circuit_name="test_circuit"
-            )
+            PauliCircuit._assert_is_pauli_circuit(circuit=circ)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)

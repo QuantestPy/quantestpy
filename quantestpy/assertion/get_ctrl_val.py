@@ -46,10 +46,10 @@ def assert_get_ctrl_val(
         verbose: bool = True) -> dict:
 
     # check inputs
-    PauliCircuit._assert_is_pauli_circuit(circuit, "Input circuit")
+    PauliCircuit._assert_is_pauli_circuit(circuit)
     pc = copy.deepcopy(circuit)
-    pc._assert_is_correct_reg(select_reg, "select_reg")
-    pc._assert_is_correct_reg(ancilla_reg, "ancilla_reg")
+    pc._assert_is_correct_reg(select_reg)
+    pc._assert_is_correct_reg(ancilla_reg)
     if not isinstance(assert_is_ancilla_uncomputated, bool):
         raise QuantestPyError(
             "assert_is_ancilla_uncomputated must be bool type."

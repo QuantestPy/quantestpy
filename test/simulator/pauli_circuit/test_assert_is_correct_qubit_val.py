@@ -24,49 +24,35 @@ class TestAssertIsCorrectQubitVal(unittest.TestCase):
         circ = PauliCircuit(100)
         qubit_value = [random.randint(0, 1) for _ in range(60)]
         self.assertIsNone(
-            circ._assert_is_correct_qubit_val(
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
-            )
+            circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
         )
 
     def test_raise_from_qubit_val_incorrect_type(self,):
         circ = PauliCircuit(100)
         qubit_value = 0
-        expected_error_msg = "test_qubit_value must be a list."
+        expected_error_msg = "qubit_val must be a list."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
-            circ._assert_is_correct_qubit_val(
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
-            )
+            circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
 
     def test_raise_from_val_incorrect_type(self,):
         circ = PauliCircuit(100)
         qubit_value = [0., 1]
-        expected_error_msg = \
-            "Values in test_qubit_value must be integer type."
+        expected_error_msg = "Values in qubit_val must be integer type."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
-            circ._assert_is_correct_qubit_val(
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
-            )
+            circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
 
     def test_raise_from_val_out_of_range(self,):
         circ = PauliCircuit(100)
         qubit_value = [0, 1, 2]
-        expected_error_msg = \
-            "Values in test_qubit_value must be either 0 or 1."
+        expected_error_msg = "Values in qubit_val must be either 0 or 1."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
-            circ._assert_is_correct_qubit_val(
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
-            )
+            circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)

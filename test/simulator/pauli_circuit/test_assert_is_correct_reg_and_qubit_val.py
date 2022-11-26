@@ -26,10 +26,8 @@ class TestAssertIsCorrectRegAndQubitVal(unittest.TestCase):
         qubit_value = [random.randint(0, 1) for _ in range(20)]
         self.assertIsNone(
             circ._assert_is_correct_reg_and_qubit_val(
-                reg=register,
-                reg_name="test_register",
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
+                register=register,
+                qubit_val=qubit_value
             )
         )
 
@@ -37,15 +35,13 @@ class TestAssertIsCorrectRegAndQubitVal(unittest.TestCase):
         circ = PauliCircuit(100)
         register = random.sample(range(0, 100), k=20)
         qubit_value = [random.randint(0, 1) for _ in range(19)]
-        expected_error_msg = "Length of test_register and that of " \
-            + "test_qubit_value must be the same."
+        expected_error_msg = "Length of register and that of " \
+            + "qubit_val must be the same."
 
         with self.assertRaises(QuantestPyTestCircuitError) as cm:
             circ._assert_is_correct_reg_and_qubit_val(
-                reg=register,
-                reg_name="test_register",
-                qubit_val=qubit_value,
-                qubit_val_name="test_qubit_value"
+                register=register,
+                qubit_val=qubit_value
             )
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
