@@ -127,10 +127,10 @@ class TestAssertGetCtrlVal(unittest.TestCase):
         qubit_idx_to_val_in_select_reg_to_ctrl_val = \
             assert_get_ctrl_val(
                 circuit=self.pc,
-                select_reg=self.select_reg,
+                ctrl_reg=self.select_reg,
                 ancilla_reg=self.ancilla_reg,
-                verbose=False,
-                assert_is_ancilla_uncomputated=True
+                print_out_result=False,
+                check_assert_is_uncomputed=True
             )
 
         # check qubit idx 19

@@ -2,16 +2,16 @@ import unittest
 
 from quantestpy import PauliCircuit
 from quantestpy.assertion.get_ctrl_val import \
-    _get_qubit_idx_to_ctrl_val_for_given_val_in_select_reg as get_ctrl_val
+    _get_qubit_idx_to_qubit_val_for_given_val_in_ctrl_reg as get_ctrl_val
 
 
-class TestGetQubitIdxToCtrlVal(unittest.TestCase):
+class TestGetQubitIdxToQubitVal(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
-        test.assertion.get_ctrl_val.test_get_qubit_idx_to_ctrl_val
+        test.assertion.get_ctrl_val.test_get_qubit_idx_to_qubit_val
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.001s
@@ -160,9 +160,9 @@ class TestGetQubitIdxToCtrlVal(unittest.TestCase):
                 val_in_select_reg_to_ctrl_val.items():
 
             actual_ctrl_val = get_ctrl_val(
-                val_in_select_reg=val_in_select_reg,
+                val_in_ctrl_reg=val_in_select_reg,
                 pc=self.pc,
-                select_reg=self.select_reg,
+                ctrl_reg=self.select_reg,
                 ancilla_reg=self.ancilla_reg
             )
             self.assertDictEqual(expect_ctrl_val, actual_ctrl_val)
