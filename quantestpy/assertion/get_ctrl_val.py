@@ -40,7 +40,7 @@ def assert_get_ctrl_val(
         circuit: PauliCircuit,
         ctrl_reg: list,
         ancilla_reg: list = [],
-        check_assert_is_uncomputed: bool = False,
+        check_ancilla_is_uncomputed: bool = False,
         print_out_result: bool = True) -> dict:
 
     # check inputs
@@ -48,7 +48,7 @@ def assert_get_ctrl_val(
     pc = copy.deepcopy(circuit)
     pc._assert_is_correct_reg(ctrl_reg)
     pc._assert_is_correct_reg(ancilla_reg)
-    if not isinstance(check_assert_is_uncomputed, bool):
+    if not isinstance(check_ancilla_is_uncomputed, bool):
         raise QuantestPyError("check_assert_is_uncomputed must be bool type.")
     if not isinstance(print_out_result, bool):
         raise QuantestPyError("print_out_result must be bool type.")
@@ -70,7 +70,7 @@ def assert_get_ctrl_val(
                 ancilla_reg
             )
 
-        if check_assert_is_uncomputed:
+        if check_ancilla_is_uncomputed:
             if not np.all(pc._qubit_value[ancilla_reg] == 0):
                 err_msg = "ancilla reg is not back to 0 by uncomputation " \
                     + f"when val in ctrl reg is {bin_val_in_ctrl_reg}."

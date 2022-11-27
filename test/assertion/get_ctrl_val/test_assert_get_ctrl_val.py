@@ -130,7 +130,7 @@ class TestAssertGetCtrlVal(unittest.TestCase):
                 ctrl_reg=self.select_reg,
                 ancilla_reg=self.ancilla_reg,
                 print_out_result=False,
-                check_assert_is_uncomputed=True
+                check_ancilla_is_uncomputed=True
             )
 
         # check qubit idx 19
