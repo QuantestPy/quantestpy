@@ -20,7 +20,7 @@ Users can always put multi-indices in "target_qubit", "control_qubit" and "contr
 The following table lists the available gates:
 
 name | description | matrix representation
---- | --- | --- | ---
+--- | --- | ---
 "x" | X gate | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;0&&space;1&space;\\&space;1&space;&&space;0&space;\end{bmatrix}" />
 "y" | Y gate | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;0&space;&&space;-i&space;\\&space;i&space;&&space;0&space;\end{bmatrix}" />
 "z" | Z gate | <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}&space;1&space;&&space;0&space;\\&space;0&space;&&space;-1&space;\end{bmatrix}" />
