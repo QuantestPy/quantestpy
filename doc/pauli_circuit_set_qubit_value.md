@@ -14,7 +14,7 @@ qubit index(indices)
 qubit value(s), either 0 or 1. The length of `qubit_val` must be equal to that of `qubit_idx`.
 
 ### Examples
-Set the state(s) of only the qubits 0 and 1 in `|1>` while the others in `|0>`:
+Set the states of only the qubits 0 and 1 in `|1>` while the others in `|0>`:
 ```py
 0  |1> ─
 
