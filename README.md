@@ -36,6 +36,7 @@ Method | Checks that
 [circuit.assert_is_zero(circuit, qubits)](./doc/circuit_assert_is_zero.md) | `qubits in circuit are 0 states`
 [circuit.assert_ancilla_is_zero(circuit, ancilla_qubits)](./doc/circuit_assert_ancilla_is_zero.md) | `ancilla_qubits in circuit are always 0 states`
 [circuit.assert_equal(circuit_a, circuit_b)](./doc/circuit_assert_equal.md) | `circuit_a == circuit_b`
+[assert_get_ctrl_val(circuit)](./doc/get_ctrl_val.md) | `values of control qubits for all gates`
 
 The hyperlinks bring you to details of the methods.
 
