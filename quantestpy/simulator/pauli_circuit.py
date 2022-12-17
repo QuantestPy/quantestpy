@@ -136,3 +136,8 @@ class PauliCircuit(TestCircuit):
     def _execute_all_gates(self,) -> None:
         for i in range(len(self._gates)):
             self._execute_i_th_gate(i)
+
+    def draw(self,):
+        from quantestpy.simulator.circuit_drawer import draw_circuit
+
+        return draw_circuit(self)
