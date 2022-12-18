@@ -117,7 +117,7 @@ class CircuitDrawer:
         elif name == "z":
             obj = "[Z]"
         elif name == "swap":
-            obj = " X "
+            obj = "SWP"
         else:
             raise QuantestPyError(
                 f"{name} is invalid input."
@@ -145,7 +145,7 @@ class CircuitDrawer:
         id_max, id_min = max(id_a, id_b), min(id_a, id_b)
         return [id_ for id_ in range(id_max) if id_ < id_max and id_ > id_min]
 
-    def draw_qubit_indentifer(self) -> None:
+    def draw_qubit_indentifier(self) -> None:
         """Draws a qubit identifer
 
         ::
@@ -308,6 +308,7 @@ class CircuitDrawer:
         '   '
 
         """
+        _ = gate_id  # unused
         for line_id in range(self._num_line):
             # only when not occupied yet
             if line_id not in self._occupied_line_id:
@@ -358,7 +359,7 @@ class CircuitDrawer:
                      │   │
         4  |1> ─────[X]──■──
         """
-        self.draw_qubit_indentifer()
+        self.draw_qubit_indentifier()
         self.draw_space()
         self.draw_init_vector()
         self.draw_space()
