@@ -33,7 +33,8 @@ jobs:
         run: |
           python3 -m unittest discover -v ./test/
           python3 -m unittest discover -v ./test/assertion/*
-          python3 -m unittest discover -v ./test/simulator/*
+          python3 -m unittest discover -v ./test/simulator/pauli_circuit/
+          python3 -m unittest discover -v ./test/simulator/circuit_drawer/
 
   test_with_qiskit:
     runs-on: ubuntu-latest
