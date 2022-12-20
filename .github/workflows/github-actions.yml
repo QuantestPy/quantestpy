@@ -32,7 +32,8 @@ jobs:
       - name: Run unit test
         run: |
           python3 -m unittest discover -v ./test/
-          python3 -m unittest discover -v ./test/assertion/*
+          python3 -m unittest discover -v ./test/assertion/get_ctrl_val
+          python3 -m unittest discover -v ./test/assertion/color_ctrl_val
           python3 -m unittest discover -v ./test/simulator/pauli_circuit/
           python3 -m unittest discover -v ./test/simulator/circuit_drawer/
 
