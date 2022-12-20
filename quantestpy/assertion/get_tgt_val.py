@@ -29,14 +29,13 @@ def _get_tgt_qubit_idx_to_qubit_val_for_given_val_in_ctrl_reg(
     for i, gate in enumerate(pc._gates):
         pc._execute_i_th_gate(i)
 
-        if gate["target_qubit"] in tgt_reg:
-            qubit_idx = gate["target_qubit"]
-            qubit_val = pc._qubit_value[qubit_idx]
+        qubit_idx = gate["target_qubit"]
+        qubit_val = pc._qubit_value[qubit_idx]
 
-            for j, idx in enumerate(qubit_idx):
+        for j, idx in enumerate(qubit_idx):
+            if idx in tgt_reg:
                 if idx in qubit_idx_to_qubit_val.keys():
                     qubit_idx_to_qubit_val[idx].append(qubit_val[j])
-
 
     return qubit_idx_to_qubit_val
 
@@ -72,9 +71,9 @@ def assert_get_tgt_val(
             _get_tgt_qubit_idx_to_qubit_val_for_given_val_in_ctrl_reg(
                 bin_val_in_ctrl_reg,
                 pc,
+                tgt_reg,
                 ctrl_reg,
-                ancilla_reg,
-                tgt_reg
+                ancilla_reg
             )
 
         if check_ancilla_is_uncomputed:
