@@ -1,20 +1,17 @@
 import unittest
 
-from quantestpy import PauliCircuit
-from quantestpy.assertion.get_tgt_val import \
-    _get_tgt_qubit_idx_to_qubit_val_for_given_val_in_ctrl_reg as get_tgt_val
+from quantestpy import PauliCircuit, assert_get_tgt_val
 
 
-class TestGetTgtQubitIdxToQubitVal(unittest.TestCase):
+class TestAssertGetTgtVal(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest \
-        test.assertion.get_tgt_val.test_get_tgt_qubit_idx_to_qubit_val
+    $ python -m unittest test.assertion.get_tgt_val.test_assert_get_tgt_val
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 0.001s
+    Ran 1 tests in 0.044s
 
     OK
     $
@@ -127,49 +124,40 @@ class TestGetTgtQubitIdxToQubitVal(unittest.TestCase):
         del self.pc
 
     def test_regular(self,):
-        val_in_select_reg_to_tgt_val = {
-            "10000": {5: [0, 1],
-                      6: [0, 0],
-                      7: [0, 0],
-                      8: [0, 0],
-                      9: [0, 0],
-                      10: [0, 0],
-                      11: [0, 0],
-                      12: [0, 0],
-                      13: [0, 0],
-                      14: [0, 0],
-                      15: [0, 0]},
-            "10001": {5: [0, 0],
-                      6: [0, 1],
-                      7: [0, 0],
-                      8: [0, 0],
-                      9: [0, 0],
-                      10: [0, 0],
-                      11: [0, 0],
-                      12: [0, 0],
-                      13: [0, 0],
-                      14: [0, 0],
-                      15: [0, 0]},
-            "10010": {5: [0, 0],
-                      6: [0, 0],
-                      7: [0, 1],
-                      8: [0, 0],
-                      9: [0, 0],
-                      10: [0, 0],
-                      11: [0, 0],
-                      12: [0, 0],
-                      13: [0, 0],
-                      14: [0, 0],
-                      15: [0, 0]}
-        }
-        for val_in_select_reg, expect_tgt_val in \
-                val_in_select_reg_to_tgt_val.items():
-
-            actual_tgt_val = get_tgt_val(
-                val_in_ctrl_reg=val_in_select_reg,
-                pc=self.pc,
+        qubit_idx_to_val_in_select_reg_to_tgt_val = \
+            assert_get_tgt_val(
+                circuit=self.pc,
                 tgt_reg=self.system_reg,
                 ctrl_reg=self.select_reg,
-                ancilla_reg=self.ancilla_reg
+                ancilla_reg=self.ancilla_reg,
+                print_out_result=False,
+                check_ancilla_is_uncomputed=True
             )
-            self.assertDictEqual(expect_tgt_val, actual_tgt_val)
+
+        # check qubit idx 6
+        expected_tgt_val_for_qubit_idx_6 = {
+            "10000": [0, 0],
+            "10001": [0, 1],
+            "10010": [0, 0],
+            "10011": [0, 0],
+            "10100": [0, 0],
+            "10101": [0, 0],
+            "10110": [0, 0],
+            "10111": [0, 0],
+            "11000": [0, 0],
+            "11001": [0, 0],
+            "11010": [0, 0]
+        }
+        for val_in_select_reg, tgt_val in \
+                expected_tgt_val_for_qubit_idx_6.items():
+            self.assertEqual(
+                tgt_val,
+                qubit_idx_to_val_in_select_reg_to_tgt_val[6][
+                    val_in_select_reg]
+            )
+
+        # check qubit idx 
+        self.assertEqual(
+            1,
+            qubit_idx_to_val_in_select_reg_to_tgt_val[14]["11001"][-1]
+        )
