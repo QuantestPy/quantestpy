@@ -109,7 +109,7 @@ def assert_color_ctrl_val(
         # show result
         print(val_in_ctrl_reg)
         print(fig)
-        input("enter")
+        input("press enter")
         sys.stdout.write(f"\033[{length+2}F")
         sys.stdout.write("\033[2K")
         del pc, gc
