@@ -156,7 +156,7 @@ class TestAssertGetTgtVal(unittest.TestCase):
                     val_in_select_reg]
             )
 
-        # check qubit idx 
+        # check qubit idx
         self.assertEqual(
             1,
             qubit_idx_to_val_in_select_reg_to_tgt_val[14]["11001"][-1]
