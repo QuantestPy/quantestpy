@@ -1,6 +1,6 @@
 # quantestpy.assert_equal_ctrl_val
 
-## assert_equal_ctrl_val(circuit, ctrl_reg, val_in_ctrl_reg_to_is_gate_executed_expect, ancilla_reg=[], tgt_reg=[], draw_circuit=False)
+## assert_equal_ctrl_val(circuit, ctrl_reg, val_in_ctrl_reg_to_is_gate_executed_expect, ancilla_reg=[], tgt_reg=[], draw_circuit=False, check_ancilla_is_uncomputed=False)
 Raises a QuantestPyAssertionError if an user's expectation of whether a gate is executed or not does not agree with the actual result.
 
 Optionally, prints out in stdout the colored circuit in which the gate disagreed is highlighted by red color.
@@ -27,6 +27,9 @@ If not given, all the qubits but `ctrl_reg` and `ancilla_reg` are assigned to `t
 
 #### draw_circuit : bool, optional
 If True, prints out the circuit instead of raising a QuantestPyAssertionError when the assertion error happened.
+
+#### check_ancilla_is_uncomputed : bool, optional
+If True, raises a QuantestPyAssertionError if the qubits in `ancilla_reg` are not back to 0 by uncomputation.
 
 ### Examples
 

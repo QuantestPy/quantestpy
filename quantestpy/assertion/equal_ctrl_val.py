@@ -75,7 +75,8 @@ def assert_equal_ctrl_val(
         val_in_ctrl_reg_to_is_gate_executed_expect: dict,
         ancilla_reg: list = [],
         tgt_reg: list = [],
-        draw_circuit: bool = False):
+        draw_circuit: bool = False,
+        check_ancilla_is_uncomputed: bool = False):
 
     # check inputs
     PauliCircuit._assert_is_pauli_circuit(circuit)
@@ -123,6 +124,12 @@ def assert_equal_ctrl_val(
             raise QuantestPyError(
                 "length of is_gate_executed_expect is illegal."
             )
+
+        if check_ancilla_is_uncomputed:
+            if not np.all(pc._qubit_value[ancilla_reg] == 0):
+                err_msg = "ancilla reg is not back to 0 by uncomputation " \
+                    + f"when val in ctrl reg is {val_in_ctrl_reg}."
+                raise QuantestPyAssertionError(err_msg)
 
         del pc
 
@@ -192,7 +199,9 @@ def assert_equal_ctrl_val(
                     "executed while 0 not executed."
                 )
 
+        # Invoke the assert equal
         output_from_assert_equal = _assert_equal(val, is_gate_executed_expect)
+
         if output_from_assert_equal is not None:
             is_gate_executed_actual, err_gate_id_lst = output_from_assert_equal
             if draw_circuit:
