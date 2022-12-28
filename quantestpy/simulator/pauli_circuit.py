@@ -18,6 +18,22 @@ class PauliCircuit(TestCircuit):
         self._qubit_value = np.array([0 for _ in range(num_qubit)])
         self._qubit_phase = np.array([0. for _ in range(num_qubit)])
 
+    @property
+    def qubit_value(self,):
+        return self._qubit_value
+
+    @property
+    def qubit_phase(self,):
+        return self._qubit_phase
+
+    @qubit_value.setter
+    def qubit_value(self, value):
+        self._qubit_value = value
+
+    @qubit_phase.setter
+    def qubit_phase(self, value):
+        self._qubit_phase = value
+
     def add_gate(self, gate: dict) -> None:
         if not isinstance(gate, dict):
             raise QuantestPyTestCircuitError(

@@ -8,8 +8,8 @@ class CircuitDrawer:
 
     def __init__(self, pc: PauliCircuit):
         self._pc = copy.deepcopy(pc)
-        self._qubit_value = pc._qubit_value.copy()
-        self._qubit_phase = pc._qubit_phase.copy()
+        self._qubit_value = pc.qubit_value
+        self._qubit_phase = pc.qubit_phase
 
         self._color_code_line_1 = ""
         self._color_code_line_0 = ""
@@ -78,8 +78,8 @@ class CircuitDrawer:
     def reset_all(self,) -> None:
         self._line_id_to_text \
             = {line_id: "" for line_id in range(self._num_line)}
-        self._pc._qubit_value = self._qubit_value.copy()
-        self._pc._qubit_phase = self._qubit_phase.copy()
+        self._pc.qubit_value = self._qubit_value.copy()
+        self._pc.qubit_phase = self._qubit_phase.copy()
 
     def get_color_code_line(self, qubit_val: int) -> str:
         return self._color_code_line_1 if qubit_val == 1 else \
@@ -185,7 +185,7 @@ class CircuitDrawer:
         for line_id in range(self._num_line):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
-                qubit_val = self._pc._qubit_value[qubit_id]
+                qubit_val = self._pc.qubit_value[qubit_id]
                 self._line_id_to_text[line_id] += \
                     self.get_init_state(
                         qubit_val=qubit_val,
@@ -215,7 +215,7 @@ class CircuitDrawer:
         for line_id in range(self._num_line):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
-                qubit_val = self._pc._qubit_value[qubit_id]
+                qubit_val = self._pc.qubit_value[qubit_id]
                 cc = self.get_color_code_line(qubit_val)
                 self._line_id_to_text[line_id] += \
                     self.get_line(qubit_val=qubit_val, length=1, color_code=cc)
@@ -233,7 +233,7 @@ class CircuitDrawer:
         gate = self._pc._gates[gate_id]
         for tg_qubit_id in gate["target_qubit"]:
             line_id = self._qubit_id_to_line_id[tg_qubit_id]
-            qubit_val = self._pc._qubit_value[tg_qubit_id]
+            qubit_val = self._pc.qubit_value[tg_qubit_id]
             self._line_id_to_text[line_id] += \
                 self.get_tgt(
                     name=gate["name"],
@@ -253,7 +253,7 @@ class CircuitDrawer:
         for ctrl_qubit_id, ctrl_val \
                 in zip(gate["control_qubit"], gate["control_value"]):
             line_id = self._qubit_id_to_line_id[ctrl_qubit_id]
-            qubit_val = self._pc._qubit_value[ctrl_qubit_id]
+            qubit_val = self._pc.qubit_value[ctrl_qubit_id]
             cc_ctrl = self._color_code_ctrl if \
                 len(self._color_code_ctrl) > 0 \
                 else self.get_color_code_line(qubit_val)
@@ -288,7 +288,7 @@ class CircuitDrawer:
             if line_id not in self._occupied_line_id:
                 if line_id in self._line_id_to_qubit_id.keys():  # qubit
                     qubit_id = self._line_id_to_qubit_id[line_id]
-                    qubit_val = self._pc._qubit_value[qubit_id]
+                    qubit_val = self._pc.qubit_value[qubit_id]
                     cc_cross = self._color_code_cross
                     cc_line = self.get_color_code_line(qubit_val)
                     self._line_id_to_text[line_id] += self.get_cross_line(
@@ -314,7 +314,7 @@ class CircuitDrawer:
             if line_id not in self._occupied_line_id:
                 if line_id in self._line_id_to_qubit_id.keys():  # qubit
                     qubit_id = self._line_id_to_qubit_id[line_id]
-                    qubit_val = self._pc._qubit_value[qubit_id]
+                    qubit_val = self._pc.qubit_value[qubit_id]
                     cc_line = self.get_color_code_line(qubit_val)
                     self._line_id_to_text[line_id] += \
                         self.get_line(qubit_val=qubit_val, color_code=cc_line)
