@@ -73,6 +73,26 @@ class TestAssertColorCtrlVal(unittest.TestCase):
         for i in ["00", "01"]:
             self.assertFalse(i in stdout)
 
+    @patch('builtins.input', return_value='')
+    def test_qiskit_convention(self, input):
+        pc = PauliCircuit(3)
+        pc.add_gate({"name": "x", "control_qubit": [0], "target_qubit": [1],
+                     "control_value": [1]})
+
+        self.assertIsNone(
+            assert_color_ctrl_val(
+                circuit=pc,
+                ctrl_reg=[0, 1],
+                from_right_to_left_for_qubit_ids=True
+            )
+        )
+
+        stdout = self.capture.getvalue()
+        self.assertIsInstance(stdout, str)
+
+        for i in ["00", "01", "10", "11"]:
+            self.assertTrue(i in stdout)
+
 
 class TestAssertColorCtrlValInput(unittest.TestCase):
 

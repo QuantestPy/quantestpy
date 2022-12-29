@@ -1,6 +1,6 @@
 # quantestpy.assert_color_ctrl_val
 
-## assert_color_ctrl_val(circuit, ctrl_reg, ancilla_reg=[], val_in_ctrl_reg_list=[])
+## assert_color_ctrl_val(circuit, ctrl_reg, ancilla_reg=[], val_in_ctrl_reg_list=[], from_right_to_left_for_qubit_ids=False)
 
 Prints out in stdout the colored circuit for all or optionally chosen initial qubit values in `ctrl_reg`. Qubits in a state `|1>` are green-colored and the executed gates are red-colored.
 
@@ -17,6 +17,9 @@ A list of qubit ids. These qubits are internally set 0 in the initial states.
 
 #### val_in_ctrl_reg_list : list[str], optional
 A list of initial values for the qubit(s) in `ctrl_reg`. If not given, all possible values are covered.
+
+#### from_right_to_left_for_qubit_ids : bool, optional
+If True, the qubits of the circuit are ordered with the first qubit on the right-most side of the tensor product.
 
 ### Examples
 

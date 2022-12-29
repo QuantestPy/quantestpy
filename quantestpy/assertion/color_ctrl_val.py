@@ -72,7 +72,8 @@ def assert_color_ctrl_val(
         circuit: PauliCircuit,
         ctrl_reg: list,
         ancilla_reg: list = [],
-        val_in_ctrl_reg_list: list = []):
+        val_in_ctrl_reg_list: list = [],
+        from_right_to_left_for_qubit_ids: bool = False):
 
     # check inputs
     PauliCircuit._assert_is_pauli_circuit(circuit)
@@ -80,6 +81,10 @@ def assert_color_ctrl_val(
     circuit._assert_is_correct_reg(ancilla_reg)
     if not isinstance(val_in_ctrl_reg_list, list):
         raise QuantestPyError("val_in_ctrl_reg_list must be a list.")
+    if not isinstance(from_right_to_left_for_qubit_ids, bool):
+        raise QuantestPyError(
+            "from_right_to_left_for_qubit_ids must be bool type."
+        )
 
     len_ctrl_reg = len(ctrl_reg)
     for val in val_in_ctrl_reg_list:
@@ -96,7 +101,11 @@ def assert_color_ctrl_val(
         # define the circuit
         pc = copy.deepcopy(circuit)
         pc.set_qubit_value(ancilla_reg, [0] * len(ancilla_reg))
-        pc.set_qubit_value(ctrl_reg, [int(i) for i in val_in_ctrl_reg])
+        if from_right_to_left_for_qubit_ids:
+            pc.set_qubit_value(ctrl_reg,
+                               [int(i) for i in reversed(val_in_ctrl_reg)])
+        else:
+            pc.set_qubit_value(ctrl_reg, [int(i) for i in val_in_ctrl_reg])
 
         # create an instance of CircuitDrawer
         gc = CircuitDrawerGateColoring(pc=pc)
