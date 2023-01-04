@@ -1,10 +1,11 @@
-import copy
 import unittest
 
 import numpy as np
 
-from quantestpy import PauliCircuit
+from quantestpy.converter.all import cvt_all_circuit_to_quantestpy_circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
+from quantestpy.simulator.pauli_circuit import (
+    PauliCircuit, cvt_quantestpy_circuit_to_pauli_circuit)
 
 ut_test_case = unittest.TestCase()
 
@@ -37,15 +38,16 @@ def _get_qubit_idx_to_qubit_val_for_given_val_in_ctrl_reg(
 
 
 def assert_get_ctrl_val(
-        circuit: PauliCircuit,
+        circuit,
         ctrl_reg: list,
         ancilla_reg: list = [],
         check_ancilla_is_uncomputed: bool = False,
         print_out_result: bool = True) -> dict:
 
+    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    pc = cvt_quantestpy_circuit_to_pauli_circuit(quantestpy_circuit)
+
     # check inputs
-    PauliCircuit._assert_is_pauli_circuit(circuit)
-    pc = copy.deepcopy(circuit)
     pc._assert_is_correct_reg(ctrl_reg)
     pc._assert_is_correct_reg(ancilla_reg)
     if not isinstance(check_ancilla_is_uncomputed, bool):

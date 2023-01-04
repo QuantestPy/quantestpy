@@ -1,77 +1,64 @@
 import numpy as np
 
-from quantestpy.exceptions import QuantestPyError, QuantestPyTestCircuitError
-from quantestpy.test_circuit import TestCircuit
+from quantestpy.simulator.exceptions import PauliCircuitError
+from quantestpy.simulator.quantestpy_circuit import QuantestPyCircuit
 
 _IMPLEMENTED_GATES = ["x", "y", "z", "swap"]
 
 
-class PauliCircuit(TestCircuit):
+class PauliCircuit(QuantestPyCircuit):
 
     def __init__(self, num_qubit: int):
-        if not isinstance(num_qubit, int) or num_qubit < 1:
-            raise QuantestPyTestCircuitError(
-                "num_qubit must be an integer greater than 0."
-            )
-
         super().__init__(num_qubit=num_qubit)
         self._qubit_value = np.array([0 for _ in range(num_qubit)])
         self._qubit_phase = np.array([0. for _ in range(num_qubit)])
 
-    def add_gate(self, gate: dict) -> None:
-        if not isinstance(gate, dict):
-            raise QuantestPyTestCircuitError(
-                "gate must be a dictionary which contains 'name', "
-                "'target_qubit', 'control_qubit' and 'control_value' as keys."
-            )
-
-        if "name" not in gate.keys():
-            raise QuantestPyTestCircuitError(
-                "gate must contain 'name' as a key."
-            )
+    def _diagnostic_gate(self, gate: dict) -> None:
+        """Override"""
+        super()._diagnostic_gate(gate)
 
         if gate["name"] not in _IMPLEMENTED_GATES:
-            raise QuantestPyTestCircuitError(
+            raise PauliCircuitError(
                 f'{gate["name"]} gate is not implemented.\n'
                 f'Implemented gates: {_IMPLEMENTED_GATES}'
             )
 
-        gate["parameter"] = []  # to avoid raise in TestCircuit.add_gate()
-        super().add_gate(gate=gate)
+        if "parameter" not in gate.keys():
+            gate["parameter"] = []
 
     @staticmethod
     def _assert_is_pauli_circuit(circuit):
         if not isinstance(circuit, PauliCircuit):
-            raise QuantestPyTestCircuitError(
+            raise PauliCircuitError(
                 "circuit must be an instance of PauliCircuit class."
             )
 
     def _assert_is_correct_reg(self, register):
         if not isinstance(register, list):
-            raise QuantestPyTestCircuitError("register must be a list.")
+            raise PauliCircuitError("register must be a list.")
 
         for idx in register:
             if not isinstance(idx, int):
-                raise QuantestPyTestCircuitError(
+                raise PauliCircuitError(
                     "Indices in register must be integer type."
                 )
             if idx >= self._num_qubit or idx < 0:
-                raise QuantestPyTestCircuitError(
+                raise PauliCircuitError(
                     f"Qubit index {idx} in register is out of range."
                 )
 
     @staticmethod
     def _assert_is_correct_qubit_val(qubit_val):
         if not isinstance(qubit_val, list):
-            raise QuantestPyTestCircuitError("qubit_val must be a list.")
+            raise PauliCircuitError("qubit_val must be a list.")
 
         for val in qubit_val:
             if not isinstance(val, int):
-                raise QuantestPyTestCircuitError(
+                raise PauliCircuitError(
                     "Values in qubit_val must be integer type."
                 )
             if val not in [0, 1]:
-                raise QuantestPyTestCircuitError(
+                raise PauliCircuitError(
                     "Values in qubit_val must be either 0 or 1."
                 )
 
@@ -80,7 +67,7 @@ class PauliCircuit(TestCircuit):
         self._assert_is_correct_qubit_val(qubit_val)
 
         if len(register) != len(qubit_val):
-            raise QuantestPyTestCircuitError(
+            raise PauliCircuitError(
                 "Length of register and that of qubit_val "
                 "must be the same."
             )
@@ -131,8 +118,26 @@ class PauliCircuit(TestCircuit):
             elif gate["name"] == "swap":
                 self._execute_swap_gate(gate["target_qubit"])
             else:
-                raise QuantestPyError("Unexpected error. Please report.")
+                raise PauliCircuitError(
+                    "Unexpected error. Please report."
+                )
 
     def _execute_all_gates(self,) -> None:
         for i in range(len(self._gates)):
             self._execute_i_th_gate(i)
+
+
+def cvt_quantestpy_circuit_to_pauli_circuit(
+        qc: QuantestPyCircuit) -> PauliCircuit:
+    """Converts an instance of QuantestPyCircuit to that of PauliCircuit.
+    """
+    if not isinstance(qc, QuantestPyCircuit):
+        raise PauliCircuitError(
+            "Input circuit must be an instance of QuantestPyCircuit."
+        )
+
+    pc = PauliCircuit(num_qubit=qc.num_qubit)
+    for gate in qc.gates:
+        pc.add_gate(gate)
+
+    return pc

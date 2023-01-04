@@ -1,7 +1,7 @@
 import unittest
 
 from quantestpy import PauliCircuit
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import PauliCircuitError
 
 
 class TestAssertIsPauliCircuit(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestAssertIsPauliCircuit(unittest.TestCase):
         expected_error_msg = \
             "circuit must be an instance of PauliCircuit class."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             PauliCircuit._assert_is_pauli_circuit(circuit=circ)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)

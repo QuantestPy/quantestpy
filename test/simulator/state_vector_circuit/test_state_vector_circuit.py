@@ -2,15 +2,16 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit
+from quantestpy import StateVectorCircuit
 
 
-class TestTestCircuit(unittest.TestCase):
+class TestStateVectorCircuit(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit
+    $ python -m \
+        unittest test.simulator.state_vector_circuit.test_state_vector_circuit
     ......
     ----------------------------------------------------------------------
     Ran 6 tests in 0.006s
@@ -20,7 +21,7 @@ class TestTestCircuit(unittest.TestCase):
     """
 
     def test__get_state_vector_1(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         actual_vec = circ._get_state_vector()
 
         expected_vec = np.array([1, 0, 0, 0])
@@ -29,7 +30,7 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_vec, expected_vec))
 
     def test__get_state_vector_2(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate(
@@ -43,7 +44,7 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_vec, expected_vec))
 
     def test__get_state_vector_3(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate({"name": "x", "target_qubit": [1], "control_qubit": [],
@@ -59,7 +60,7 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_vec, expected_vec))
 
     def test__get_state_vector_4(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
                        "control_value": [], "parameter": []})
         circ.add_gate(
@@ -75,7 +76,7 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_vec, expected_vec))
 
     def test_set_initial_state_vector_1(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         init_vec = np.array([1, 1j, -1, -1]) / 2.
         circ.set_initial_state_vector(init_vec)
         actual_vec = circ._get_state_vector()
@@ -86,7 +87,7 @@ class TestTestCircuit(unittest.TestCase):
             np.testing.assert_allclose(actual_vec, expected_vec))
 
     def test_set_initial_state_vector_2(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         init_vec = np.array([1, 0, 1, 0]) / np.sqrt(2.)
         circ.set_initial_state_vector(init_vec)
         circ.add_gate(

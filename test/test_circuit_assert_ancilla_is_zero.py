@@ -1,7 +1,7 @@
 import traceback
 import unittest
 
-from quantestpy import TestCircuit, circuit
+from quantestpy import QuantestPyCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -19,7 +19,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
     """
 
     def test_regular_1(self,):
-        test_circuit = TestCircuit(4)
+        test_circuit = QuantestPyCircuit(4)
         # V
         test_circuit.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],
@@ -54,7 +54,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         )
 
     def test_irregular_1(self,):
-        test_circuit = TestCircuit(4)
+        test_circuit = QuantestPyCircuit(4)
         # V
         test_circuit.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],

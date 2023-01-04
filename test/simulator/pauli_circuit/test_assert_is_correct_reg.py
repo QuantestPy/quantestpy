@@ -2,7 +2,7 @@ import random
 import unittest
 
 from quantestpy import PauliCircuit
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import PauliCircuitError
 
 
 class TestAssertIsCorrectReg(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestAssertIsCorrectReg(unittest.TestCase):
         register = {0, 1, 2}
         expected_error_msg = "register must be a list."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_reg(register=register)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
@@ -42,7 +42,7 @@ class TestAssertIsCorrectReg(unittest.TestCase):
         register = [10.]
         expected_error_msg = "Indices in register must be integer type."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_reg(register=register)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
@@ -52,7 +52,7 @@ class TestAssertIsCorrectReg(unittest.TestCase):
         register = [99, 100]
         expected_error_msg = "Qubit index 100 in register is out of range."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_reg(register=register)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)

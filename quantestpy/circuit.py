@@ -6,41 +6,17 @@ from typing import Union
 
 import numpy as np
 
-from quantestpy import TestCircuit, operator
-from quantestpy.converter import (_cvt_openqasm_to_test_circuit,
-                                  _cvt_qiskit_to_test_circuit,
-                                  _is_instance_of_qiskit_quantumcircuit)
+from quantestpy import QuantestPyCircuit, operator
+from quantestpy.converter.all import cvt_all_circuit_to_quantestpy_circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
+from quantestpy.simulator.state_vector_circuit import \
+    cvt_quantestpy_circuit_to_state_vector_circuit
 
 ut_test_case = unittest.TestCase()
 
 
-def _get_test_circuit_from_input_circuit(circuit: Union[TestCircuit, str]) \
-        -> TestCircuit:
-
-    # test_circuit
-    if isinstance(circuit, TestCircuit):
-        test_circuit = circuit
-
-    # qasm
-    elif isinstance(circuit, str):
-        test_circuit = _cvt_openqasm_to_test_circuit(circuit)
-
-    # qiskit.QuantumCircuit()
-    elif _is_instance_of_qiskit_quantumcircuit(circuit):
-        test_circuit = _cvt_qiskit_to_test_circuit(circuit)
-
-    else:
-        raise QuantestPyError(
-            "Input circuit must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and TestCircuit."
-        )
-
-    return test_circuit
-
-
 def assert_equal_to_operator(
-        circuit: Union[TestCircuit, str],
+        circuit: Union[QuantestPyCircuit, str],
         operator_: Union[np.ndarray, np.matrix],
         from_right_to_left_for_qubit_ids: bool = False,
         rtol: float = 0.,
@@ -49,12 +25,15 @@ def assert_equal_to_operator(
         matrix_norm_type: Union[str, None] = None,
         msg=None) -> None:
 
-    test_circuit = _get_test_circuit_from_input_circuit(circuit)
+    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    state_vector_circuit = cvt_quantestpy_circuit_to_state_vector_circuit(
+        quantestpy_circuit
+    )
 
-    test_circuit._from_right_to_left_for_qubit_ids = \
+    state_vector_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
 
-    operator_from_test_circuit = test_circuit._get_whole_gates()
+    operator_from_test_circuit = state_vector_circuit._get_whole_gates()
 
     operator.assert_equal(
         operator_from_test_circuit,
@@ -67,7 +46,7 @@ def assert_equal_to_operator(
     )
 
 
-def assert_is_zero(circuit: Union[TestCircuit, str],
+def assert_is_zero(circuit: Union[QuantestPyCircuit, str],
                    qubits: list = None,
                    atol: float = 1e-8,
                    msg=None) -> None:
@@ -77,10 +56,13 @@ def assert_is_zero(circuit: Union[TestCircuit, str],
             "qubits must be a list of integer(s) as qubit's ID(s)."
         )
 
-    test_circuit = _get_test_circuit_from_input_circuit(circuit)
+    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    state_vector_circuit = cvt_quantestpy_circuit_to_state_vector_circuit(
+        quantestpy_circuit
+    )
 
-    state_vec = test_circuit._get_state_vector()
-    num_qubit = test_circuit._num_qubit
+    state_vec = state_vector_circuit._get_state_vector()
+    num_qubit = state_vector_circuit.num_qubit
     if qubits is None:
         qubits = [i for i in range(num_qubit)]
 
@@ -117,7 +99,7 @@ def assert_is_zero(circuit: Union[TestCircuit, str],
         raise QuantestPyAssertionError(msg)
 
 
-def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
+def assert_ancilla_is_zero(circuit: Union[QuantestPyCircuit, str],
                            ancilla_qubits: list,
                            atol: float = 1e-8,
                            msg=None) -> None:
@@ -127,9 +109,9 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
             "ancilla_qubits must be a list of integer(s) as qubit's ID(s)."
         )
 
-    test_circuit = _get_test_circuit_from_input_circuit(circuit)
+    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
 
-    num_qubit = test_circuit._num_qubit
+    num_qubit = quantestpy_circuit.num_qubit
 
     # system qubits <=> ancilla qubits
     system_qubits = [qubit for qubit in range(num_qubit)
@@ -153,11 +135,11 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
 
         # add x gate(s) in test_circuit
         for system_qubit in comb_of_sys_qubits:
-            _add_x_gate_in_front(test_circuit._gates, system_qubit)
+            _add_x_gate_in_front(quantestpy_circuit._gates, system_qubit)
 
         # assertion using assert_is_zero
         try:
-            assert_is_zero(circuit=test_circuit,
+            assert_is_zero(circuit=quantestpy_circuit,
                            qubits=ancilla_qubits,
                            atol=atol)
 
@@ -167,7 +149,7 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
 
         # remove x gate(s) from test_circuit, i.e. reset test_circuit.
         for _ in comb_of_sys_qubits:
-            del test_circuit._gates[0]
+            del quantestpy_circuit._gates[0]
 
     if len(error_msgs_from_assert_is_zero) == 0:
         return None  # = assertion non-error
@@ -188,8 +170,8 @@ def assert_ancilla_is_zero(circuit: Union[TestCircuit, str],
 
 
 def assert_equal(
-        circuit_a: Union[TestCircuit, str],
-        circuit_b: Union[TestCircuit, str],
+        circuit_a: Union[QuantestPyCircuit, str],
+        circuit_b: Union[QuantestPyCircuit, str],
         rtol: float = 0.,
         atol: float = 1e-8,
         up_to_global_phase: bool = False,
@@ -216,11 +198,18 @@ def assert_equal(
             "Type of rtol must be float."
         )
 
-    test_circuit_a = _get_test_circuit_from_input_circuit(circuit_a)
-    test_circuit_b = _get_test_circuit_from_input_circuit(circuit_b)
+    quantestpy_circuit_a = cvt_all_circuit_to_quantestpy_circuit(circuit_a)
+    quantestpy_circuit_b = cvt_all_circuit_to_quantestpy_circuit(circuit_b)
 
-    whole_gates_a = test_circuit_a._get_whole_gates()
-    whole_gates_b = test_circuit_b._get_whole_gates()
+    state_vector_circuit_a = cvt_quantestpy_circuit_to_state_vector_circuit(
+        quantestpy_circuit_a
+    )
+    state_vector_circuit_b = cvt_quantestpy_circuit_to_state_vector_circuit(
+        quantestpy_circuit_b
+    )
+
+    whole_gates_a = state_vector_circuit_a._get_whole_gates()
+    whole_gates_b = state_vector_circuit_b._get_whole_gates()
 
     # call operator.assert_equal
     operator.assert_equal(

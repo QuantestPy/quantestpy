@@ -1,7 +1,7 @@
 import unittest
 
 from quantestpy import PauliCircuit
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import PauliCircuitError
 from quantestpy.simulator.pauli_circuit import _IMPLEMENTED_GATES
 
 
@@ -56,7 +56,7 @@ class TestAddGate(unittest.TestCase):
             'rz gate is not implemented.\n' \
             + f'Implemented gates: {_IMPLEMENTED_GATES}'
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ.add_gate(
                 {"name": "rz",
                  "target_qubit": [20],

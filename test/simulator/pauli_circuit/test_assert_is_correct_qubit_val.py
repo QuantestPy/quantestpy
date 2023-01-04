@@ -2,7 +2,7 @@ import random
 import unittest
 
 from quantestpy import PauliCircuit
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import PauliCircuitError
 
 
 class TestAssertIsCorrectQubitVal(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestAssertIsCorrectQubitVal(unittest.TestCase):
         qubit_value = 0
         expected_error_msg = "qubit_val must be a list."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
@@ -42,7 +42,7 @@ class TestAssertIsCorrectQubitVal(unittest.TestCase):
         qubit_value = [0., 1]
         expected_error_msg = "Values in qubit_val must be integer type."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)
@@ -52,7 +52,7 @@ class TestAssertIsCorrectQubitVal(unittest.TestCase):
         qubit_value = [0, 1, 2]
         expected_error_msg = "Values in qubit_val must be either 0 or 1."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_qubit_val(qubit_val=qubit_value)
 
         self.assertEqual(cm.exception.args[0], expected_error_msg)

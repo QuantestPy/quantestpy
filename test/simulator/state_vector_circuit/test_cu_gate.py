@@ -2,16 +2,16 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy.test_circuit import _u
+from quantestpy import StateVectorCircuit
+from quantestpy.simulator.state_vector_circuit import _u
 
 
-class TestTestCircuitCUGate(unittest.TestCase):
+class TestStateVectorCircuitCUGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit_cu_gate
+    $ python -m unittest test.simulator.state_vector_circuit.test_cu_gate
     ........
     ----------------------------------------------------------------------
     Ran 7 tests in 0.007s
@@ -21,7 +21,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
     """
 
     def test_cu_regular_qubit_order(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
 
         theta = np.pi/4
         phi = np.pi/8
@@ -43,7 +43,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cu_qiskit_qubit_order(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ._from_right_to_left_for_qubit_ids = True
 
         theta = np.pi/4
@@ -66,7 +66,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cu_flip_control_target(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
 
         theta = np.pi/4
         phi = np.pi/8
@@ -88,7 +88,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cu_three_qubits_qiskit_qubit_order(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
 
         theta = np.pi/4
@@ -139,7 +139,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cu_control_value_is_zero(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
 
         theta = np.pi/4
         phi = np.pi/8
@@ -161,7 +161,7 @@ class TestTestCircuitCUGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cu_multiple_controls(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
 
         theta = np.pi/4
         phi = np.pi/8
@@ -193,12 +193,12 @@ class TestTestCircuitCUGate(unittest.TestCase):
         lambda_ = np.pi/16
         gamma = 0
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
             _u([theta, phi, lambda_, gamma]),
             control_qubit=[0], target_qubit=[1, 2], control_value=[1])
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
             _u([theta, phi, lambda_, gamma]),
             control_qubit=[0], target_qubit=[1], control_value=[1])

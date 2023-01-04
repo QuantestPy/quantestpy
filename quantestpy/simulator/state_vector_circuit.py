@@ -2,7 +2,8 @@ import itertools
 
 import numpy as np
 
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import StateVectorCircuitError
+from quantestpy.simulator.quantestpy_circuit import QuantestPyCircuit
 
 # inside of test unit
 # single qubit gates
@@ -62,7 +63,7 @@ _IMPLEMENTED_GATES = _IMPLEMENTED_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_GATES_WITH_PARAM
 
 
-class TestCircuit:
+class StateVectorCircuit(QuantestPyCircuit):
     """
     This circuit class will be always used as an input to assert methods
     which deal with circuits. Mathematical operations such as applying gates
@@ -70,153 +71,43 @@ class TestCircuit:
     """
 
     def __init__(self, num_qubit: int):
-        self._gates = []
-        self._qubit_indices = [i for i in range(num_qubit)]
-        self._num_qubit = num_qubit
+        super().__init__(num_qubit=num_qubit)
         self._from_right_to_left_for_qubit_ids = False
         self._binary_to_vector = None
         self._initial_state_vector = None
 
-    def add_gate(self, gate: dict) -> None:
-        """
-        Example
-        gate = {"name": "x", "target_qubit": [1], "control_qubit": [],
-                "control_value": [], "parameter": []}
-        gate = {"name": "rx", "target_qubit": [1], "control_qubit": [0],
-                "control_value": [1], "parameter": [np.pi/8]}
-        """
-        if not isinstance(gate, dict):
-            raise QuantestPyTestCircuitError(
-                "gate's type must be dictionary which contains 'name', "
-                "'target_qubit' and optionally 'control_qubit' as keys."
-            )
-
-        if "name" not in gate.keys():
-            raise QuantestPyTestCircuitError(
-                "gate must contain 'name' as a key."
-            )
-
-        if "target_qubit" not in gate.keys():
-            raise QuantestPyTestCircuitError(
-                "gate must contain 'target_qubit' as a key."
-            )
-
-        if "control_qubit" not in gate.keys():
-            raise QuantestPyTestCircuitError(
-                "gate must contain 'control_qubit' as a key."
-            )
-
-        if "control_value" not in gate.keys():
-            raise QuantestPyTestCircuitError(
-                "gate must contain 'control_value' as a key."
-            )
+    def _diagnostic_gate(self, gate: dict) -> None:
+        """Override"""
+        super()._diagnostic_gate(gate)
 
         if "parameter" not in gate.keys():
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 "gate must contain 'parameter' as a key."
             )
 
         if gate["name"] not in _IMPLEMENTED_GATES:
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 f'{gate["name"]} is not implemented.'
                 f'Implemented gates: {_IMPLEMENTED_GATES}'
             )
 
-        if not isinstance(gate["target_qubit"], list):
-            raise QuantestPyTestCircuitError(
-                'gate["target_qubit"] must be a list'
-            )
-
-        if not isinstance(gate["control_qubit"], list):
-            raise QuantestPyTestCircuitError(
-                'gate["control_qubit"] must be a list'
-            )
-
-        if not isinstance(gate["control_value"], list):
-            raise QuantestPyTestCircuitError(
-                'gate["control_value"] must be a list'
-            )
-
-        if len(gate["control_qubit"]) != len(gate["control_value"]):
-            raise QuantestPyTestCircuitError(
-                "control_qubit and control_value must have the same lenght."
-            )
-
-        if len(gate["target_qubit"]) < 1:
-            raise QuantestPyTestCircuitError(
-                "'target_qubit' must not an empty list."
-            )
-
-        for qubit in gate["target_qubit"]:
-            if not isinstance(qubit, int):
-                raise QuantestPyTestCircuitError(
-                    "Index in target_qubit must be integer type."
-                )
-
-            if qubit not in self._qubit_indices:
-                raise QuantestPyTestCircuitError(
-                    f"Index {qubit} in target_qubit out of range for "
-                    f"test_circuit size {self._num_qubit}."
-                )
-
-        for qubit in gate["control_qubit"]:
-            if not isinstance(qubit, int):
-                raise QuantestPyTestCircuitError(
-                    "Index in control_qubit must be integer type."
-                )
-
-            if qubit not in self._qubit_indices:
-                raise QuantestPyTestCircuitError(
-                    f"Index {qubit} in control_qubit out of range for "
-                    f"test_circuit size {self._num_qubit}."
-                )
-
-        for value in gate["control_value"]:
-            if not isinstance(value, int):
-                raise QuantestPyTestCircuitError(
-                    "Value in control_value must be integer type."
-                )
-
-            if value not in [0, 1]:
-                raise QuantestPyTestCircuitError(
-                    f"Value {value} in control_value is not acceptable. "
-                    "It must be either 0 or 1."
-                )
-
-        if len(gate["target_qubit"]) != len(set(gate["target_qubit"])):
-            raise QuantestPyTestCircuitError(
-                "Duplicate in target_qubit is not supported."
-            )
-
-        if len(gate["control_qubit"]) != len(set(gate["control_qubit"])):
-            raise QuantestPyTestCircuitError(
-                "Duplicate in control_qubit is not supported."
-            )
-
-        if len(list(set(gate["target_qubit"]) & set(gate["control_qubit"]))) \
-                > 0:
-            raise QuantestPyTestCircuitError(
-                f'target_qubit {gate["target_qubit"]} and '
-                f'control_qubit {gate["control_qubit"]} have intersection.'
-            )
-
         if gate["name"] in _IMPLEMENTED_GATES_WITHOUT_PARAM and \
                 len(gate["parameter"]) != 0:
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 f'{gate["name"]} gate must have an empty list for '
                 "'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_ONE_PARAM and \
                 len(gate["parameter"]) != 1:
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 f'{gate["name"]} gate must have a list containing '
                 "exactly 1 element for 'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_FOUR_PARAM and \
                 len(gate["parameter"]) != 4:
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 f'{gate["name"]} gate must have a list containing '
                 "exactly 4 elements for 'parameter'."
             )
@@ -224,19 +115,10 @@ class TestCircuit:
         if gate["name"] in _IMPLEMENTED_GATES_WITH_PARAM:
             for param in gate["parameter"]:
                 if not isinstance(param, float) and not isinstance(param, int):
-                    raise QuantestPyTestCircuitError(
+                    raise StateVectorCircuitError(
                         f'Parameter(s) in {gate["name"]} gate must be '
                         'float or integer type.'
                     )
-
-        if gate["name"] in ["swap", "iswap"] and \
-                len(gate["target_qubit"]) != 2:
-            raise QuantestPyTestCircuitError(
-                f'{gate["name"]} gate must have a list '
-                "containing exactly 2 elements for 'target_qubit'."
-            )
-
-        self._gates.append(gate)
 
     def _create_all_qubit_gate_from_original_qubit_gate(
             self,
@@ -288,12 +170,12 @@ class TestCircuit:
             -> None:
 
         if not isinstance(initial_state_vector, np.ndarray):
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 'type of initial state vector must be numpy.ndarray.'
             )
 
         if initial_state_vector.shape != (2**self._num_qubit,):
-            raise QuantestPyTestCircuitError(
+            raise StateVectorCircuitError(
                 "shape of initial state vector is invalid. It must be "
                 "(2**num_qubit,)."
             )
@@ -396,7 +278,9 @@ class TestCircuit:
                     original_qubit_gate = eval("_" + gate["name"]
                                                + '(gate["parameter"])')
                 else:
-                    raise
+                    raise StateVectorCircuitError(
+                        "Unexpected error. Please report."
+                    )
                 all_qubit_gate = \
                     self._create_all_qubit_gate_from_original_qubit_gate(
                         original_qubit_gate,
@@ -409,16 +293,32 @@ class TestCircuit:
         return whole_gates
 
 
+def cvt_quantestpy_circuit_to_state_vector_circuit(
+        qc: QuantestPyCircuit) -> StateVectorCircuit:
+    """Converts an instance of QuantestPyCircuit to that of StateVectorCircuit.
+    """
+    if not isinstance(qc, QuantestPyCircuit):
+        raise StateVectorCircuitError(
+            "Input circuit must be an instance of QuantestPyCircuit."
+        )
+
+    svc = StateVectorCircuit(num_qubit=qc.num_qubit)
+    for gate in qc.gates:
+        svc.add_gate(gate)
+
+    return svc
+
+
 if __name__ == "__main__":
     """Example showing how to use TestCircuit class."""
 
-    test_circ = TestCircuit(3)
-    test_circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
-                        "control_value": [], "parameter": []})
-    test_circ.add_gate(
+    circ = StateVectorCircuit(3)
+    circ.add_gate({"name": "x", "target_qubit": [0], "control_qubit": [],
+                   "control_value": [], "parameter": []})
+    circ.add_gate(
         {"name": "x", "target_qubit": [2], "control_qubit": [0],
          "control_value": [1], "parameter": []})
-    test_circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
-                        "control_value": [], "parameter": []})
+    circ.add_gate({"name": "h", "target_qubit": [0], "control_qubit": [],
+                   "control_value": [], "parameter": []})
 
-    state_vector = test_circ._get_state_vector()
+    state_vector = circ._get_state_vector()

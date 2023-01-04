@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit, circuit
+from quantestpy import QuantestPyCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -22,7 +22,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
 
     def setUp(self) -> None:
         """Prepare the Bell state"""
-        self.test_circ = TestCircuit(2)
+        self.test_circ = QuantestPyCircuit(2)
         self.test_circ.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []})

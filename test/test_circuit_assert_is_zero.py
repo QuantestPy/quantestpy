@@ -1,6 +1,6 @@
 import unittest
 
-from quantestpy import TestCircuit, circuit
+from quantestpy import QuantestPyCircuit, circuit
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
@@ -18,7 +18,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
     """
 
     def test_regular_1(self,):
-        test_circuit = TestCircuit(3)
+        test_circuit = QuantestPyCircuit(3)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []}
@@ -36,7 +36,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         )
 
     def test_regular_2(self,):
-        test_circuit = TestCircuit(4)
+        test_circuit = QuantestPyCircuit(4)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [3], "control_qubit": [],
              "control_value": [], "parameter": []}
@@ -54,7 +54,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         )
 
     def test_irregular_1(self,):
-        test_circuit = TestCircuit(2)
+        test_circuit = QuantestPyCircuit(2)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []}
@@ -72,7 +72,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
     def test_large_a_tol_raise_no_error(self,):
         """Assertion error does not raise for Bell state when a_tol is large
         """
-        test_circuit = TestCircuit(2)
+        test_circuit = QuantestPyCircuit(2)
         test_circuit.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []}

@@ -2,15 +2,16 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit
+from quantestpy import StateVectorCircuit
 
 
-class TestTestCircuitGetWholeGates(unittest.TestCase):
+class TestStateVectorCircuitGetWholeGates(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit_get_whole_gates
+    $ python -m \
+        unittest test.simulator.state_vector_circuit.test_get_whole_gates
     ............................
     ----------------------------------------------------------------------
     Ran 28 tests in 0.012s
@@ -20,7 +21,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
     """
 
     def test_get_whole_gates_id(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "id", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -36,7 +37,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_x(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "x", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -52,7 +53,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_y(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "y", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -68,7 +69,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_z(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "z", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -84,7 +85,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_h(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "h", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -100,7 +101,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_s(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "s", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -115,7 +116,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_sdg(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "sdg", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -130,7 +131,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_t(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "t", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -145,7 +146,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_tdg(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "tdg", "target_qubit": [1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -160,7 +161,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_rx(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/4
         circ.add_gate(
             {"name": "rx", "target_qubit": [1], "control_qubit": [],
@@ -177,7 +178,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_ry(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/4
         circ.add_gate(
             {"name": "ry", "target_qubit": [1], "control_qubit": [],
@@ -193,7 +194,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_rz(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/4
         circ.add_gate(
             {"name": "rz", "target_qubit": [1], "control_qubit": [],
@@ -209,7 +210,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_p(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/4
         circ.add_gate(
             {"name": "p", "target_qubit": [1], "control_qubit": [],
@@ -225,7 +226,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_u(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/16
         phi = np.pi/8
         lambda_ = np.pi/4
@@ -249,7 +250,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cx(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "x", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []})
@@ -265,7 +266,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cy(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "y", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []})
@@ -281,7 +282,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cz(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "z", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []})
@@ -297,7 +298,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_ch(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "h", "target_qubit": [1], "control_qubit": [0],
              "control_value": [1], "parameter": []})
@@ -313,7 +314,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_crx(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/4
         circ.add_gate(
             {"name": "rx", "target_qubit": [1], "control_qubit": [0],
@@ -330,7 +331,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_cry(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/4
         circ.add_gate(
             {"name": "ry", "target_qubit": [1], "control_qubit": [0],
@@ -346,7 +347,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-07))
 
     def test_get_whole_gates_crz(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/4
         circ.add_gate(
             {"name": "rz", "target_qubit": [1], "control_qubit": [0],
@@ -362,7 +363,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cp(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/4
         circ.add_gate(
             {"name": "p", "target_qubit": [1], "control_qubit": [0],
@@ -378,7 +379,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cu(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         theta = np.pi/16
         phi = np.pi/8
         lambda_ = np.pi/4
@@ -407,7 +408,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
         ]
 
         for target_qubit, parameter in test_patterns:
-            circ = TestCircuit(3)
+            circ = StateVectorCircuit(3)
             circ.add_gate(
                 {"name": "scalar",
                  "target_qubit": [target_qubit],
@@ -439,7 +440,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
 
         for num_qubit, target_qubit, parameter in test_patterns:
 
-            circ = TestCircuit(num_qubit)
+            circ = StateVectorCircuit(num_qubit)
             circ.add_gate(
                 {"name": "scalar",
                     "target_qubit": target_qubit,
@@ -463,7 +464,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                 np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_swap(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "swap", "target_qubit": [0, 1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -477,7 +478,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_cswap(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ.add_gate(
             {"name": "swap", "target_qubit": [1, 2], "control_qubit": [0],
              "control_value": [1], "parameter": []})
@@ -494,7 +495,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_iswap(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ.add_gate(
             {"name": "iswap", "target_qubit": [0, 1], "control_qubit": [],
              "control_value": [], "parameter": []})
@@ -508,7 +509,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
                                        atol=1e-16))
 
     def test_get_whole_gates_ccswap(self,):
-        circ = TestCircuit(4)
+        circ = StateVectorCircuit(4)
         circ.add_gate(
             {"name": "swap", "target_qubit": [2, 3], "control_qubit": [0, 1],
              "control_value": [1, 1], "parameter": []})
@@ -535,7 +536,7 @@ class TestTestCircuitGetWholeGates(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_get_whole_gates_ciswap(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ.add_gate(
             {"name": "iswap", "target_qubit": [1, 2], "control_qubit": [0],
              "control_value": [1], "parameter": []})
