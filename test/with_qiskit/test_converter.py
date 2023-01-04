@@ -16,8 +16,7 @@ class TestConverter(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest \
-        test_with_external_module.with_qiskit.converter.qasm_and_qiskit.test_converter
+    $ python -m unittest test.with_qiskit.test_converter
     ......
     ----------------------------------------------------------------------
     Ran 6 tests in 0.060s
