@@ -13,6 +13,22 @@ class PauliCircuit(QuantestPyCircuit):
         self._qubit_value = np.array([0 for _ in range(num_qubit)])
         self._qubit_phase = np.array([0. for _ in range(num_qubit)])
 
+    @property
+    def qubit_value(self,):
+        return self._qubit_value
+
+    @property
+    def qubit_phase(self,):
+        return self._qubit_phase
+
+    @qubit_value.setter
+    def qubit_value(self, value):
+        self._qubit_value = value
+
+    @qubit_phase.setter
+    def qubit_phase(self, value):
+        self._qubit_phase = value
+
     def _diagnostic_gate(self, gate: dict) -> None:
         """Override"""
         super()._diagnostic_gate(gate)
@@ -125,6 +141,11 @@ class PauliCircuit(QuantestPyCircuit):
     def _execute_all_gates(self,) -> None:
         for i in range(len(self._gates)):
             self._execute_i_th_gate(i)
+
+    def draw(self,):
+        from quantestpy.simulator.circuit_drawer import draw_circuit
+
+        return draw_circuit(self)
 
 
 def cvt_quantestpy_circuit_to_pauli_circuit(

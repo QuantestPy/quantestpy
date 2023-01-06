@@ -19,6 +19,9 @@ Adds a gate in the circuit.
 #### [set_qubit_value](./pauli_circuit_set_qubit_value.md)
 Sets the state(s) of qubit(s) either `|0>` or `|1>`.
 
+#### [draw](./pauli_circuit_draw.md)
+Draws the circuit.
+
 ### Attributes
 None.
 
