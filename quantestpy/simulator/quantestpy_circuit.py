@@ -64,22 +64,22 @@ class QuantestPyCircuit:
 
         if not isinstance(gate["target_qubit"], list):
             raise QuantestPyCircuitError(
-                'gate["target_qubit"] must be a list'
+                'gate["target_qubit"] must be a list.'
             )
 
         if not isinstance(gate["control_qubit"], list):
             raise QuantestPyCircuitError(
-                'gate["control_qubit"] must be a list'
+                'gate["control_qubit"] must be a list.'
             )
 
         if not isinstance(gate["control_value"], list):
             raise QuantestPyCircuitError(
-                'gate["control_value"] must be a list'
+                'gate["control_value"] must be a list.'
             )
 
         if len(gate["control_qubit"]) != len(gate["control_value"]):
             raise QuantestPyCircuitError(
-                "control_qubit and control_value must have the same lenght."
+                "control_qubit and control_value must have the same length."
             )
 
         if len(gate["target_qubit"]) < 1:

@@ -65,9 +65,8 @@ _IMPLEMENTED_GATES = _IMPLEMENTED_GATES_WITHOUT_PARAM \
 
 class StateVectorCircuit(QuantestPyCircuit):
     """
-    This circuit class will be always used as an input to assert methods
-    which deal with circuits. Mathematical operations such as applying gates
-    will be executed using the methods of this class.
+    This circuit class will be used inside the assert methods which deal with
+    state vectors.
     """
 
     def __init__(self, num_qubit: int):
