@@ -11,7 +11,7 @@ class TestConverterWithoutQiskit(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m \
-        unittest test.converter.qasm_and_qiskit.test_converter_without_qiskit
+        unittest test.converter.qasm.test_converter_without_qiskit
     ...
     ----------------------------------------------------------------------
     Ran 5 tests in 0.041s
