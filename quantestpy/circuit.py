@@ -7,7 +7,8 @@ from typing import Union
 import numpy as np
 
 from quantestpy import QuantestPyCircuit, operator
-from quantestpy.converter.all import cvt_all_circuit_to_quantestpy_circuit
+from quantestpy.converter.converter_to_quantestpy_circuit import \
+    cvt_input_circuit_to_quantestpy_circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 from quantestpy.simulator.state_vector_circuit import \
     cvt_quantestpy_circuit_to_state_vector_circuit
@@ -25,7 +26,7 @@ def assert_equal_to_operator(
         matrix_norm_type: Union[str, None] = None,
         msg=None) -> None:
 
-    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    quantestpy_circuit = cvt_input_circuit_to_quantestpy_circuit(circuit)
     state_vector_circuit = cvt_quantestpy_circuit_to_state_vector_circuit(
         quantestpy_circuit
     )
@@ -56,7 +57,7 @@ def assert_is_zero(circuit: Union[QuantestPyCircuit, str],
             "qubits must be a list of integer(s) as qubit's ID(s)."
         )
 
-    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    quantestpy_circuit = cvt_input_circuit_to_quantestpy_circuit(circuit)
     state_vector_circuit = cvt_quantestpy_circuit_to_state_vector_circuit(
         quantestpy_circuit
     )
@@ -109,7 +110,7 @@ def assert_ancilla_is_zero(circuit: Union[QuantestPyCircuit, str],
             "ancilla_qubits must be a list of integer(s) as qubit's ID(s)."
         )
 
-    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    quantestpy_circuit = cvt_input_circuit_to_quantestpy_circuit(circuit)
 
     num_qubit = quantestpy_circuit.num_qubit
 
@@ -198,8 +199,8 @@ def assert_equal(
             "Type of rtol must be float."
         )
 
-    quantestpy_circuit_a = cvt_all_circuit_to_quantestpy_circuit(circuit_a)
-    quantestpy_circuit_b = cvt_all_circuit_to_quantestpy_circuit(circuit_b)
+    quantestpy_circuit_a = cvt_input_circuit_to_quantestpy_circuit(circuit_a)
+    quantestpy_circuit_b = cvt_input_circuit_to_quantestpy_circuit(circuit_b)
 
     state_vector_circuit_a = cvt_quantestpy_circuit_to_state_vector_circuit(
         quantestpy_circuit_a

@@ -2,7 +2,8 @@ import unittest
 
 import numpy as np
 
-from quantestpy.converter.all import cvt_all_circuit_to_quantestpy_circuit
+from quantestpy.converter.converter_to_quantestpy_circuit import \
+    cvt_input_circuit_to_quantestpy_circuit
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 from quantestpy.simulator.pauli_circuit import (
     PauliCircuit, cvt_quantestpy_circuit_to_pauli_circuit)
@@ -44,7 +45,7 @@ def assert_get_ctrl_val(
         check_ancilla_is_uncomputed: bool = False,
         print_out_result: bool = True) -> dict:
 
-    quantestpy_circuit = cvt_all_circuit_to_quantestpy_circuit(circuit)
+    quantestpy_circuit = cvt_input_circuit_to_quantestpy_circuit(circuit)
     pc = cvt_quantestpy_circuit_to_pauli_circuit(quantestpy_circuit)
 
     # check inputs

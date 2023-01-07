@@ -1,12 +1,11 @@
 import traceback
 import unittest
 
-from quantestpy.converter.qasm_and_qiskit import \
-    _cvt_openqasm_to_quantestpy_circuit
+from quantestpy.converter.sdk.qasm import _cvt_openqasm_to_quantestpy_circuit
 from quantestpy.exceptions import QuantestPyError
 
 
-class TestConverter(unittest.TestCase):
+class TestConverterWithoutQiskit(unittest.TestCase):
     """
     How to execute this test:
     $ pwd

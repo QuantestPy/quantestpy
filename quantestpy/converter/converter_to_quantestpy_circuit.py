@@ -1,11 +1,11 @@
 from quantestpy import QuantestPyCircuit
-from quantestpy.converter.qasm_and_qiskit import (
-    _cvt_openqasm_to_quantestpy_circuit, _cvt_qiskit_to_quantestpy_circuit,
-    _is_instance_of_qiskit_quantumcircuit)
+from quantestpy.converter.sdk.qasm import _cvt_openqasm_to_quantestpy_circuit
+from quantestpy.converter.sdk.qiskit import (
+    _cvt_qiskit_to_quantestpy_circuit, _is_instance_of_qiskit_quantumcircuit)
 from quantestpy.exceptions import QuantestPyError
 
 
-def cvt_all_circuit_to_quantestpy_circuit(circuit) -> QuantestPyCircuit:
+def cvt_input_circuit_to_quantestpy_circuit(circuit) -> QuantestPyCircuit:
 
     # test_circuit
     if isinstance(circuit, QuantestPyCircuit):

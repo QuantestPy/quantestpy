@@ -92,14 +92,6 @@ def _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit) -> QuantestPyCircuit:
     return circuit
 
 
-def _cvt_openqasm_to_quantestpy_circuit(qasm: str) -> QuantestPyCircuit:
-
-    _raise_error_if_not_qiskit_installed()
-
-    qiskit_circuit = QuantumCircuit.from_qasm_str(qasm)
-    return _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit)
-
-
 def _is_instance_of_qiskit_quantumcircuit(circuit) -> bool:
 
     _raise_error_if_not_qiskit_installed()

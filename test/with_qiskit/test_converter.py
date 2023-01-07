@@ -4,8 +4,8 @@ import numpy as np
 from qiskit import QuantumCircuit
 
 from quantestpy import QuantestPyCircuit
-from quantestpy.converter.qasm_and_qiskit import (
-    _cvt_openqasm_to_quantestpy_circuit, _cvt_qiskit_to_quantestpy_circuit)
+from quantestpy.converter.sdk.qasm import _cvt_openqasm_to_quantestpy_circuit
+from quantestpy.converter.sdk.qiskit import _cvt_qiskit_to_quantestpy_circuit
 from quantestpy.simulator.state_vector_circuit import \
     cvt_quantestpy_circuit_to_state_vector_circuit
 
