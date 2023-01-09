@@ -20,15 +20,15 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
     """
 
     def test_all_pass(self,):
-        test_circuit = QuantestPyCircuit(3)
-        test_circuit.add_gate(
+        qc = QuantestPyCircuit(3)
+        qc.add_gate(
             {"name": "h",
                 "target_qubit": [1],
                 "control_qubit": [],
                 "control_value": [],
                 "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x",
                 "target_qubit": [2],
                 "control_qubit": [0, 1],
@@ -49,20 +49,20 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
                 "parameter": []}
         ]
 
-        actual_gates = test_circuit._gates
+        actual_gates = qc._gates
 
         self.assertEqual(expected_gates, actual_gates)
 
     def test_all_pass_multi_target(self,):
-        test_circuit = QuantestPyCircuit(3)
-        test_circuit.add_gate(
+        qc = QuantestPyCircuit(3)
+        qc.add_gate(
             {"name": "x",
                 "target_qubit": [1, 2],
                 "control_qubit": [0],
                 "control_value": [1],
                 "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "h",
                 "target_qubit": [0, 1, 2],
                 "control_qubit": [],
@@ -83,16 +83,16 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
                 "parameter": []}
         ]
 
-        actual_gates = test_circuit._gates
+        actual_gates = qc._gates
 
         self.assertEqual(expected_gates, actual_gates)
 
     def test_index_range_in_target_qubit(self,):
-        test_circuit = QuantestPyCircuit(3)
+        qc = QuantestPyCircuit(3)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [3],
                      "control_qubit": [],
@@ -105,18 +105,18 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             expected_error_msg = \
                 "quantestpy.simulator.exceptions.QuantestPyCircuitError: " \
                 + "Index 3" \
-                + " in target_qubit out of range for test_circuit size 3.\n"
+                + " in target_qubit out of range for circuit size 3.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_index_type_in_target_qubit(self,):
-        test_circuit = QuantestPyCircuit(4)
+        qc = QuantestPyCircuit(4)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "h",
                      "target_qubit": [1.],
                      "control_qubit": [],
@@ -135,11 +135,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_index_range_in_control_qubit(self,):
-        test_circuit = QuantestPyCircuit(10)
+        qc = QuantestPyCircuit(10)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [1],
                      "control_qubit": [2, 10],
@@ -152,18 +152,18 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             expected_error_msg = \
                 "quantestpy.simulator.exceptions.QuantestPyCircuitError: " \
                 + "Index 10" \
-                + " in control_qubit out of range for test_circuit size 10.\n"
+                + " in control_qubit out of range for circuit size 10.\n"
 
             actual_error_msg = traceback.format_exception_only(type(e), e)[0]
 
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_index_type_in_control_qubit(self,):
-        test_circuit = QuantestPyCircuit(3)
+        qc = QuantestPyCircuit(3)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1.2],
@@ -182,11 +182,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_value_range_in_control_value(self,):
-        test_circuit = QuantestPyCircuit(3)
+        qc = QuantestPyCircuit(3)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1, 2],
@@ -207,11 +207,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_value_type_in_control_value(self,):
-        test_circuit = QuantestPyCircuit(3)
+        qc = QuantestPyCircuit(3)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [0, 2],
@@ -230,11 +230,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_target_qubit_empty(self,):
-        test_circuit = QuantestPyCircuit(5)
+        qc = QuantestPyCircuit(5)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "t",
                      "target_qubit": [],
                      "control_qubit": [],
@@ -254,11 +254,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
 
     def test_msg_from_duplicate_in_target_qubit(self,):
 
-        test_circuit = QuantestPyCircuit(5)
+        qc = QuantestPyCircuit(5)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0, 0, 2],
                      "control_qubit": [4],
@@ -278,11 +278,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
 
     def test_msg_from_duplicate_in_control_qubit(self,):
 
-        test_circuit = QuantestPyCircuit(5)
+        qc = QuantestPyCircuit(5)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [1, 2, 3, 4, 4],
@@ -302,11 +302,11 @@ class TestQuantestPyCircuitAddGate(unittest.TestCase):
 
     def test_msg_from_intersection_in_target_and_control_qubits(self,):
 
-        test_circuit = QuantestPyCircuit(5)
+        qc = QuantestPyCircuit(5)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                qc.add_gate(
                     {"name": "x",
                      "target_qubit": [0, 1, 2, 3],
                      "control_qubit": [3, 4],

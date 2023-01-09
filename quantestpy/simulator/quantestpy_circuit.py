@@ -96,7 +96,7 @@ class QuantestPyCircuit:
             if qubit not in self._qubit_indices:
                 raise QuantestPyCircuitError(
                     f"Index {qubit} in target_qubit out of range for "
-                    f"test_circuit size {self._num_qubit}."
+                    f"circuit size {self._num_qubit}."
                 )
 
         for qubit in gate["control_qubit"]:
@@ -108,7 +108,7 @@ class QuantestPyCircuit:
             if qubit not in self._qubit_indices:
                 raise QuantestPyCircuitError(
                     f"Index {qubit} in control_qubit out of range for "
-                    f"test_circuit size {self._num_qubit}."
+                    f"circuit size {self._num_qubit}."
                 )
 
         for value in gate["control_value"]:

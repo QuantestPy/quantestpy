@@ -20,11 +20,11 @@ class TestStateVectorCircuitAddGate(unittest.TestCase):
     """
 
     def test_parameter_without_param(self,):
-        test_circuit = StateVectorCircuit(1)
+        svc = StateVectorCircuit(1)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                svc.add_gate(
                     {"name": "x",
                      "target_qubit": [0],
                      "control_qubit": [],
@@ -44,11 +44,11 @@ class TestStateVectorCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_parameter_with_one_param(self,):
-        test_circuit = StateVectorCircuit(1)
+        svc = StateVectorCircuit(1)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                svc.add_gate(
                     {"name": "p",
                      "target_qubit": [0],
                      "control_qubit": [],
@@ -68,11 +68,11 @@ class TestStateVectorCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_parameter_with_four_param(self,):
-        test_circuit = StateVectorCircuit(1)
+        svc = StateVectorCircuit(1)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                svc.add_gate(
                     {"name": "u",
                      "target_qubit": [0],
                      "control_qubit": [],
@@ -92,11 +92,11 @@ class TestStateVectorCircuitAddGate(unittest.TestCase):
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_value_type_in_parameter(self,):
-        test_circuit = StateVectorCircuit(1)
+        svc = StateVectorCircuit(1)
 
         try:
             self.assertIsNotNone(
-                test_circuit.add_gate(
+                svc.add_gate(
                     {"name": "p",
                      "target_qubit": [0],
                      "control_qubit": [],

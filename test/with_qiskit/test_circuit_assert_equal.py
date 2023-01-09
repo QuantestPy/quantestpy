@@ -73,37 +73,37 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
     def test_exact_equal(self,):
         """Check CNOT basis transformation; see Nielsen-Chuang p.179"""
-        test_circuit_a = QuantestPyCircuit(2)
-        test_circuit_a.add_gate(
+        qc_a = QuantestPyCircuit(2)
+        qc_a.add_gate(
             {"name": "h", "target_qubit": [0, 1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
-        test_circuit_a.add_gate(
+        qc_a.add_gate(
             {"name": "x", "target_qubit": [1], "control_qubit": [0],
                 "control_value": [1], "parameter": []}
         )
-        test_circuit_a.add_gate(
+        qc_a.add_gate(
             {"name": "h", "target_qubit": [0, 1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
 
-        test_circuit_b = QuantestPyCircuit(2)
-        test_circuit_b.add_gate(
+        qc_b = QuantestPyCircuit(2)
+        qc_b.add_gate(
             {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
 
         self.assertIsNone(
             circuit.assert_equal(
-                circuit_a=test_circuit_a,
-                circuit_b=test_circuit_b
+                circuit_a=qc_a,
+                circuit_b=qc_b
             )
         )
 
     def test_msg_from_wrong_type_for_atol(self,):
 
-        test_circuit_a = QuantestPyCircuit(2)
-        test_circuit_b = QuantestPyCircuit(2)
+        qc_a = QuantestPyCircuit(2)
+        qc_b = QuantestPyCircuit(2)
 
         test_patterns = [
             1,
@@ -116,8 +116,8 @@ class TestCircuitAssertEqual(unittest.TestCase):
             try:
                 self.assertIsNotNone(
                     circuit.assert_equal(
-                        circuit_a=test_circuit_a,
-                        circuit_b=test_circuit_b,
+                        circuit_a=qc_a,
+                        circuit_b=qc_b,
                         atol=tolerance
                     )
                 )
@@ -135,18 +135,18 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
     def test_matrix_norms(self,):
 
-        test_circuit_a = QuantestPyCircuit(2)
-        test_circuit_a.add_gate(
+        qc_a = QuantestPyCircuit(2)
+        qc_a.add_gate(
             {"name": "x", "target_qubit": [0, 1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
-        test_circuit_a.add_gate(
+        qc_a.add_gate(
             {"name": "s", "target_qubit": [1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
 
-        test_circuit_b = QuantestPyCircuit(2)
-        test_circuit_b.add_gate(
+        qc_b = QuantestPyCircuit(2)
+        qc_b.add_gate(
             {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
@@ -171,8 +171,8 @@ class TestCircuitAssertEqual(unittest.TestCase):
             try:
                 self.assertIsNotNone(
                     circuit.assert_equal(
-                        circuit_a=test_circuit_a,
-                        circuit_b=test_circuit_b,
+                        circuit_a=qc_a,
+                        circuit_b=qc_b,
                         matrix_norm_type=pattern["matrix_norm_type"],
                         atol=pattern["atol"]
                     )
@@ -195,14 +195,14 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
     def test_operator_norm_2(self,):
 
-        test_circuit_a = QuantestPyCircuit(1)
-        test_circuit_a.add_gate(
+        qc_a = QuantestPyCircuit(1)
+        qc_a.add_gate(
             {"name": "x", "target_qubit": [0], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
 
-        test_circuit_b = QuantestPyCircuit(1)
-        test_circuit_b.add_gate(
+        qc_b = QuantestPyCircuit(1)
+        qc_b.add_gate(
             {"name": "s", "target_qubit": [0], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
@@ -210,8 +210,8 @@ class TestCircuitAssertEqual(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 circuit.assert_equal(
-                    circuit_a=test_circuit_a,
-                    circuit_b=test_circuit_b,
+                    circuit_a=qc_a,
+                    circuit_b=qc_b,
                     matrix_norm_type="operator_norm_2",
                     atol=1.5
                 )
@@ -232,18 +232,18 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
     def test_matrix_norms_with_rtol(self,):
 
-        test_circuit_a = QuantestPyCircuit(2)
-        test_circuit_a.add_gate(
+        qc_a = QuantestPyCircuit(2)
+        qc_a.add_gate(
             {"name": "x", "target_qubit": [0, 1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
-        test_circuit_a.add_gate(
+        qc_a.add_gate(
             {"name": "s", "target_qubit": [1], "control_qubit": [],
                 "control_value": [], "parameter": []}
         )
 
-        test_circuit_b = QuantestPyCircuit(2)
-        test_circuit_b.add_gate(
+        qc_b = QuantestPyCircuit(2)
+        qc_b.add_gate(
             {"name": "x", "target_qubit": [0], "control_qubit": [1],
                 "control_value": [1], "parameter": []}
         )
@@ -272,8 +272,8 @@ class TestCircuitAssertEqual(unittest.TestCase):
             try:
                 self.assertIsNotNone(
                     circuit.assert_equal(
-                        circuit_a=test_circuit_a,
-                        circuit_b=test_circuit_b,
+                        circuit_a=qc_a,
+                        circuit_b=qc_b,
                         matrix_norm_type=pattern["matrix_norm_type"],
                         atol=0.,
                         rtol=pattern["rtol"]

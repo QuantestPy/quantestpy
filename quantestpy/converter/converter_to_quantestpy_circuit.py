@@ -7,7 +7,7 @@ from quantestpy.exceptions import QuantestPyError
 
 def cvt_input_circuit_to_quantestpy_circuit(circuit) -> QuantestPyCircuit:
 
-    # test_circuit
+    # QuantestPyCircuit
     if isinstance(circuit, QuantestPyCircuit):
         quantestpy_circuit = circuit
 

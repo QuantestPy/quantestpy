@@ -22,16 +22,16 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
 
     def setUp(self) -> None:
         """Prepare the Bell state"""
-        self.test_circ = QuantestPyCircuit(2)
-        self.test_circ.add_gate(
+        self.qc = QuantestPyCircuit(2)
+        self.qc.add_gate(
             {"name": "h", "target_qubit": [0], "control_qubit": [],
              "control_value": [], "parameter": []})
-        self.test_circ.add_gate(
+        self.qc.add_gate(
             {"name": "x", "control_qubit": [0],  "target_qubit": [1],
              "control_value": [1], "parameter": []})
 
     def tearDown(self) -> None:
-        del self.test_circ
+        del self.qc
 
     def test_assert_equal_to_operator_1(self,):
 
@@ -45,7 +45,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         self.assertIsNone(
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                circuit=self.test_circ
+                circuit=self.qc
             )
         )
 
@@ -61,7 +61,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                circuit=self.test_circ,
+                circuit=self.qc,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
             )
 
@@ -77,7 +77,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         self.assertIsNone(
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                circuit=self.test_circ,
+                circuit=self.qc,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
             )
         )
@@ -94,5 +94,5 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         with self.assertRaises(QuantestPyAssertionError):
             circuit.assert_equal_to_operator(
                 operator_=expected_operator,
-                circuit=self.test_circ
+                circuit=self.qc
             )

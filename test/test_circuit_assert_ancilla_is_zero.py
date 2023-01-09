@@ -19,64 +19,64 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
     """
 
     def test_regular_1(self,):
-        test_circuit = QuantestPyCircuit(4)
+        qc = QuantestPyCircuit(4)
         # V
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
 
         # uncomputation
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [3],
              "control_value": [1], "parameter": []}
         )
 
         # V^{-1}
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
 
         self.assertIsNone(
             circuit.assert_ancilla_is_zero(
-                circuit=test_circuit,
+                circuit=qc,
                 ancilla_qubits=[1, 2]
             )
         )
 
     def test_irregular_1(self,):
-        test_circuit = QuantestPyCircuit(4)
+        qc = QuantestPyCircuit(4)
         # V
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
 
         # uncomputation
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [3],
              "control_value": [1], "parameter": []}
         )
 
         # V^{-1}: Wrong order!!
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [0], "target_qubit": [1],
              "control_value": [1], "parameter": []}
         )
-        test_circuit.add_gate(
+        qc.add_gate(
             {"name": "x", "control_qubit": [1], "target_qubit": [2],
              "control_value": [1], "parameter": []}
         )
@@ -84,7 +84,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         try:
             self.assertIsNotNone(
                 circuit.assert_ancilla_is_zero(
-                    circuit=test_circuit,
+                    circuit=qc,
                     ancilla_qubits=[1, 2]
                 )
             )
