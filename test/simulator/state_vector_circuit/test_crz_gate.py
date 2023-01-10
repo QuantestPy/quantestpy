@@ -2,16 +2,16 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy.test_circuit import _p
+from quantestpy import StateVectorCircuit
+from quantestpy.simulator.state_vector_circuit import _rz
 
 
-class TestTestCircuitCPGate(unittest.TestCase):
+class TestStateVectorCircuitCRZGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit_cp_gate
+    $ python -m unittest test.simulator.state_vector_circuit.test_crz_gate
     ........
     ----------------------------------------------------------------------
     Ran 7 tests in 0.007s
@@ -20,61 +20,61 @@ class TestTestCircuitCPGate(unittest.TestCase):
     $
     """
 
-    def test_cp_regular_qubit_order(self,):
-        circ = TestCircuit(2)
+    def test_crz_regular_qubit_order(self,):
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
             [0, 1, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, np.exp(1j*lambda_)]])
+            [0, 0, np.exp(-1j*lambda_/2), 0],
+            [0, 0, 0, np.exp(1j*lambda_/2)]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_qiskit_qubit_order(self,):
-        circ = TestCircuit(2)
+    def test_crz_qiskit_qubit_order(self,):
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
-            [0, 1, 0, 0],
+            [0, np.exp(-1j*lambda_/2), 0, 0],
             [0, 0, 1, 0],
-            [0, 0, 0, np.exp(1j*lambda_)]])
+            [0, 0, 0, np.exp(1j*lambda_/2)]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_flip_control_target(self,):
-        circ = TestCircuit(2)
+    def test_crz_flip_control_target(self,):
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[1], target_qubit=[0], control_value=[1])
 
         expected_gate = np.array([
             [1, 0, 0, 0],
-            [0, 1, 0, 0],
+            [0, np.exp(-1j*lambda_/2), 0, 0],
             [0, 0, 1, 0],
-            [0, 0, 0, np.exp(1j*lambda_)]])
+            [0, 0, 0, np.exp(1j*lambda_/2)]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_three_qubits_qiskit_qubit_order(self,):
-        circ = TestCircuit(3)
+    def test_crz_three_qubits_qiskit_qubit_order(self,):
+        circ = StateVectorCircuit(3)
         lambda_ = np.pi/8
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[2], control_value=[1])
 
         # this is qiskit's output
@@ -83,16 +83,16 @@ class TestTestCircuitCPGate(unittest.TestCase):
               0. + 0.j, 0. + 0.j,
               0. + 0.j, 0. + 0.j,
               0. + 0.j, 0. + 0.j],
-             [0. + 0.j, 1. + 0.j,
+             [0. + 0.j, 0.98078528-0.19509032j,
                 0. + 0.j, 0. + 0.j,
+                0. + 0.j, 0. + 0.j,
+              0. + 0.j, 0. + 0.j],
+             [0. + 0.j, 0. + 0.j,
+                1. + 0.j, 0. + 0.j,
                 0. + 0.j, 0. + 0.j,
                 0. + 0.j, 0. + 0.j],
                 [0. + 0.j, 0. + 0.j,
-                 1. + 0.j, 0. + 0.j,
-                 0. + 0.j, 0. + 0.j,
-                 0. + 0.j, 0. + 0.j],
-                [0. + 0.j, 0. + 0.j,
-                 0. + 0.j, 1. + 0.j,
+                 0. + 0.j, 0.98078528-0.19509032j,
                  0. + 0.j, 0. + 0.j,
                  0. + 0.j, 0. + 0.j],
                 [0. + 0.j, 0. + 0.j,
@@ -101,7 +101,7 @@ class TestTestCircuitCPGate(unittest.TestCase):
                  0. + 0.j, 0. + 0.j],
                 [0. + 0.j, 0. + 0.j,
                  0. + 0.j, 0. + 0.j,
-                 0. + 0.j, 0.92387953+0.38268343j,
+                 0. + 0.j, 0.98078528+0.19509032j,
                  0. + 0.j, 0. + 0.j],
                 [0. + 0.j, 0. + 0.j,
                  0. + 0.j, 0. + 0.j,
@@ -110,32 +110,32 @@ class TestTestCircuitCPGate(unittest.TestCase):
                 [0. + 0.j, 0. + 0.j,
                  0. + 0.j, 0. + 0.j,
                  0. + 0.j, 0. + 0.j,
-                 0. + 0.j, 0.92387953+0.38268343j]])
+                 0. + 0.j, 0.98078528+0.19509032j]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_control_value_is_zero(self,):
-        circ = TestCircuit(2)
+    def test_crz_control_value_is_zero(self,):
+        circ = StateVectorCircuit(2)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[0])
 
         expected_gate = np.array([
-            [1, 0, 0, 0],
-            [0, np.exp(1j*lambda_), 0, 0],
+            [np.exp(-1j*lambda_/2), 0, 0, 0],
+            [0, np.exp(1j*lambda_/2), 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_multiple_controls(self,):
-        circ = TestCircuit(3)
+    def test_crz_multiple_controls(self,):
+        circ = StateVectorCircuit(3)
         lambda_ = np.pi/8
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
 
         expected_gate = np.array([[1, 0, 0, 0, 0, 0, 0, 0],
@@ -144,26 +144,28 @@ class TestTestCircuitCPGate(unittest.TestCase):
                                   [0, 0, 0, 1, 0, 0, 0, 0],
                                   [0, 0, 0, 0, 1, 0, 0, 0],
                                   [0, 0, 0, 0, 0, 1, 0, 0],
-                                  [0, 0, 0, 0, 0, 0, 1, 0],
-                                  [0, 0, 0, 0, 0, 0, 0, np.exp(1j*lambda_)]])
+                                  [0, 0, 0, 0, 0, 0,
+                                   np.exp(-1j*lambda_/2), 0],
+                                  [0, 0, 0, 0, 0, 0,
+                                   0, np.exp(1j*lambda_/2)]])
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_cp_multiple_targets(self,):
+    def test_crz_multiple_targets(self,):
         lambda_ = np.pi/8
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[1, 2], control_value=[1])
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[1], control_value=[1])
         gate_1_1 = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p([lambda_]),
+            _rz([lambda_]),
             control_qubit=[0], target_qubit=[2], control_value=[1])
 
         self.assertIsNone(

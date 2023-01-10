@@ -2,7 +2,7 @@ import random
 import unittest
 
 from quantestpy import PauliCircuit
-from quantestpy.exceptions import QuantestPyTestCircuitError
+from quantestpy.simulator.exceptions import PauliCircuitError
 
 
 class TestAssertIsCorrectRegAndQubitVal(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestAssertIsCorrectRegAndQubitVal(unittest.TestCase):
         expected_error_msg = "Length of register and that of " \
             + "qubit_val must be the same."
 
-        with self.assertRaises(QuantestPyTestCircuitError) as cm:
+        with self.assertRaises(PauliCircuitError) as cm:
             circ._assert_is_correct_reg_and_qubit_val(
                 register=register,
                 qubit_val=qubit_value

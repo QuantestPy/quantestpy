@@ -1,6 +1,6 @@
 import unittest
 
-from quantestpy import PauliCircuit, assert_get_ctrl_val
+from quantestpy import QuantestPyCircuit, assert_get_ctrl_val
 
 
 class TestAssertGetCtrlVal(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestAssertGetCtrlVal(unittest.TestCase):
         """
         This is the circuit in Figure 7 in arxiv:1805.03662
         """
-        self.pc = PauliCircuit(1+4+11+4)
+        self.pc = QuantestPyCircuit(1+4+11+4)
         self.pc.add_gate({"name": "x", "target_qubit": [16],
                           "control_qubit": [0, 1], "control_value": [1, 0]})
         self.pc.add_gate({"name": "x", "target_qubit": [17],

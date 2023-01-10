@@ -1,6 +1,6 @@
 import numpy as np
 
-from quantestpy import TestCircuit
+from quantestpy import QuantestPyCircuit
 from quantestpy.exceptions import QuantestPyError
 
 try:
@@ -19,7 +19,7 @@ def _raise_error_if_not_qiskit_installed():
         )
 
 
-def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
+def _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit) -> QuantestPyCircuit:
 
     _raise_error_if_not_qiskit_installed()
 
@@ -30,7 +30,7 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
     gates = experiments["instructions"]
     num_qubits = experiments["config"]["n_qubits"]
     global_phase = experiments["header"]["global_phase"]
-    circuit = TestCircuit(num_qubits)
+    circuit = QuantestPyCircuit(num_qubits)
 
     for gate in gates:
 
@@ -90,14 +90,6 @@ def _cvt_qiskit_to_test_circuit(qiskit_circuit) -> TestCircuit:
         circuit.add_gate(gate_test)
 
     return circuit
-
-
-def _cvt_openqasm_to_test_circuit(qasm: str) -> TestCircuit:
-
-    _raise_error_if_not_qiskit_installed()
-
-    qiskit_circuit = QuantumCircuit.from_qasm_str(qasm)
-    return _cvt_qiskit_to_test_circuit(qiskit_circuit)
 
 
 def _is_instance_of_qiskit_quantumcircuit(circuit) -> bool:

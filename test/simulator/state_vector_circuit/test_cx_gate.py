@@ -2,16 +2,16 @@ import unittest
 
 import numpy as np
 
-from quantestpy import TestCircuit
-from quantestpy.test_circuit import _X
+from quantestpy import StateVectorCircuit
+from quantestpy.simulator.state_vector_circuit import _X
 
 
-class TestTestCircuitCXGate(unittest.TestCase):
+class TestStateVectorCircuitCXGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_test_circuit_cx_gate
+    $ python -m unittest test.simulator.state_vector_circuit.test_cx_gate
     ........
     ----------------------------------------------------------------------
     Ran 8 tests in 0.009s
@@ -21,7 +21,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
     """
 
     def test_cx_regular_qubit_order(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[1], control_value=[1]
         )
@@ -35,7 +35,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cx_qiskit_qubit_order(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[1], control_value=[1]
@@ -50,7 +50,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cx_flip_control_target(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[1], target_qubit=[0], control_value=[1]
         )
@@ -64,7 +64,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cx_three_qubits_qiskit_qubit_order(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[2], control_value=[1]
@@ -85,7 +85,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_cx_control_value_is_zero(self,):
-        circ = TestCircuit(2)
+        circ = StateVectorCircuit(2)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[1], control_value=[0]
         )
@@ -99,7 +99,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_toffoli(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X,
             control_qubit=[0, 1], target_qubit=[2], control_value=[1, 1])
@@ -117,7 +117,7 @@ class TestTestCircuitCXGate(unittest.TestCase):
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_toffoli_qiskit_qubit_order(self,):
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         circ._from_right_to_left_for_qubit_ids = True
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X,
@@ -139,12 +139,12 @@ class TestTestCircuitCXGate(unittest.TestCase):
 
     def test_cx_multiple_targets(self,):
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[1, 2], control_value=[1]
         )
 
-        circ = TestCircuit(3)
+        circ = StateVectorCircuit(3)
         gate_1_0 = circ._create_all_qubit_gate_from_original_qubit_gate(
             _X, control_qubit=[0], target_qubit=[1], control_value=[1]
         )
