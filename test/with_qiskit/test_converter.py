@@ -23,7 +23,7 @@ class TestConverter(unittest.TestCase):
     OK
     """
 
-    def test__cvt_qiskit_to_test_circuit(self,):
+    def test__cvt_qiskit_to_quantestpy_circuit(self,):
         qc = QuantumCircuit(2, 2)
         qc.h(0)
         qc.cx(0, 1)
@@ -44,7 +44,7 @@ class TestConverter(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test__cvt_openqasm_to_test_circuit(self,):
+    def test__cvt_openqasm_to_quantestpy_circuit(self,):
         qc = QuantumCircuit(2, 2)
         qc.h(0)
         qc.cx(0, 1)
@@ -66,7 +66,7 @@ class TestConverter(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test__cvt_qiskit_to_test_circuit_control_gates_1(self,):
+    def test__cvt_qiskit_to_quantestpy_circuit_control_gates_1(self,):
         qc = QuantumCircuit(3)
         qc.cx(0, 1)
         qc.cy(0, 1)
@@ -95,7 +95,7 @@ class TestConverter(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
-    def test__cvt_qiskit_to_test_circuit_control_gates_2(self,):
+    def test__cvt_qiskit_to_quantestpy_circuit_control_gates_2(self,):
         theta = np.pi/4
 
         qc = QuantumCircuit(3)
@@ -122,7 +122,7 @@ class TestConverter(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
-    def test__cvt_qiskit_to_test_circuit_control_gates_3(self,):
+    def test__cvt_qiskit_to_quantestpy_circuit_control_gates_3(self,):
         theta = np.pi/4
         phi = np.pi/8
         lambda_ = np.pi/16
@@ -153,7 +153,7 @@ class TestConverter(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
 
-    def test__cvt_qiskit_to_test_circuit_global_phase(self,):
+    def test__cvt_qiskit_to_quantestpy_circuit_global_phase(self,):
 
         qc = QuantumCircuit(3, global_phase=np.pi/7.)
         qc.h(0)

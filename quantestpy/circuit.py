@@ -34,10 +34,11 @@ def assert_equal_to_operator(
     state_vector_circuit._from_right_to_left_for_qubit_ids = \
         from_right_to_left_for_qubit_ids
 
-    operator_from_test_circuit = state_vector_circuit._get_whole_gates()
+    operator_from_state_vector_circuit = \
+        state_vector_circuit._get_whole_gates()
 
     operator.assert_equal(
-        operator_from_test_circuit,
+        operator_from_state_vector_circuit,
         operator_,
         rtol,
         atol,
@@ -134,7 +135,7 @@ def assert_ancilla_is_zero(circuit: Union[QuantestPyCircuit, str],
     error_msgs_from_assert_is_zero = []
     for comb_of_sys_qubits in all_combinations_of_system_qubits:
 
-        # add x gate(s) in test_circuit
+        # add x gate(s) in quantestpy_circuit
         for system_qubit in comb_of_sys_qubits:
             _add_x_gate_in_front(quantestpy_circuit._gates, system_qubit)
 
@@ -148,7 +149,8 @@ def assert_ancilla_is_zero(circuit: Union[QuantestPyCircuit, str],
             t = traceback.format_exception_only(type(e), e)[0]
             error_msgs_from_assert_is_zero.append(t)
 
-        # remove x gate(s) from test_circuit, i.e. reset test_circuit.
+        # remove x gate(s) from quantestpy_circuit,
+        # i.e. reset quantestpy_circuit.
         for _ in comb_of_sys_qubits:
             del quantestpy_circuit._gates[0]
 
