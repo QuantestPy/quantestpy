@@ -46,6 +46,14 @@ def _rz(parameter: list) -> np.ndarray:
     return _p(parameter)*np.exp(-1j*phi/2)
 
 
+def _r(parameter: list) -> np.ndarray:
+    theta, phi = parameter
+    return np.array([
+        [np.cos(theta/2), -1j * np.exp(-1j*phi) * np.sin(theta/2)],
+        [-1j * np.exp(1j*phi) * np.sin(theta/2), np.cos(theta/2)]
+    ])
+
+
 def _scalar(parameter: list) -> np.ndarray:
     theta = parameter[0]
     return _ID * np.exp(1j*theta)
@@ -56,9 +64,10 @@ _IMPLEMENTED_GATES_WITHOUT_PARAM = [
     "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg", "swap", "iswap"]
 _IMPLEMENTED_GATES_WITH_ONE_PARAM = [
     "rx", "ry", "rz", "p", "scalar"]
+_IMPLEMENTED_GATES_WITH_TWO_PARAM = ["r"]
 _IMPLEMENTED_GATES_WITH_FOUR_PARAM = ["u"]
 _IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_GATES_WITH_ONE_PARAM \
-    + _IMPLEMENTED_GATES_WITH_FOUR_PARAM
+    + _IMPLEMENTED_GATES_WITH_TWO_PARAM + _IMPLEMENTED_GATES_WITH_FOUR_PARAM
 _IMPLEMENTED_GATES = _IMPLEMENTED_GATES_WITHOUT_PARAM \
     + _IMPLEMENTED_GATES_WITH_PARAM
 
@@ -102,6 +111,13 @@ class StateVectorCircuit(QuantestPyCircuit):
             raise StateVectorCircuitError(
                 f'{gate["name"]} gate must have a list containing '
                 "exactly 1 element for 'parameter'."
+            )
+
+        if gate["name"] in _IMPLEMENTED_GATES_WITH_TWO_PARAM and \
+                len(gate["parameter"]) != 2:
+            raise StateVectorCircuitError(
+                f'{gate["name"]} gate must have a list containing '
+                "exactly 2 elements for 'parameter'."
             )
 
         if gate["name"] in _IMPLEMENTED_GATES_WITH_FOUR_PARAM and \
@@ -273,7 +289,8 @@ class StateVectorCircuit(QuantestPyCircuit):
                     original_qubit_gate = eval("_" + gate["name"].upper())
                 elif gate["name"] in ("sdg", "tdg"):
                     original_qubit_gate = eval("_" + gate["name"].capitalize())
-                elif gate["name"] in ("rx", "ry", "rz", "u", "p", "scalar"):
+                elif gate["name"] in (
+                        "rx", "ry", "rz", "r", "u", "p", "scalar"):
                     original_qubit_gate = eval("_" + gate["name"]
                                                + '(gate["parameter"])')
                 else:
