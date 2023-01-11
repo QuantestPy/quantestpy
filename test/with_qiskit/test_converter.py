@@ -16,9 +16,9 @@ class TestConverter(unittest.TestCase):
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest test.with_qiskit.test_converter
-    ......
+    .......
     ----------------------------------------------------------------------
-    Ran 6 tests in 0.060s
+    Ran 7 tests in 0.066s
 
     OK
     """
@@ -176,6 +176,51 @@ class TestConverter(unittest.TestCase):
                                    "control_qubit": [],
                                    "control_value": [],
                                    "parameter": [np.pi/7.]})
+
+        actual_gate = cvt_quantestpy_circuit_to_state_vector_circuit(
+            actual_circuit)._get_whole_gates()
+        expected_gate = cvt_quantestpy_circuit_to_state_vector_circuit(
+            expected_circuit)._get_whole_gates()
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-15))
+
+    def test__cvt_qiskit_to_quantestpy_circuit_control_gates_4(self,):
+        theta = np.pi/4
+        phi = np.pi/8
+
+        qc = QuantumCircuit(3)
+        qc.r(theta, phi, 1)
+        qc.crx(theta, 0, 1)
+        qc.rx(theta, 2)
+        qc.cry(theta, 0, 1)
+        qc.ry(theta, 2)
+        qc.crz(theta, 0, 1)
+        qc.rz(theta, 2)
+
+        actual_circuit = _cvt_qiskit_to_quantestpy_circuit(qc)
+
+        expected_circuit = QuantestPyCircuit(3)
+        expected_circuit.add_gate({"name": "r", "target_qubit": [1],
+                                   "control_qubit": [], "control_value": [],
+                                   "parameter": [theta, phi]})
+        expected_circuit.add_gate({"name": "rx", "target_qubit": [1],
+                                   "control_qubit": [0], "control_value": [1],
+                                   "parameter": [theta]})
+        expected_circuit.add_gate({"name": "rx", "target_qubit": [2],
+                                   "control_qubit": [], "control_value": [],
+                                   "parameter": [theta]})
+        expected_circuit.add_gate({"name": "ry", "target_qubit": [1],
+                                   "control_qubit": [0], "control_value": [1],
+                                   "parameter": [theta]})
+        expected_circuit.add_gate({"name": "ry", "target_qubit": [2],
+                                   "control_qubit": [], "control_value": [],
+                                   "parameter": [theta]})
+        expected_circuit.add_gate({"name": "rz", "target_qubit": [1],
+                                   "control_qubit": [0], "control_value": [1],
+                                   "parameter": [theta]})
+        expected_circuit.add_gate({"name": "rz", "target_qubit": [2],
+                                   "control_qubit": [], "control_value": [],
+                                   "parameter": [theta]})
 
         actual_gate = cvt_quantestpy_circuit_to_state_vector_circuit(
             actual_circuit)._get_whole_gates()
