@@ -1,7 +1,8 @@
 import unittest
 
-from quantestpy import PauliCircuit
-from quantestpy.simulator.circuit_drawer import CircuitDrawer as CD
+from quantestpy.simulator.pauli_circuit import PauliCircuit
+from quantestpy.visualization.pauli_circuit_drawer import \
+    PauliCircuitDrawer as CD
 
 
 class TestDrawLine(unittest.TestCase):
@@ -9,7 +10,7 @@ class TestDrawLine(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.circuit_drawer.test_draw_line
+    $ python -m unittest test.visualization.pauli_circuit_drawer.test_draw_line
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s

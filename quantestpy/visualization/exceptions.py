@@ -1,0 +1,2 @@
+class QuantestPyVisualizationError(Exception):
+    pass

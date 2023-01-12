@@ -1,7 +1,10 @@
 import unittest
 
-from quantestpy import PauliCircuit
-from quantestpy.simulator.circuit_drawer import CircuitDrawer as CD
+import numpy as np
+
+from quantestpy.simulator.pauli_circuit import PauliCircuit
+from quantestpy.visualization.pauli_circuit_drawer import \
+    PauliCircuitDrawer as CD
 
 
 class TestGetMethods(unittest.TestCase):
@@ -9,10 +12,11 @@ class TestGetMethods(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.circuit_drawer.test_get_methods
-    .........
+    $ python -m \
+        unittest test.visualization.pauli_circuit_drawer.test_get_methods
+    ........
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.003s
+    Ran 8 tests in 0.003s
 
     OK
     $
@@ -43,11 +47,6 @@ class TestGetMethods(unittest.TestCase):
         expect = "\033[32m │ \033[0m"
         self.assertEqual(actual, expect)
 
-    def test_get_space(self,):
-        actual = CD.get_space(length=4)
-        expect = "    "
-        self.assertEqual(actual, expect)
-
     def test_get_tgt(self,):
         name_lst = ["x", "y", "z", "swap"]
         obj_lst = ["[X]", "[Y]", "[Z]", "SWP"]
@@ -66,16 +65,17 @@ class TestGetMethods(unittest.TestCase):
                 obj + "\033[0m\033[32m─\033[0m"
             self.assertEqual(actual, expect)
 
-    def test_get_init_state(self,):
+    def test_get_state(self,):
         qubit_val_lst = [1, 0]
         obj_lst = ["|1>", "|0>"]
         color_code_lst = ["\033[32m", ""]
         for qubit_val, obj, cc in zip(qubit_val_lst, obj_lst, color_code_lst):
-            actual = CD.get_init_state(qubit_val, color_code=cc)
+            actual = CD.get_state(qubit_val, color_code=cc)
             expect = cc + obj + "\033[0m"
             self.assertEqual(actual, expect)
 
-    def test_get_inter_line_id(self,):
-        actual = CD.get_inter_line_id(2, 6)
-        expect = [3, 4, 5]
+    def test_get_phase(self,):
+        qubit_phase = 1.5 * np.pi
+        actual = CD.get_phase(qubit_phase=qubit_phase, decimals=2)
+        expect = "1.5\033[0m"
         self.assertEqual(actual, expect)

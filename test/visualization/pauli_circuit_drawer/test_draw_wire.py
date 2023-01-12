@@ -1,7 +1,8 @@
 import unittest
 
-from quantestpy import PauliCircuit
-from quantestpy.simulator.circuit_drawer import CircuitDrawer as CD
+from quantestpy.simulator.pauli_circuit import PauliCircuit
+from quantestpy.visualization.pauli_circuit_drawer import \
+    PauliCircuitDrawer as CD
 
 
 class TestDrawWire(unittest.TestCase):
@@ -9,7 +10,7 @@ class TestDrawWire(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.circuit_drawer.test_draw_wire
+    $ python -m unittest test.visualization.pauli_circuit_drawer.test_draw_wire
     ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.002s
@@ -90,9 +91,9 @@ class TestDrawWire(unittest.TestCase):
         cd.draw_wire(gate_id=0)
         actual = cd.line_id_to_text
         expect = {0: "",
-                  1: "\033[31m │ \033[0m",
-                  2: "\033[32m─\033[0m\033[31m┼\033[0m\033[32m─\033[0m",
-                  3: "\033[31m │ \033[0m",
+                  1: " │ \033[0m",
+                  2: "\033[32m─\033[0m┼\033[0m\033[32m─\033[0m",
+                  3: " │ \033[0m",
                   4: ""}
         self.assertEqual(actual, expect)
 
