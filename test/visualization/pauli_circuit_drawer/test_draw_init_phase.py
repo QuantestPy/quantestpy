@@ -25,12 +25,12 @@ class TestDrawInitPhase(unittest.TestCase):
         cd = CD(pc)
 
         cd.draw_init_phase()
-        actual = cd.line_id_to_text
-        expect = {0: "0.0\033[0m",
+        actual = cd._line_id_to_text
+        expect = {0: "0.0",
                   1: "   ",
-                  2: "0.0\033[0m",
+                  2: "0.0",
                   3: "   ",
-                  4: "0.0\033[0m",
+                  4: "0.0",
                   5: "   ",
-                  6: "0.0\033[0m"}
+                  6: "0.0"}
         self.assertEqual(actual, expect)

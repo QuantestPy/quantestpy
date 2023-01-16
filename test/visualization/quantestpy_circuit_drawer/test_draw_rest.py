@@ -25,17 +25,17 @@ class TestDrawRest(unittest.TestCase):
         cd = CD(qc)
         cd._occupied_line_id = [0, 1, 6]
 
-        cd.draw_rest(gate_id=0)
-        actual = cd.line_id_to_text
+        cd.draw_rest()
+        actual = cd._line_id_to_text
         expect = {0: "",
                   1: "",
-                  2: "───",
-                  3: "   ",
-                  4: "───",
-                  5: "   ",
+                  2: "─",
+                  3: " ",
+                  4: "─",
+                  5: " ",
                   6: "",
-                  7: "   ",
-                  8: "───"}
+                  7: " ",
+                  8: "─"}
         self.assertEqual(actual, expect)
 
         actual = cd._occupied_line_id

@@ -27,7 +27,7 @@ class TestDrawCircuit(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_circuit()
-        actual = cd.line_id_to_text
+        actual = cd.line_id_to_text_whole
         expect = \
             {0: "0 ──■── 0",
              1: "    │    ",

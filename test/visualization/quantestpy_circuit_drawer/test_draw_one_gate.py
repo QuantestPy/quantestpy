@@ -27,7 +27,7 @@ class TestDrawOneGate(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_one_gate(gate_id=0)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "─■─",
                   1: " │ ",
                   2: "─┼─",

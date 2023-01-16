@@ -27,12 +27,12 @@ class TestDrawInitVector(unittest.TestCase):
         cd._color_code_line_1 = ""
 
         cd.draw_init_vector()
-        actual = cd.line_id_to_text
-        expect = {0: "|0>\033[0m",
+        actual = cd._line_id_to_text
+        expect = {0: "|0>",
                   1: "   ",
-                  2: "|1>\033[0m",
+                  2: "|1>",
                   3: "   ",
-                  4: "|0>\033[0m",
+                  4: "|0>",
                   5: "   ",
-                  6: "|1>\033[0m"}
+                  6: "|1>"}
         self.assertEqual(actual, expect)

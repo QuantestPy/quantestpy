@@ -27,8 +27,8 @@ class TestDrawCtrl(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_ctrl(gate_id=0)
-        actual = cd.line_id_to_text
-        expect = {0: "─■─",
+        actual = cd._line_id_to_text
+        expect = {0: "■",
                   1: "",
                   2: ""}
         self.assertEqual(actual, expect)
@@ -44,10 +44,10 @@ class TestDrawCtrl(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_ctrl(gate_id=0)
-        actual = cd.line_id_to_text
-        expect = {0: "─■─",
+        actual = cd._line_id_to_text
+        expect = {0: "■",
                   1: "",
-                  2: "─o─",
+                  2: "o",
                   3: "",
                   4: ""}
         self.assertEqual(actual, expect)

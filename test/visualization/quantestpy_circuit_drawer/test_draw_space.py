@@ -25,7 +25,7 @@ class TestDrawSpace(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_space()
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: " ",
                   1: " ",
                   2: " ",

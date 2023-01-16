@@ -26,12 +26,12 @@ class TestGetMethods(unittest.TestCase):
 
     def test_get_cross_line(self,):
         actual = CD.get_cross_line()
-        expect = "─┼─"
+        expect = "┼"
         self.assertEqual(actual, expect)
 
     def test_get_wire(self,):
         actual = CD.get_wire()
-        expect = " │ "
+        expect = "│"
         self.assertEqual(actual, expect)
 
     def test_get_space(self,):
@@ -52,7 +52,7 @@ class TestGetMethods(unittest.TestCase):
         obj_lst = ["■", "o"]
         for ctrl_val, obj in zip(ctrl_val_lst, obj_lst):
             actual = CD.get_ctrl(ctrl_val)
-            expect = "─" + obj + "─"
+            expect = obj
             self.assertEqual(actual, expect)
 
     def test_get_inter_line_id(self,):

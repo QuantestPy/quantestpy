@@ -27,7 +27,7 @@ class TestDrawTgt(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_tgt(gate_id=0)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "",
                   1: "",
                   2: "[X]"}
@@ -44,7 +44,7 @@ class TestDrawTgt(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_tgt(gate_id=0)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "[H]",
                   1: "",
                   2: "[H]"}
@@ -63,12 +63,12 @@ class TestDrawTgt(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_tgt(gate_id=1)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "",
                   1: "",
                   2: "",
                   3: "",
-                  4: "R_z"}
+                  4: "[R_z]"}
         self.assertEqual(actual, expect)
 
         actual = cd._occupied_line_id

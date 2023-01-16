@@ -18,22 +18,17 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         self._color_code_line_1 = self.get_color_code("green")
         self._color_code_line_0 = ""
 
-        self._color_code_tgt = ""
-        self._color_code_ctrl = ""
-        self._color_code_cross = ""
-        self._color_code_wire = ""
         self._color_code_gate = self.get_color_code("purple")
         self._decimals = 2
-
-        self._qubit_id_to_color_code \
-            = {qubit_id: "" for qubit_id in range(self._num_qubit)}
-        self._output_qubit_id_to_color_code \
-            = {qubit_id: "" for qubit_id in range(self._num_qubit)}
 
         self._qubit_id_to_reg_name \
             = {qubit_id: "" for qubit_id in range(self._num_qubit)}
         self._qubit_id_to_output_reg_name \
             = {qubit_id: "" for qubit_id in range(self._num_qubit)}
+
+    @staticmethod
+    def add_color_code_in_obj(color_code: str, obj: str) -> str:
+        return color_code + obj + "\033[0m"
 
     @staticmethod
     def get_color_code(color: str) -> str:
@@ -58,19 +53,26 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         else:
             raise QuantestPyVisualizationError(f"{color} is invalid color.")
 
-    def set_color_to_reg(self, color_to_reg: dict) -> None:
-        for color, reg in color_to_reg.items():
-            self._qc._assert_is_correct_reg(reg)
-            for qubit_id in reg:
-                self._qubit_id_to_color_code[qubit_id] = self.get_color_code(
-                    color)
+    @staticmethod
+    def get_tgt(name: str) -> str:
+        if name == "x":
+            obj = "[X]"
+        elif name == "y":
+            obj = "[Y]"
+        elif name == "z":
+            obj = "[Z]"
+        elif name == "swap":
+            obj = "[SWP]"
+        else:
+            raise QuantestPyVisualizationError(
+                f"Gate {name} is not implemented."
+            )
+        return obj
 
-    def set_color_to_output_reg(self, color_to_reg: dict) -> None:
-        for color, reg in color_to_reg.items():
-            self._qc._assert_is_correct_reg(reg)
-            for qubit_id in reg:
-                self._output_qubit_id_to_color_code[qubit_id] = \
-                    self.get_color_code(color)
+    @staticmethod
+    def get_state(qubit_val: int) -> str:
+        obj = "|1>" if qubit_val == 1 else "|0>"
+        return obj
 
     def set_name_to_reg(self, name_to_reg: dict) -> None:
         for name, reg in name_to_reg.items():
@@ -93,72 +95,13 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         else:
             return False
 
-    def reset_all(self,) -> None:
-        super().reset_all()
-        self._qc.qubit_value = self._qubit_value.copy()
-        self._qc.qubit_phase = self._qubit_phase.copy()
-
     def get_color_code_line(self, qubit_val: int) -> str:
         return self._color_code_line_1 if qubit_val == 1 else \
             self._color_code_line_0
 
-    @staticmethod
-    def get_line(qubit_val: int, length: int = 3, color_code: str = "") -> str:
-        _ = qubit_val  # unused
-        return color_code + "─" * length + "\033[0m"
-
-    @staticmethod
-    def get_cross_line(qubit_val: int,
-                       color_code_cross: str = "",
-                       color_code_line: str = "") -> str:
-        _ = qubit_val  # unused
-        return color_code_line + "─" + "\033[0m" \
-            + color_code_cross + "┼" + "\033[0m" \
-            + color_code_line + "─" + "\033[0m"
-
-    @staticmethod
-    def get_wire(color_code: str = ""):
-        return color_code + " │ " + "\033[0m"
-
-    @staticmethod
-    def get_tgt(name: str, qubit_val: int, color_code: str = "") -> str:
-        _ = qubit_val  # unused
-        if name == "x":
-            obj = "[X]"
-        elif name == "y":
-            obj = "[Y]"
-        elif name == "z":
-            obj = "[Z]"
-        elif name == "swap":
-            obj = "SWP"
-        else:
-            raise QuantestPyVisualizationError(
-                f"Gate {name} is not implemented."
-            )
-        return color_code + obj + "\033[0m"
-
-    @staticmethod
-    def get_ctrl(ctrl_val: int,
-                 qubit_val: int,
-                 color_code_ctrl: str = "",
-                 color_code_line: str = "") -> str:
-        _ = qubit_val  # unused
-        obj = "■" if ctrl_val == 1 else "o"
-        return color_code_line + "─" + "\033[0m" \
-            + color_code_ctrl + obj + "\033[0m" \
-            + color_code_line + "─" + "\033[0m"
-
-    @staticmethod
-    def get_state(qubit_val: int, color_code: str = "") -> str:
-        obj = "|1>" if qubit_val == 1 else "|0>"
-        return color_code + obj + "\033[0m"
-
-    @staticmethod
-    def get_phase(qubit_phase: float,
-                  decimals: int,
-                  color_code: str = "") -> str:
-        qubit_phase_str = str(np.round(qubit_phase / np.pi, decimals))
-        return color_code + qubit_phase_str + "\033[0m"
+    def get_phase(self, qubit_phase: float) -> str:
+        phase_in_unit_of_pi = str(np.round(qubit_phase/np.pi, self._decimals))
+        return phase_in_unit_of_pi
 
     def draw_qubit_init_identifier(self) -> None:
         """Overrides
@@ -181,12 +124,9 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
                 reg_name = self._qubit_id_to_reg_name[qubit_id]
-                self._line_id_to_text[line_id] += \
-                    self._qubit_id_to_color_code[qubit_id] \
-                    + str(qubit_id) \
+                self._line_id_to_text[line_id] += str(qubit_id) \
                     + self.get_space(id_max_length-len(str(qubit_id))) \
                     + reg_name \
-                    + "\033[0m" \
                     + self.get_space(reg_name_max_length-len(reg_name))
             else:
                 self._line_id_to_text[line_id] += \
@@ -212,12 +152,9 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
                 reg_name = self._qubit_id_to_output_reg_name[qubit_id]
-                self._line_id_to_text[line_id] += \
-                    self._output_qubit_id_to_color_code[qubit_id] \
-                    + reg_name \
+                self._line_id_to_text[line_id] += reg_name \
                     + self.get_space(reg_name_max_length-len(reg_name)) \
                     + str(qubit_id) \
-                    + "\033[0m" \
                     + self.get_space(id_max_length-len(str(qubit_id)))
             else:
                 self._line_id_to_text[line_id] += \
@@ -233,12 +170,10 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
                 qubit_val = self._qc.qubit_value[qubit_id]
-                self._line_id_to_text[line_id] += \
-                    self.get_state(
-                        qubit_val=qubit_val,
-                        color_code=self.get_color_code_line(qubit_val))
+                obj = self.get_state(qubit_val)
             else:
-                self._line_id_to_text[line_id] += self.get_space(length=3)
+                obj = self.get_space(length=3)
+            self.add_obj_in_line_id_to_text(line_id, obj)
 
     def draw_final_vector(self) -> None:
         """Draws final state vectors.
@@ -256,21 +191,19 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         """
         phase_max_length = 0
         for qubit_phase in self._qc.qubit_phase:
-            qubit_phase_str_length = \
-                len(str(np.round(qubit_phase / np.pi, self._decimals)))
-            if qubit_phase_str_length > phase_max_length:
-                phase_max_length = qubit_phase_str_length
+            phase_length = len(self.get_phase(qubit_phase))
+            if phase_length > phase_max_length:
+                phase_max_length = phase_length
 
         for line_id in range(self._num_line):
             if line_id in self._line_id_to_qubit_id.keys():
                 qubit_id = self._line_id_to_qubit_id[line_id]
                 qubit_phase = self._qc.qubit_phase[qubit_id]
-                qubit_phase_str = self.get_phase(qubit_phase, self._decimals)
-                self._line_id_to_text[line_id] += qubit_phase_str \
-                    + self.get_space(phase_max_length-len(qubit_phase_str))
+                phase = self.get_phase(qubit_phase)
+                obj = phase + self.get_space(phase_max_length-len(phase))
             else:
-                self._line_id_to_text[line_id] += self.get_space(
-                    length=phase_max_length)
+                obj = self.get_space(length=phase_max_length)
+            self.add_obj_in_line_id_to_text(line_id, obj)
 
     def draw_final_phase(self) -> None:
         """Draws qubit phases in unit of PI.
@@ -280,111 +213,90 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         """
         self.draw_init_phase()
 
-    def draw_line(self) -> None:
-        """Overrides"""
-        for line_id in range(self._num_line):
-            if line_id in self._line_id_to_qubit_id.keys():
-                qubit_id = self._line_id_to_qubit_id[line_id]
-                qubit_val = self._qc.qubit_value[qubit_id]
-                cc = self.get_color_code_line(qubit_val)
-                self._line_id_to_text[line_id] += \
-                    self.get_line(qubit_val=qubit_val, length=1, color_code=cc)
-            else:
-                self._line_id_to_text[line_id] += self.get_space(length=1)
+    def color_line(self, line_id: int, text: str) -> None:
+        """Colors lines according to their qubit values"""
+        if line_id in self._line_id_to_qubit_id.keys():
+            qubit_id = self._line_id_to_qubit_id[line_id]
+            qubit_val = self._qc.qubit_value[qubit_id]
+            color_code = self.get_color_code_line(qubit_val)
+            obj = self.add_color_code_in_obj(color_code, text)
+            self.add_obj_in_line_id_to_text(line_id, obj, replace_obj=True)
 
-    def draw_tgt(self, gate_id: int) -> None:
-        """Overrides"""
-        if self.is_gate_executed(gate_id):
-            self._color_code_tgt = self._color_code_gate
-        else:
-            self._color_code_tgt = ""
-
+    def draw_one_gate(self, gate_id: int) -> None:
+        """Overrides.
+        Draws and colors objs for one gate operation.
+        """
+        # Set up
+        self._gate_length = 0
         gate = self._qc.gates[gate_id]
-        for tg_qubit_id in gate["target_qubit"]:
-            line_id = self._qubit_id_to_line_id[tg_qubit_id]
-            qubit_val = self._qc.qubit_value[tg_qubit_id]
-            self._line_id_to_text[line_id] += \
-                self.get_tgt(
-                    name=gate["name"],
-                    qubit_val=qubit_val,
-                    color_code=self._color_code_tgt)
-            self._occupied_line_id.append(line_id)
+        target_qubit_line_id = [self._qubit_id_to_line_id[qubit_id]
+                                for qubit_id in gate["target_qubit"]]
+        self._occupied_line_id = list()
+        self.reset_line_id_to_text()
 
-    def draw_ctrl(self, gate_id: int) -> None:
-        """Overrides"""
+        # Target
+        self.draw_tgt(gate_id)
         if self.is_gate_executed(gate_id):
-            self._color_code_ctrl = self._color_code_gate
-        else:
-            self._color_code_ctrl = ""
+            for line_id, text in self._line_id_to_text.items():
+                if len(text) > 0:
+                    obj = self.add_color_code_in_obj(
+                        self._color_code_gate, text)
+                    self.add_obj_in_line_id_to_text(
+                        line_id, obj, replace_obj=True)
+        self.update_line_id_to_text_whole()
 
-        gate = self._qc.gates[gate_id]
-        for ctrl_qubit_id, ctrl_val \
-                in zip(gate["control_qubit"], gate["control_value"]):
-            line_id = self._qubit_id_to_line_id[ctrl_qubit_id]
-            qubit_val = self._qc.qubit_value[ctrl_qubit_id]
-            cc_ctrl = self._color_code_ctrl if \
-                len(self._color_code_ctrl) > 0 \
-                else self.get_color_code_line(qubit_val)
-            cc_line = self.get_color_code_line(qubit_val)
-            self._line_id_to_text[line_id] += self.get_ctrl(
-                ctrl_val=ctrl_val,
-                qubit_val=qubit_val,
-                color_code_ctrl=cc_ctrl,
-                color_code_line=cc_line
+        # Line or space
+        line_id_list = list(range(self._num_line))
+        for line_id in target_qubit_line_id:
+            line_id_list.remove(line_id)  # remove lines of targets
+        line_len = self._gate_length - 1
+        line_len_fwd = int(line_len/2)
+        line_len_bwd = line_len - line_len_fwd
+
+        self.draw_line(line_id_list, line_len_fwd)
+        for line_id, text in self._line_id_to_text.items():
+            if len(text) > 0:
+                self.color_line(line_id, text)
+        self.update_line_id_to_text_whole()
+
+        # Ctrl
+        self.draw_ctrl(gate_id)
+        for line_id, text in self._line_id_to_text.items():
+            if len(text) > 0:
+                if self.is_gate_executed(gate_id):
+                    cc = self._color_code_gate
+                else:
+                    qubit_id = self._line_id_to_qubit_id[line_id]
+                    qubit_val = self._qc.qubit_value[qubit_id]
+                    cc = self.get_color_code_line(qubit_val)
+                obj = self.add_color_code_in_obj(cc, text)
+                self.add_obj_in_line_id_to_text(line_id, obj, replace_obj=True)
+        self.update_line_id_to_text_whole()
+
+        # Wire
+        self.draw_wire(gate_id)
+        if self.is_gate_executed(gate_id):
+            for line_id, text in self._line_id_to_text.items():
+                if len(text) > 0:
+                    obj = self.add_color_code_in_obj(
+                        self._color_code_gate, text)
+                    self.add_obj_in_line_id_to_text(
+                        line_id, obj, replace_obj=True)
+        self.update_line_id_to_text_whole()
+
+        # Line or space
+        self.draw_rest()
+        self.draw_line(line_id_list, line_len_bwd)
+        for line_id, text in self._line_id_to_text.items():
+            if len(text):
+                self.color_line(line_id, text)
+        self.update_line_id_to_text_whole()
+
+        # Checker
+        if len(self._occupied_line_id) != self._num_line:
+            raise QuantestPyVisualizationError(
+                "Unexpected error. Please report."
             )
-            self._occupied_line_id.append(line_id)
-
-    def draw_wire(self, gate_id: int) -> None:
-        """Overrides"""
-        if self.is_gate_executed(gate_id):
-            self._color_code_wire = self._color_code_gate
-            self._color_code_cross = self._color_code_gate
-        else:
-            self._color_code_wire = ""
-            self._color_code_cross = ""
-
-        gate = self._qc.gates[gate_id]
-        inter_line_id = list()
-        for ctrl_qubit_id in gate["control_qubit"]:
-            ctrl_line_id = self._qubit_id_to_line_id[ctrl_qubit_id]
-            for tg_qubit_id in gate["target_qubit"]:
-                tg_line_id = self._qubit_id_to_line_id[tg_qubit_id]
-                inter_line_id += self.get_inter_line_id(tg_line_id,
-                                                        ctrl_line_id)
-
-        for line_id in set(inter_line_id):
-            # only when not occupied yet
-            if line_id not in self._occupied_line_id:
-                if line_id in self._line_id_to_qubit_id.keys():  # qubit
-                    qubit_id = self._line_id_to_qubit_id[line_id]
-                    qubit_val = self._qc.qubit_value[qubit_id]
-                    cc_cross = self._color_code_cross
-                    cc_line = self.get_color_code_line(qubit_val)
-                    self._line_id_to_text[line_id] += self.get_cross_line(
-                        qubit_val=qubit_val,
-                        color_code_cross=cc_cross,
-                        color_code_line=cc_line
-                    )
-                else:  # inter horizontal space
-                    self._line_id_to_text[line_id] += \
-                        self.get_wire(self._color_code_wire)
-                self._occupied_line_id.append(line_id)
-
-    def draw_rest(self, gate_id: int) -> None:
-        """Overrides"""
-        _ = gate_id  # unused
-        for line_id in range(self._num_line):
-            # only when not occupied yet
-            if line_id not in self._occupied_line_id:
-                if line_id in self._line_id_to_qubit_id.keys():  # qubit
-                    qubit_id = self._line_id_to_qubit_id[line_id]
-                    qubit_val = self._qc.qubit_value[qubit_id]
-                    cc_line = self.get_color_code_line(qubit_val)
-                    self._line_id_to_text[line_id] += \
-                        self.get_line(qubit_val=qubit_val, color_code=cc_line)
-                else:  # inter horizontal space
-                    self._line_id_to_text[line_id] += self.get_space()
-                self._occupied_line_id.append(line_id)
 
     def draw_circuit(self) -> None:
         """Overrides"""
@@ -394,19 +306,26 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         self.draw_space()
         self.draw_init_phase()
         self.draw_space()
+        self.update_line_id_to_text_whole()
         self.draw_line()
+        for line_id, text in self._line_id_to_text.items():
+            self.color_line(line_id, text)
+        self.update_line_id_to_text_whole()
 
         for i in range(len(self._qc.gates)):
             self.draw_one_gate(i)
             self._qc._execute_i_th_gate(i)
-            self.draw_line()
 
+        self.draw_line()
+        for line_id, text in self._line_id_to_text.items():
+            self.color_line(line_id, text)
         self.draw_space()
         self.draw_final_vector()
         self.draw_space()
         self.draw_final_phase()
         self.draw_space()
         self.draw_qubit_final_identifier()
+        self.update_line_id_to_text_whole()
 
 
 def draw_circuit(circuit: PauliCircuit) -> PauliCircuitDrawer:

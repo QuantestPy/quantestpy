@@ -27,9 +27,9 @@ class TestDrawWire(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_wire(gate_id=0)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "",
-                  1: " │ ",
+                  1: "│",
                   2: "",
                   3: "",
                   4: ""}
@@ -46,11 +46,11 @@ class TestDrawWire(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_wire(gate_id=0)
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "",
-                  1: " │ ",
-                  2: "─┼─",
-                  3: " │ ",
+                  1: "│",
+                  2: "┼",
+                  3: "│",
                   4: ""}
         self.assertEqual(actual, expect)
 

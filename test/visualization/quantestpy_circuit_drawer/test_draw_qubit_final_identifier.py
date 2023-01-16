@@ -25,7 +25,7 @@ class TestDrawQubitFinalIdentifier(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_qubit_final_identifier()
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "0",
                   1: " ",
                   2: "1",
@@ -38,7 +38,7 @@ class TestDrawQubitFinalIdentifier(unittest.TestCase):
         cd = CD(qc)
 
         cd.draw_qubit_final_identifier()
-        actual = cd.line_id_to_text
+        actual = cd._line_id_to_text
         expect = {0: "0 ",
                   1: "  ",
                   2: "1 ",
