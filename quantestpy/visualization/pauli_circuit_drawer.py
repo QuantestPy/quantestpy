@@ -219,14 +219,15 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         """
         self.draw_init_phase()
 
-    def color_line(self, line_id: int, text: str) -> None:
+    def color_line(self) -> None:
         """Colors lines according to their qubit values"""
-        if line_id in self._line_id_to_qubit_id.keys():
-            qubit_id = self._line_id_to_qubit_id[line_id]
-            qubit_val = self._qc.qubit_value[qubit_id]
-            color_code = self.get_color_code_line(qubit_val)
-            obj = self.add_color_code_in_obj(color_code, text)
-            self.add_obj_in_line_id_to_text(line_id, obj, replace_obj=True)
+        for line_id, text in self._line_id_to_text.items():
+            if line_id in self._line_id_to_qubit_id.keys() and len(text) > 0:
+                qubit_id = self._line_id_to_qubit_id[line_id]
+                qubit_val = self._qc.qubit_value[qubit_id]
+                color_code = self.get_color_code_line(qubit_val)
+                obj = self.add_color_code_in_obj(color_code, text)
+                self.add_obj_in_line_id_to_text(line_id, obj, replace_obj=True)
 
     def draw_one_gate(self, gate_id: int) -> None:
         """Overrides :
@@ -260,9 +261,7 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         line_len_bwd = line_len - line_len_fwd
 
         self.draw_line(line_id_list, line_len_fwd)
-        for line_id, text in self._line_id_to_text.items():
-            if len(text) > 0:
-                self.color_line(line_id, text)
+        self.color_line()
         self.update_line_id_to_text_whole()
 
         # Ctrl
@@ -293,9 +292,7 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         # Line or space
         self.draw_rest()
         self.draw_line(line_id_list, line_len_bwd)
-        for line_id, text in self._line_id_to_text.items():
-            if len(text):
-                self.color_line(line_id, text)
+        self.color_line()
         self.update_line_id_to_text_whole()
 
         # Checker
@@ -317,8 +314,7 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         self.draw_space()
         self.update_line_id_to_text_whole()
         self.draw_line()
-        for line_id, text in self._line_id_to_text.items():
-            self.color_line(line_id, text)
+        self.color_line()
         self.update_line_id_to_text_whole()
 
         for i in range(len(self._qc.gates)):
@@ -326,8 +322,7 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             self._qc._execute_i_th_gate(i)
 
         self.draw_line()
-        for line_id, text in self._line_id_to_text.items():
-            self.color_line(line_id, text)
+        self.color_line()
         self.draw_space()
         self.draw_final_vector()
         self.draw_space()
