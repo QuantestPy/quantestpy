@@ -55,6 +55,9 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
 
     @staticmethod
     def get_tgt(name: str) -> str:
+        """Overrides :
+        Restricts gates to the gates implemented in PauliCircuit.
+        """
         if name == "x":
             obj = "[X]"
         elif name == "y":
@@ -104,7 +107,8 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         return phase_in_unit_of_pi
 
     def draw_qubit_init_identifier(self) -> None:
-        """Overrides
+        """Overrides :
+        Adds register names after qubit ids.
         ::
 
         '0 reg1'
@@ -133,8 +137,10 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
                     self.get_space(id_max_length+reg_name_max_length)
 
     def draw_qubit_final_identifier(self) -> None:
-        """Overrides
+        """Overrides :
+        Adds register names before qubit ids.
         ::
+
         'out 0'
 
         '    1'
@@ -223,8 +229,8 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             self.add_obj_in_line_id_to_text(line_id, obj, replace_obj=True)
 
     def draw_one_gate(self, gate_id: int) -> None:
-        """Overrides.
-        Draws and colors objs for one gate operation.
+        """Overrides :
+        Colors as well as draws objs for one gate operation.
         """
         # Set up
         self._gate_length = 0
@@ -299,7 +305,10 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
             )
 
     def draw_circuit(self) -> None:
-        """Overrides"""
+        """Overrides :
+        Calls the newly added draw methods.
+        Colors the initial and final qubit lines.
+        """
         self.draw_qubit_init_identifier()
         self.draw_space()
         self.draw_init_vector()
