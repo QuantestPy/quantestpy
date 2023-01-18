@@ -308,6 +308,12 @@ class StateVectorCircuit(QuantestPyCircuit):
 
         return whole_gates
 
+    def draw(self,):
+        from quantestpy.visualization.state_vector_circuit_drawer import \
+            draw_circuit
+
+        return draw_circuit(self)
+
 
 def cvt_quantestpy_circuit_to_state_vector_circuit(
         qc: QuantestPyCircuit) -> StateVectorCircuit:
