@@ -143,7 +143,7 @@ class PauliCircuit(QuantestPyCircuit):
             self._execute_i_th_gate(i)
 
     def draw(self,):
-        from quantestpy.simulator.circuit_drawer import draw_circuit
+        from quantestpy.visualization.pauli_circuit_drawer import draw_circuit
 
         return draw_circuit(self)
 
