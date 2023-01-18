@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 
 from quantestpy import QuantestPyCircuit
-from quantestpy.assertion.not_entangled import assert_not_entangled
+from quantestpy.assertion.assert_not_entangled import assert_not_entangled
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
