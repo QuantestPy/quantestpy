@@ -3,8 +3,8 @@ import unittest
 
 import numpy as np
 
-from quantestpy.exceptions import QuantestPyAssertionError
 from quantestpy import assert_equivalent_operators
+from quantestpy.exceptions import QuantestPyAssertionError
 
 
 class TestAssertEquivalentOperators(unittest.TestCase):
