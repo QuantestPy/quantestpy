@@ -2,16 +2,17 @@ import unittest
 
 import numpy as np
 
-from quantestpy import QuantestPyCircuit, circuit
+from quantestpy import QuantestPyCircuit, assert_circuit_equivalent_to_operator
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestCircuitAssertEqualToOperator(unittest.TestCase):
+class TestAssertCircuitEquivalentToOperator(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_circuit_assert_equal_to_operator
+    $ python -m unittest \
+        test.assertion.assert_circuit_equivalent_to_operator.test_assert_circuit_equivalent_to_operator
     ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.003s
@@ -43,7 +44,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         )/np.sqrt(2.)
 
         self.assertIsNone(
-            circuit.assert_equal_to_operator(
+            assert_circuit_equivalent_to_operator(
                 operator_=expected_operator,
                 circuit=self.qc
             )
@@ -59,7 +60,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         )/np.sqrt(2.)
 
         with self.assertRaises(QuantestPyAssertionError):
-            circuit.assert_equal_to_operator(
+            assert_circuit_equivalent_to_operator(
                 operator_=expected_operator,
                 circuit=self.qc,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
@@ -75,7 +76,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         )/np.sqrt(2.)  # Qiskit convention
 
         self.assertIsNone(
-            circuit.assert_equal_to_operator(
+            assert_circuit_equivalent_to_operator(
                 operator_=expected_operator,
                 circuit=self.qc,
                 from_right_to_left_for_qubit_ids=True  # Qiskit convention
@@ -92,7 +93,7 @@ class TestCircuitAssertEqualToOperator(unittest.TestCase):
         )/np.sqrt(2.)  # Qiskit convention
 
         with self.assertRaises(QuantestPyAssertionError):
-            circuit.assert_equal_to_operator(
+            assert_circuit_equivalent_to_operator(
                 operator_=expected_operator,
                 circuit=self.qc
             )

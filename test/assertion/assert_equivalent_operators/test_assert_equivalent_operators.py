@@ -4,15 +4,16 @@ import unittest
 import numpy as np
 
 from quantestpy.exceptions import QuantestPyAssertionError
-from quantestpy.operator import assert_equal
+from quantestpy import assert_equivalent_operators
 
 
-class TestOperatorAssertEqual(unittest.TestCase):
+class TestAssertEquivalentOperators(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_operator_assert_equal
+    $ python -m unittest \
+        test.assertion.assert_equivalent_operators.test_assert_equivalent_operators
     ...
     ----------------------------------------------------------------------
     Ran 3 tests in 0.012s
@@ -37,7 +38,7 @@ class TestOperatorAssertEqual(unittest.TestCase):
         ) / np.sqrt(2.) * np.exp(0.4j)
 
         self.assertIsNone(
-            assert_equal(
+            assert_equivalent_operators(
                 op_a,
                 op_b,
                 up_to_global_phase=True
@@ -60,7 +61,7 @@ class TestOperatorAssertEqual(unittest.TestCase):
         ) / np.sqrt(2.) * np.exp(0.7j)
 
         with self.assertRaises(QuantestPyAssertionError):
-            assert_equal(
+            assert_equivalent_operators(
                 op_a,
                 op_b
             )
@@ -102,7 +103,7 @@ class TestOperatorAssertEqual(unittest.TestCase):
 
             try:
                 self.assertIsNotNone(
-                    assert_equal(
+                    assert_equivalent_operators(
                         operator_a=op_a,
                         operator_b=op_b,
                         matrix_norm_type=pattern["matrix_norm_type"],

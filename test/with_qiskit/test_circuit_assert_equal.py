@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from qiskit import QuantumCircuit
 
-from quantestpy import QuantestPyCircuit, circuit
+from quantestpy import QuantestPyCircuit, assert_equivalent_circuits
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 
 
@@ -28,7 +28,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                circuit.assert_equal(
+                assert_equivalent_circuits(
                     circuit_a=circuit_a,
                     circuit_b=circuit_b
                 )
@@ -53,7 +53,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                circuit.assert_equal(
+                assert_equivalent_circuits(
                     circuit_a=circuit_a,
                     circuit_b=circuit_b
                 )
@@ -94,7 +94,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
         )
 
         self.assertIsNone(
-            circuit.assert_equal(
+            assert_equivalent_circuits(
                 circuit_a=qc_a,
                 circuit_b=qc_b
             )
@@ -115,7 +115,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             try:
                 self.assertIsNotNone(
-                    circuit.assert_equal(
+                    assert_equivalent_circuits(
                         circuit_a=qc_a,
                         circuit_b=qc_b,
                         atol=tolerance
@@ -170,7 +170,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             try:
                 self.assertIsNotNone(
-                    circuit.assert_equal(
+                    assert_equivalent_circuits(
                         circuit_a=qc_a,
                         circuit_b=qc_b,
                         matrix_norm_type=pattern["matrix_norm_type"],
@@ -209,7 +209,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                circuit.assert_equal(
+                assert_equivalent_circuits(
                     circuit_a=qc_a,
                     circuit_b=qc_b,
                     matrix_norm_type="operator_norm_2",
@@ -271,7 +271,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             try:
                 self.assertIsNotNone(
-                    circuit.assert_equal(
+                    assert_equivalent_circuits(
                         circuit_a=qc_a,
                         circuit_b=qc_b,
                         matrix_norm_type=pattern["matrix_norm_type"],

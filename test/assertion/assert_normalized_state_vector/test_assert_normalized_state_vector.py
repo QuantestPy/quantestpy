@@ -3,16 +3,17 @@ import unittest
 
 import numpy as np
 
-from quantestpy import state_vector
+from quantestpy import assert_normalized_state_vector
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestStateVectorAssertIsNormalized(unittest.TestCase):
+class TestAssertNormalizedStateVector(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_state_vector_assert_is_normalized
+    $ python -m unittest \
+        test.assertion.assert_normalized_state_vector.test_assert_normalized_state_vector
     ....
     ----------------------------------------------------------------------
     Ran 2 tests in 0.001s
@@ -25,7 +26,7 @@ class TestStateVectorAssertIsNormalized(unittest.TestCase):
         vec = np.array([-1, 0, 0, 1j]) / np.sqrt(2.)
 
         self.assertIsNone(
-            state_vector.assert_is_normalized(vec)
+            assert_normalized_state_vector(vec)
         )
 
     def test_error_msg(self,):
@@ -33,7 +34,7 @@ class TestStateVectorAssertIsNormalized(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                state_vector.assert_is_normalized(vec)
+                assert_normalized_state_vector(vec)
             )
 
         except QuantestPyAssertionError as e:

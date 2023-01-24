@@ -8,36 +8,6 @@ from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
 ut_test_case = unittest.TestCase()
 
 
-def assert_is_normalized(
-        state_vector_subject_to_test: Union[np.ndarray, list],
-        atol: float = 1e-8,
-        msg=None) -> None:
-
-    a = state_vector_subject_to_test
-
-    # check type
-    if not isinstance(a, np.ndarray) and not isinstance(a, list):
-        raise TypeError(
-            "The type of state_vector_subject_to_test must be "
-            "either numpy.ndarray or list."
-        )
-
-    # conv. list to ndarray
-    if not isinstance(a, np.ndarray):
-        a = np.array(a)
-
-    # calc. norm
-    norm = np.sqrt(np.dot(a, a.conj()).real)
-
-    if np.abs(norm - 1.) <= atol:
-        return
-    else:
-        error_msg = ("The state vector is not normalized.\n"
-                     f"Norm: {norm}")
-        msg = ut_test_case._formatMessage(msg, error_msg)
-        raise QuantestPyAssertionError(msg)
-
-
 def _remove_global_phase_from_two_vectors(a: np.ndarray, b: np.ndarray):
 
     abs_a = np.abs(a)
@@ -54,7 +24,7 @@ def _remove_global_phase_from_two_vectors(a: np.ndarray, b: np.ndarray):
     return a, b
 
 
-def assert_equal(
+def assert_equivalent_state_vectors(
         state_vector_a: Union[np.ndarray, list],
         state_vector_b: Union[np.ndarray, list],
         rtol: float = 0.,

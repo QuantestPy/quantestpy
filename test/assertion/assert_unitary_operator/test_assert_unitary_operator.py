@@ -3,16 +3,17 @@ import unittest
 
 import numpy as np
 
-from quantestpy import operator
+from quantestpy import assert_unitary_operator
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestOperatorAssertIsUnitary(unittest.TestCase):
+class TestAssertUnitaryOperator(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_operator_assert_is_unitary
+    $ python -m unittest \
+        test.assertion.assert_unitary_operator.test_assert_unitary_operator
     ....
     ----------------------------------------------------------------------
     Ran 2 tests in 0.004s
@@ -30,7 +31,7 @@ class TestOperatorAssertIsUnitary(unittest.TestCase):
         ) / np.sqrt(2.) * np.exp(0.4j)
 
         self.assertIsNone(
-            operator.assert_is_unitary(operator_)
+            assert_unitary_operator(operator_)
         )
 
     def test_error_msg(self,):
@@ -43,7 +44,7 @@ class TestOperatorAssertIsUnitary(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                operator.assert_is_unitary(operator_)
+                assert_unitary_operator(operator_)
             )
 
         except QuantestPyAssertionError as e:
