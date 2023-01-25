@@ -1,16 +1,17 @@
 import traceback
 import unittest
 
-from quantestpy import QuantestPyCircuit, circuit
+from quantestpy import QuantestPyCircuit, assert_ancilla_reset
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestCircuitAssertAncillaIsZero(unittest.TestCase):
+class TestAssertAncillaReset(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_circuit_assert_ancilla_is_zero
+    $ python -m unittest \
+        test.assertion.assert_ancilla_reset.test_assert_ancilla_reset
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.135s
@@ -47,7 +48,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
         )
 
         self.assertIsNone(
-            circuit.assert_ancilla_is_zero(
+            assert_ancilla_reset(
                 circuit=qc,
                 ancilla_qubits=[1, 2]
             )
@@ -83,7 +84,7 @@ class TestCircuitAssertAncillaIsZero(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                circuit.assert_ancilla_is_zero(
+                assert_ancilla_reset(
                     circuit=qc,
                     ancilla_qubits=[1, 2]
                 )

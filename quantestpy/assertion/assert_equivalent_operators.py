@@ -3,33 +3,11 @@ from typing import Union
 
 import numpy as np
 
+from quantestpy.assertion.assert_equivalent_state_vectors import \
+    _remove_global_phase_from_two_vectors
 from quantestpy.exceptions import QuantestPyAssertionError, QuantestPyError
-from quantestpy.state_vector import _remove_global_phase_from_two_vectors
 
 ut_test_case = unittest.TestCase()
-
-
-def assert_is_unitary(
-        operator_subject_to_test: Union[np.ndarray, np.matrix],
-        atol: float = 1e-8,
-        msg=None) -> None:
-
-    m = operator_subject_to_test
-
-    # conv. list to matrix
-    if not isinstance(m, np.matrix):
-        m = np.matrix(m)
-
-    a = m * m.H
-
-    if np.all(np.abs(a - np.eye(m.shape[0])) <= atol):
-        return
-
-    else:
-        error_msg = ("Operator is not unitary.\n"
-                     f"m * m^+:\n{a}")
-        msg = ut_test_case._formatMessage(msg, error_msg)
-        raise QuantestPyAssertionError(msg)
 
 
 def _get_matrix_norm(
@@ -75,7 +53,7 @@ def _get_matrix_norm(
     return matrix_norm_value
 
 
-def assert_equal(
+def assert_equivalent_operators(
         operator_a: Union[np.ndarray, np.matrix],
         operator_b: Union[np.ndarray, np.matrix],
         rtol: float = 0.,
