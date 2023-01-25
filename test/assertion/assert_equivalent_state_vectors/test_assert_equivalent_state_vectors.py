@@ -3,16 +3,17 @@ import unittest
 
 import numpy as np
 
-from quantestpy import state_vector
+from quantestpy import assert_equivalent_state_vectors
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestStateVectorAssertEqual(unittest.TestCase):
+class TestAssertEquivalentStateVectors(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_state_vector_assert_equal
+    $ python -m unittest \
+        test.assertion.assert_equivalent_state_vectors.test_assert_equivalent_state_vectors
     .....
     ----------------------------------------------------------------------
     Ran 5 tests in 0.009s
@@ -26,7 +27,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
         vec_b = - np.array([1, 0, 0, 1]) / np.sqrt(2.)
 
         self.assertIsNone(
-            state_vector.assert_equal(
+            assert_equivalent_state_vectors(
                 vec_a,
                 vec_b,
                 up_to_global_phase=True
@@ -40,7 +41,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             / 0.5201442107723587 * np.exp(0.4j)
 
         self.assertIsNone(
-            state_vector.assert_equal(
+            assert_equivalent_state_vectors(
                 vec_a,
                 vec_b,
                 up_to_global_phase=True
@@ -52,7 +53,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
         vec_b = np.array([1, 1j, -1j, -0.999j]) / 2.
 
         self.assertIsNone(
-            state_vector.assert_equal(
+            assert_equivalent_state_vectors(
                 vec_a,
                 vec_b,
                 atol=6.2e-05
@@ -60,7 +61,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
         )
 
         with self.assertRaises(QuantestPyAssertionError):
-            state_vector.assert_equal(
+            assert_equivalent_state_vectors(
                 vec_a,
                 vec_b
             )
@@ -72,7 +73,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
             / 0.5201442107723587 * np.exp(0.4j)
 
         with self.assertRaises(QuantestPyAssertionError):
-            state_vector.assert_equal(
+            assert_equivalent_state_vectors(
                 vec_a,
                 vec_b
             )
@@ -83,7 +84,7 @@ class TestStateVectorAssertEqual(unittest.TestCase):
 
         try:
             self.assertIsNotNone(
-                state_vector.assert_equal(
+                assert_equivalent_state_vectors(
                     vec_a,
                     vec_b,
                     rtol=1e-06,

@@ -1,15 +1,16 @@
 import unittest
 
-from quantestpy import QuantestPyCircuit, circuit
+from quantestpy import QuantestPyCircuit, assert_qubit_reset_to_zero_state
 from quantestpy.exceptions import QuantestPyAssertionError
 
 
-class TestCircuitAssertIsZero(unittest.TestCase):
+class TestAssertQubitResetToZeroState(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.test_circuit_assert_is_zero
+    $ python -m unittest \
+        test.assertion.assert_qubit_reset_to_zero_state.test_assert_qubit_reset_to_zero_state
     ....
     ----------------------------------------------------------------------
     Ran 4 tests in 0.008s
@@ -29,7 +30,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         )
 
         self.assertIsNone(
-            circuit.assert_is_zero(
+            assert_qubit_reset_to_zero_state(
                 circuit=qc,
                 qubits=[1]
             )
@@ -47,7 +48,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         )
 
         self.assertIsNone(
-            circuit.assert_is_zero(
+            assert_qubit_reset_to_zero_state(
                 circuit=qc,
                 qubits=[1, 2]
             )
@@ -65,7 +66,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
         )
 
         with self.assertRaises(QuantestPyAssertionError):
-            circuit.assert_is_zero(
+            assert_qubit_reset_to_zero_state(
                 circuit=qc
             )
 
@@ -84,7 +85,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
 
         # no error
         self.assertIsNone(
-            circuit.assert_is_zero(
+            assert_qubit_reset_to_zero_state(
                 circuit=qc,
                 atol=0.71
             )
@@ -92,7 +93,7 @@ class TestCircuitAssertIsZero(unittest.TestCase):
 
         # error
         with self.assertRaises(QuantestPyAssertionError):
-            circuit.assert_is_zero(
+            assert_qubit_reset_to_zero_state(
                 circuit=qc,
                 atol=0.7
             )
