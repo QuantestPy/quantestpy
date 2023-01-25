@@ -170,8 +170,8 @@ def assert_circuit_equivalent_to_output_qubit_state(
         # check output type
         if not isinstance(output, str) and not isinstance(output, tuple):
             raise QuantestPyError(
-                "Output must be either a binary bitstring or a tuple of"
-                " having both a binary bitstring and a list of qubit phases."
+                "Output must be either a binary bitstring or a tuple "
+                "having both a binary bitstring and a list of qubit phases."
             )
         if isinstance(output, str):
             out_bitstring = output

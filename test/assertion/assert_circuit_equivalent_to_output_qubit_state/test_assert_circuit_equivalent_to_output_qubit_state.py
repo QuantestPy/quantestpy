@@ -116,8 +116,8 @@ class TestAssertEquivalent(unittest.TestCase):
                     "control_value": [1, 1]})
 
         expected_error_msg = \
-            "Output must be either a binary bitstring or a tuple of" \
-            + " having both a binary bitstring and a list of qubit phases."
+            "Output must be either a binary bitstring or a tuple having " \
+            + "both a binary bitstring and a list of qubit phases."
 
         with self.assertRaises(QuantestPyError) as cm:
             assert_circuit_equivalent_to_output_qubit_state(
