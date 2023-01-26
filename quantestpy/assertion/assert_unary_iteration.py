@@ -126,7 +126,6 @@ def assert_unary_iteration(
         system_reg: list,
         input_to_output: dict,
         ancilla_reg: list = [],
-        check_ancilla_is_uncomputed: bool = False,
         draw_circuit: bool = False):
     """
     e.g.
@@ -144,8 +143,6 @@ def assert_unary_iteration(
     pc_org._assert_is_correct_reg(ancilla_reg)
     if not isinstance(input_to_output, dict):
         raise QuantestPyError("input_to_output must be a dict.")
-    if not isinstance(check_ancilla_is_uncomputed, bool):
-        raise QuantestPyError("check_ancilla_is_uncomputed must be bool type.")
     if not isinstance(draw_circuit, bool):
         raise QuantestPyError("draw_circuit must be bool type.")
 
@@ -200,7 +197,7 @@ def assert_unary_iteration(
                 raise QuantestPyAssertionError(err_msg)
 
         # check ancilla == 0
-        if check_ancilla_is_uncomputed:
+        if len(ancilla_reg) > 0:
             return_from_assert_ancilla_reset = _assert_ancilla_reset(
                 pc_org,
                 index_reg,

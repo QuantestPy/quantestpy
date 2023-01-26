@@ -97,8 +97,7 @@ class TestAssertUnaryIteration(unittest.TestCase):
                     "01": "00",
                     "10": "00",
                     "11": "11"
-                },
-                check_ancilla_is_uncomputed=True
+                }
             )
         self.assertEqual(cm.exception.args[0], expected_error_msg)
 
@@ -250,8 +249,7 @@ class TestDrawCircuitOption(unittest.TestCase):
                     "10": "00",
                     "11": "11"
                 },
-                draw_circuit=True,
-                check_ancilla_is_uncomputed=True
+                draw_circuit=True
             )
         )
 
