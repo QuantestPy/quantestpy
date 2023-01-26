@@ -21,7 +21,7 @@ def _is_a_in_b(a: list, b: list) -> bool:
     return False
 
 
-def _assert_internal_replacing_gates_in_system_reg_with_x_gates(
+def _assert_equal_qubit_state_replacing_gates_in_sys_reg_with_x_gates(
         pauli_circuit_org: PauliCircuit,
         index_reg: list,
         system_reg: list,
@@ -79,6 +79,10 @@ def _draw_circuit(pauli_circuit_org: PauliCircuit,
                   err_msg: str,
                   val_err_reg: list,
                   replace_gate: bool = True) -> None:
+    # Check input
+    if len(system_reg) > 0 and len(ancilla_reg) > 0:
+        raise QuantestPyError("Unexpected error. Please report.")
+
     # define the circuit
     pc = copy.deepcopy(pauli_circuit_org)
     pc.set_qubit_value(index_reg, [int(i) for i in in_bitstring])
@@ -163,7 +167,7 @@ def assert_unary_iteration(
 
         # check actual == expect
         return_from_assert_equal = \
-            _assert_internal_replacing_gates_in_system_reg_with_x_gates(
+            _assert_equal_qubit_state_replacing_gates_in_sys_reg_with_x_gates(
                 pc_org,
                 index_reg,
                 system_reg,

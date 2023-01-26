@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from quantestpy import PauliCircuit
 from quantestpy.assertion.assert_unary_iteration import _draw_circuit
+from quantestpy.exceptions import QuantestPyError
 
 
 class TestDrawCircuit(unittest.TestCase):
@@ -14,9 +15,9 @@ class TestDrawCircuit(unittest.TestCase):
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
         test.assertion.assert_unary_iteration.test_draw_circuit
-    ..
+    ...
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.005s
+    Ran 3 tests in 0.008s
 
     OK
     $
@@ -77,3 +78,30 @@ class TestDrawCircuit(unittest.TestCase):
         self.assertIsInstance(stdout, str)
         for s in ["This is an err msg.", "[Y]"]:
             self.assertTrue(s in stdout)
+
+
+class TestInput(unittest.TestCase):
+
+    def test_raise_from_invalid_input_set(self,):
+        pc = PauliCircuit(5)
+        pc.add_gate({"name": "x", "control_qubit": [0, 1], "target_qubit": [2],
+                    "control_value": [1, 1]})
+        pc.add_gate({"name": "y", "control_qubit": [2], "target_qubit": [3],
+                    "control_value": [1]})
+        pc.add_gate({"name": "x", "control_qubit": [0, 1], "target_qubit": [2],
+                    "control_value": [1, 1]})
+
+        expected_error_msg = "Unexpected error. Please report."
+
+        with self.assertRaises(QuantestPyError) as cm:
+            _draw_circuit(
+                pauli_circuit_org=pc,
+                index_reg=[0, 1],
+                system_reg=[3, 4],
+                ancilla_reg=[2],
+                in_bitstring="11",
+                err_msg="This is an err msg.",
+                val_err_reg=[2, 3]
+            )
+
+        self.assertEqual(cm.exception.args[0], expected_error_msg)
