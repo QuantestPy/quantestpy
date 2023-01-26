@@ -39,4 +39,4 @@ extend_skip_glob = ["*__init__.py"]
 skip = ["./test/assertion/assert_circuit_equivalent_to_output_qubit_state/test_draw_circuit.py",
 "./test/assertion/assert_circuit_equivalent_to_output_qubit_state/test_assert_internal.py",
 "./test/assertion/assert_circuit_equivalent_to_output_qubit_state/test_drawer.py",
-"./quantestpy/assertion/assert_unary_iteration.py"]
+"assert_unary_iteration.py"]
