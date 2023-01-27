@@ -73,16 +73,12 @@ def _assert_ancilla_reset(pauli_circuit_org: PauliCircuit,
 
 def _draw_circuit(pauli_circuit_org: PauliCircuit,
                   index_reg: list,
-                  system_reg: list,
-                  ancilla_reg: list,
+                  output_reg: list,
+                  output_reg_name: str,
                   in_bitstring: str,
                   err_msg: str,
                   val_err_reg: list,
                   replace_gate: bool = True) -> None:
-    # Check input
-    if len(system_reg) > 0 and len(ancilla_reg) > 0:
-        raise QuantestPyError("Unexpected error. Please report.")
-
     # define the circuit
     pc = copy.deepcopy(pauli_circuit_org)
     pc.set_qubit_value(index_reg, [int(i) for i in in_bitstring])
@@ -91,24 +87,19 @@ def _draw_circuit(pauli_circuit_org: PauliCircuit,
     if replace_gate:
         for gate_id, gate in enumerate(pc.gates):
             tgt_qubit_idx = gate["target_qubit"]
-            if _is_a_in_b(a=tgt_qubit_idx, b=system_reg):
+            if _is_a_in_b(a=tgt_qubit_idx, b=output_reg):
                 pc.gates[gate_id]["name"] = "x"
 
     # create an instance of PauliCircuitDrawerColorErrorQubit
     gc = PauliCircuitDrawerColorErrorQubit(
         circuit=pc,
-        output_reg=system_reg if len(system_reg) > 0 else ancilla_reg,
+        output_reg=output_reg,
         val_err_reg=val_err_reg,
         color_phase=False,
         phase_err_reg=[]
     )
     gc.set_name_to_reg({"in": index_reg})
-    if len(system_reg) > 0:
-        gc.set_name_to_output_reg({"system": system_reg})
-    elif len(ancilla_reg) > 0:
-        gc.set_name_to_output_reg({"ancilla": ancilla_reg})
-    else:
-        raise QuantestPyError("Unexpected error. Please report.")
+    gc.set_name_to_output_reg({output_reg_name: output_reg})
     gc.draw_circuit()
     length = len(list(gc.line_id_to_text_whole.values()))
     fig = gc.create_single_string()
@@ -191,8 +182,8 @@ def assert_unary_iteration(
 
                 _draw_circuit(pauli_circuit_org=pc_org,
                               index_reg=index_reg,
-                              system_reg=system_reg,
-                              ancilla_reg=[],
+                              output_reg=system_reg,
+                              output_reg_name="system",
                               in_bitstring=in_bitstring,
                               err_msg=err_msg,
                               val_err_reg=val_err_reg,
@@ -219,8 +210,8 @@ def assert_unary_iteration(
                 if draw_circuit:
                     _draw_circuit(pauli_circuit_org=pc_org,
                                   index_reg=index_reg,
-                                  system_reg=[],
-                                  ancilla_reg=ancilla_reg,
+                                  output_reg=ancilla_reg,
+                                  output_reg_name="ancilla",
                                   in_bitstring=in_bitstring,
                                   err_msg=err_msg,
                                   val_err_reg=ancilla_err_reg,

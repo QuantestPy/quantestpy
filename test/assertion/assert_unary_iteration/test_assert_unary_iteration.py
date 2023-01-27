@@ -14,9 +14,10 @@ class TestAssertUnaryIteration(unittest.TestCase):
     {Your directory where you git-cloned quantestpy}/quantestpy
     $ python -m unittest \
         test.assertion.assert_unary_iteration.test_assert_unary_iteration
-    .......
+    .........
     ----------------------------------------------------------------------
-    Ran 7 tests in 0.010s
+    Ran 9 tests in 0.021s
+
     OK
     $
     """
