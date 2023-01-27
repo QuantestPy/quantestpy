@@ -91,14 +91,14 @@ class TestAssertUnaryIteration(unittest.TestCase):
             assert_unary_iteration(
                 circuit=qc,
                 index_reg=[0, 1],
-                ancilla_reg=[2],
                 system_reg=[3, 4],
                 input_to_output={
                     "00": "00",
                     "01": "00",
                     "10": "00",
                     "11": "11"
-                }
+                },
+                ancilla_reg=[2]
             )
         self.assertEqual(cm.exception.args[0], expected_error_msg)
 
@@ -207,13 +207,13 @@ class TestDrawCircuitOption(unittest.TestCase):
                 circuit=qc,
                 index_reg=[0, 1],
                 system_reg=[3, 4],
-                ancilla_reg=[2],
                 input_to_output={
                     "00": "00",
                     "01": "00",
                     "10": "00",
                     "11": "10"  # error
                 },
+                ancilla_reg=[2],
                 draw_circuit=True
             )
         )
@@ -242,7 +242,6 @@ class TestDrawCircuitOption(unittest.TestCase):
             assert_unary_iteration(
                 circuit=qc,
                 index_reg=[0, 1],
-                ancilla_reg=[2],
                 system_reg=[3, 4],
                 input_to_output={
                     "00": "00",
@@ -250,6 +249,7 @@ class TestDrawCircuitOption(unittest.TestCase):
                     "10": "00",
                     "11": "11"
                 },
+                ancilla_reg=[2],
                 draw_circuit=True
             )
         )
