@@ -25,7 +25,7 @@ class PauliCircuitDrawerColorErrorQubit(PauliCircuitDrawer):
         self._val_err_reg = val_err_reg
         self._color_phase = color_phase
         self._phase_err_reg = phase_err_reg
-        self._color_code_succ = self.get_color_code("blue")
+        self._color_code_succ = self.get_color_code("cyan")
         self._color_code_err = self.get_color_code("red")
 
     def draw_final_vector(self) -> None:
