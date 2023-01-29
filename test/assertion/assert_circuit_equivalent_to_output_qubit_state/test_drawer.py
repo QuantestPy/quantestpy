@@ -31,13 +31,13 @@ class TestDrawer(unittest.TestCase):
 
         cd.draw_final_vector()
         actual = cd._line_id_to_text
-        expect = {0: "\033[34m|0>\033[0m",
+        expect = {0: "\033[36m|0>\033[0m",
                   1: "   ",
                   2: "\033[31m|1>\033[0m",
                   3: "   ",
                   4: "|0>\033[0m",
                   5: "   ",
-                  6: "\033[34m|1>\033[0m"}
+                  6: "\033[36m|1>\033[0m"}
         self.assertEqual(actual, expect)
 
     def test_draw_final_phase_regular(self,):
@@ -61,5 +61,5 @@ class TestDrawer(unittest.TestCase):
                   3: "   ",
                   4: "0.0\033[0m",
                   5: "   ",
-                  6: "\033[34m0.0\033[0m"}
+                  6: "\033[36m0.0\033[0m"}
         self.assertEqual(actual, expect)

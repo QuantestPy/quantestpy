@@ -18,7 +18,7 @@ class PauliCircuitDrawer(QuantestPyCircuitDrawer):
         self._color_code_line_1 = self.get_color_code("green")
         self._color_code_line_0 = ""
 
-        self._color_code_gate = self.get_color_code("purple")
+        self._color_code_gate = self.get_color_code("blue")
         self._decimals = 2
 
         self._qubit_id_to_reg_name \
