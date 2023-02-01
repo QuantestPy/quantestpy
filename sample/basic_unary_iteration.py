@@ -7,7 +7,6 @@ REFERENCE : Figure 7 in R. Babbush et al., arXiv:1805.03662
 
 from quantestpy import QuantestPyCircuit, assert_unary_iteration
 
-
 """Define a function testing the circuit"""
 
 

@@ -5,9 +5,8 @@ REFERENCE : Figure 1 in C. Gidney, arXiv:1709.06648
 """
 
 
-from quantestpy import QuantestPyCircuit, \
-    assert_circuit_equivalent_to_output_qubit_state
-
+from quantestpy import (QuantestPyCircuit,
+                        assert_circuit_equivalent_to_output_qubit_state)
 
 """Define a function testing the circuit"""
 
