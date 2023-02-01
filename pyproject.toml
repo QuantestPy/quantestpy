@@ -30,6 +30,7 @@ qiskit = [
 [tool.setuptools]
 include-package-data = true
 zip-safe = false
+packages = ["quantestpy"]
 
 [tool.flake8]
 per-file-ignores = "__init__.py:F401"
