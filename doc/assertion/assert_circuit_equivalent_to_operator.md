@@ -1,6 +1,6 @@
-# quantestpy.circuit.assert_equal_to_operator
+# quantestpy.assert_circuit_equivalent_to_operator
 
-## circuit.assert_equal_to_operator(circuit, operator_, from_right_to_left_for_qubit_ids=False, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
+## assert_circuit_equivalent_to_operator(circuit, operator_, from_right_to_left_for_qubit_ids=False, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
 
 Raises a QuantestPyAssertionError if the circuit, which is internally converted to an operator, is not equal to the given operator up to desired tolerance.
 
@@ -16,8 +16,8 @@ where `operator_from_circuit` denotes the operator converted from `circuit`.
 
 ### Parameters
 
-#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
-The circuit to check. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
+#### circuit : \{quantestpy.QuantestPyCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
+The circuit to check. [quantestpy.QuantestPyCircuit](../simulator/quantestpy_circuit.md) is a circuit class developed in this project.
 
 #### operator_ : \{numpy.ndarray, numpy.matrix\}
 The operator desired.
@@ -68,7 +68,7 @@ The message to be added to the error message on failure.
 ...:                [0, 0, 0, 0, 0, 1, 0, 0],
 ...:                [0, 0, 0, 0, 0, 0, 0, 1],
 ...:                [0, 0, 0, 0, 0, 0, 1, 0]])  # Operator for a Toffoli circuit
->>>> qp.circuit.assert_equal_to_operator(qc, op)
+>>>> qp.assert_circuit_equivalent_to_operator(qc, op)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError:
@@ -85,9 +85,9 @@ Max relative difference: 1.5
        [0, 0, 1, 0, 0, 0, 0, 0],...
 ```
 
-Chosing the matrix norm option:
+Choosing the matrix norm option:
 ```py
->>>> qp.circuit.assert_equal_to_operator(qc, op, matrix_norm_type="Frobenius_norm", atol=1e-2)
+>>>> qp.assert_circuit_equivalent_to_operator(qc, op, matrix_norm_type="Frobenius_norm", atol=1e-2)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: matrix norm ||A-B|| 4 is larger than (atol + rtol*||B||) 0.01.

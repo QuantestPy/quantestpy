@@ -1,6 +1,6 @@
-# quantestpy.state_vector.assert_equal
+# quantestpy.assert_equivalent_state_vectors
 
-## state_vector.assert_equal(state_vector_a, state_vector_b, rtol=0, atol=1e-8, up_to_global_phase=False, msg=None)
+## assert_equivalent_state_vectors(state_vector_a, state_vector_b, rtol=0, atol=1e-8, up_to_global_phase=False, msg=None)
 
 Raises a QuantestPyAssertionError if the two state vectors are element-wise not equal up to desired tolerance.
 
@@ -36,7 +36,7 @@ The message to be added to the error message on failure.
 ...:                [1j, 0., 1., 0.],
 ...:                [0., -1., 0., -1j]]) / np.sqrt(2.)
 >>>> vec_b = np.matmul(op, vec_ini)
->>>> qp.state_vector.assert_equal(vec_a, vec_b)
+>>>> qp.assert_equivalent_state_vectors(vec_a, vec_b)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError:

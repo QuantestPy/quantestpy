@@ -1,6 +1,6 @@
-# quantestpy.operator.assert_equal
+# quantestpy.assert_equivalent_operators
 
-## operator.assert_equal(operator_a, operator_b, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
+## assert_equivalent_operators(operator_a, operator_b, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
 
 Raises a QuantestPyAssertionError if the two operators are not equal up to desired tolerance.
 
@@ -44,7 +44,7 @@ The message to be added to the error message on failure.
 ...:                  [0., 1., 0., 1.],
 ...:                  [1j, 0., 1., 0.],
 ...:                  [0., 1., 0., 1j]]) / np.sqrt(2.)
->>>> qp.operator.assert_equal(op_a, op_b)
+>>>> qp.assert_equivalent_operators(op_a, op_b)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError:
@@ -61,9 +61,9 @@ Max relative difference: 2.
        [0.      +0.j      , 0.707107+0.j      , 0.      +0.j      ,...
 ```
 
-Chosing the matrix norm option:
+Choosing the matrix norm option:
 ```py
->>>> qp.operator.assert_equal(op_a, op_b, matrix_norm_type="operator_norm_2", atol=1e-4)
+>>>> qp.assert_equivalent_operators(op_a, op_b, matrix_norm_type="operator_norm_2", atol=1e-4)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: matrix norm ||A-B|| 2 is larger than (atol + rtol*||B||) 0.0001.
