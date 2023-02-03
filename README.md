@@ -19,7 +19,7 @@ import quantestpy as qp
 state_vec = [0.7072+0j, 0, 0, 0.7072+0j]
 
 # check that the state vector is normalized.
-qp.state_vector.assert_is_normalized(state_vector_subject_to_test=state_vec)
+qp.assert_normalized_state_vector(state_vector_subject_to_test=state_vec)
 
 ...
 ```
@@ -28,15 +28,16 @@ QuantestPy provides several assert methods to check for and report failures. The
 
 Method | Checks that
 --- | ---
-[state_vector.assert_is_normalized(state_vec)](./doc/state_vector_assert_is_normalized.md) | `state_vec is normalized`
-[state_vector.assert_equal(state_vec_a, state_vec_b)](./doc/state_vector_assert_equal.md) | `state_vec_a == state_vec_b`
-[operator.assert_is_unitary(operator)](./doc/operator_assert_is_unitary.md) | `operator is unitary`
-[operator.assert_equal(operator_a, operator_b)](./doc/operator_assert_equal.md) | `operator_a == operator_b`
-[circuit.assert_equal_to_operator(circuit, operator)](./doc/circuit_assert_equal_to_operator.md) | `circuit == operator`
-[circuit.assert_is_zero(circuit, qubits)](./doc/circuit_assert_is_zero.md) | `qubits in circuit are 0 states`
-[circuit.assert_ancilla_is_zero(circuit, ancilla_qubits)](./doc/circuit_assert_ancilla_is_zero.md) | `ancilla_qubits in circuit are always 0 states`
-[circuit.assert_equal(circuit_a, circuit_b)](./doc/circuit_assert_equal.md) | `circuit_a == circuit_b`
-[assert_get_ctrl_val(circuit)](./doc/get_ctrl_val.md) | `values of control qubits for all gates`
+[assert_normalized_state_vector(state_vec)](./doc/assertion/assert_normalized_state_vector.md) | `state_vec is normalized`
+[assert_equivalent_state_vectors(state_vec_a, state_vec_b)](./doc/assertion/assert_equivalent_state_vectors.md) | `state_vec_a == state_vec_b`
+[assert_unitary_operator(operator)](./doc/assertion/assert_unitary_operator.md) | `operator is unitary`
+[assert_equivalent_operators(operator_a, operator_b)](./doc/assertion/assert_equivalent_operators.md) | `operator_a == operator_b`
+[assert_circuit_equivalent_to_operator(circuit, operator)](./doc/assertion/assert_circuit_equivalent_to_operator.md) | `circuit == operator`
+[assert_qubit_reset_to_zero_state(circuit, qubits)](./doc/assertion/assert_qubit_reset_to_zero_state.md) | `qubits in circuit are 0 states`
+[assert_ancilla_reset(circuit, ancilla_qubits)](./doc/assertion/assert_ancilla_reset.md) | `ancilla_qubits in circuit are always 0 states`
+[assert_equivalent_circuits(circuit_a, circuit_b)](./doc/assertion/assert_equivalent_circuits.md) | `circuit_a == circuit_b`
+[assert_unary_iteration(circuit, input_to_output)](./doc/assertion/assert_unary_iteration.md) | `circuit is the expected indexed operation`
+[assert_circuit_equivalent_to_output_qubit_state(circuit, input_to_output)](./doc/assertion/assert_circuit_equivalent_to_output_qubit_state.md) | `circuit's output for the input is as expected`
 
 The hyperlinks bring you to details of the methods.
 

@@ -1,6 +1,6 @@
-# quantestpy.operator.assert_is_unitary
+# quantestpy.assert_unitary_operator
 
-## operator.assert_is_unitary(operator_subject_to_test, atol=1e-8, msg=None)
+## assert_unitary_operator(operator_subject_to_test, atol=1e-8, msg=None)
 
 Raises a QuantestPyAssertionError if the operator is not an unitary matrix up to desired tolerance.
 
@@ -25,7 +25,7 @@ The message to be added to the error message on failure.
 ```py
 >>>> op_ini = np.array([[0., 1.], [1., 0.]])
 >>>> op = np.matmul(np.array([[0., 1j], [-1j, 1.]]), op_ini)
->>>> qp.operator.assert_is_unitary(op)
+>>>> qp.assert_unitary_operator(op)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: Operator is not unitary.
