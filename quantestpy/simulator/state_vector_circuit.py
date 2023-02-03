@@ -289,7 +289,8 @@ class StateVectorCircuit(QuantestPyCircuit):
                 if gate["name"] in ("id", "x", "y", "z", "h", "s", "t", "sx"):
                     original_qubit_gate = eval("_" + gate["name"].upper())
                 elif gate["name"] in ("sdg", "tdg", "sxdg"):
-                    original_qubit_gate = eval("_" + gate["name"].capitalize())
+                    original_qubit_gate = \
+                        eval("_" + gate["name"][:-2].upper() + "dg")
                 elif gate["name"] in (
                         "rx", "ry", "rz", "r", "u", "p", "scalar"):
                     original_qubit_gate = eval("_" + gate["name"]

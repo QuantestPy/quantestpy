@@ -4,8 +4,10 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info.operators import Operator
 
-from quantestpy import StateVectorCircuit
-from quantestpy.simulator.state_vector_circuit import _SX
+from quantestpy.converter.converter_to_quantestpy_circuit import \
+    cvt_input_circuit_to_quantestpy_circuit
+from quantestpy.simulator.state_vector_circuit import \
+    cvt_quantestpy_circuit_to_state_vector_circuit
 
 
 class TestStateVectorCircuitSXGate(unittest.TestCase):
@@ -13,7 +15,8 @@ class TestStateVectorCircuitSXGate(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.state_vector_circuit.test_sx_gate
+    $ python -m unittest \
+        test.with_qiskit.simulator.state_vector_circuit.test_sx_gate
     ..
     ----------------------------------------------------------------------
     Ran 2 tests in 0.005s
@@ -23,27 +26,27 @@ class TestStateVectorCircuitSXGate(unittest.TestCase):
     """
 
     def test_csx_control_value_1(self,):
-        circ = StateVectorCircuit(3)
-        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _SX, control_qubit=[2], target_qubit=[1], control_value=[1]
-        )
-
         qc = QuantumCircuit(3)
         qc.csx(0, 1)
         expected_gate = np.array(Operator(qc))
+
+        qpc = cvt_input_circuit_to_quantestpy_circuit(qc)
+        svc = cvt_quantestpy_circuit_to_state_vector_circuit(qpc)
+        svc._from_right_to_left_for_qubit_ids = True
+        actual_gate = svc._get_whole_gates()
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
     def test_csx_control_value_0(self,):
-        circ = StateVectorCircuit(3)
-        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _SX, control_qubit=[2], target_qubit=[1], control_value=[0]
-        )
-
         qc = QuantumCircuit(3)
         qc.csx(0, 1, None, "0")
         expected_gate = np.array(Operator(qc))
+
+        qpc = cvt_input_circuit_to_quantestpy_circuit(qc)
+        svc = cvt_quantestpy_circuit_to_state_vector_circuit(qpc)
+        svc._from_right_to_left_for_qubit_ids = True
+        actual_gate = svc._get_whole_gates()
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))

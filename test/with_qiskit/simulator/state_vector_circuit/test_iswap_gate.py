@@ -4,7 +4,10 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info.operators import Operator
 
-from quantestpy import StateVectorCircuit
+from quantestpy.converter.converter_to_quantestpy_circuit import \
+    cvt_input_circuit_to_quantestpy_circuit
+from quantestpy.simulator.state_vector_circuit import \
+    cvt_quantestpy_circuit_to_state_vector_circuit
 
 
 class TestStateVectorCircuitCSwapGate(unittest.TestCase):
@@ -12,7 +15,8 @@ class TestStateVectorCircuitCSwapGate(unittest.TestCase):
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.state_vector_circuit.test_iswap_gate
+    $ python -m unittest \
+        test.with_qiskit.simulator.state_vector_circuit.test_iswap_gate
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.006s
@@ -21,17 +25,15 @@ class TestStateVectorCircuitCSwapGate(unittest.TestCase):
     $
     """
 
-    def test_iswap_control_value_1(self,):
-        circ = StateVectorCircuit(3)
-        circ.add_gate({"name": "iswap",
-                       "target_qubit": [2, 1], "control_qubit": [],
-                       "control_value": [], "parameter": []})
-
-        actual_gate = circ._get_whole_gates()
-
+    def test_iswap(self,):
         qc = QuantumCircuit(3)
         qc.iswap(0, 1)
         expected_gate = np.array(Operator(qc))
+
+        qpc = cvt_input_circuit_to_quantestpy_circuit(qc)
+        svc = cvt_quantestpy_circuit_to_state_vector_circuit(qpc)
+        svc._from_right_to_left_for_qubit_ids = True
+        actual_gate = svc._get_whole_gates()
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
