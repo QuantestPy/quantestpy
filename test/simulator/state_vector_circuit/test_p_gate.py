@@ -2,19 +2,22 @@ import unittest
 
 import numpy as np
 
+from qiskit import QuantumCircuit
+from qiskit.quantum_info.operators import Operator
+
 from quantestpy import StateVectorCircuit
 from quantestpy.simulator.state_vector_circuit import _p
 
 
-class TestStateVectorCircuitCPGate(unittest.TestCase):
+class TestStateVectorCircuitPGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.state_vector_circuit.test_cp_gate
-    ........
+    $ python -m unittest test.simulator.state_vector_circuit.test_p_gate
+    ..........
     ----------------------------------------------------------------------
-    Ran 7 tests in 0.007s
+    Ran 10 tests in 0.011s
 
     OK
     $
@@ -168,3 +171,46 @@ class TestStateVectorCircuitCPGate(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1)))
+
+    def test_cp_control_value_1(self,):
+        circ = StateVectorCircuit(3)
+        lambda_ = np.pi/4
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _p([lambda_]),
+            control_qubit=[2], target_qubit=[1], control_value=[1])
+
+        qc = QuantumCircuit(3)
+        qc.cp(np.pi/4, 0, 1)
+        expected_gate = np.array(Operator(qc))
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_cp_control_value_0(self,):
+        circ = StateVectorCircuit(3)
+        lambda_ = np.pi/4
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _p([lambda_]),
+            control_qubit=[2], target_qubit=[1], control_value=[0])
+
+        qc = QuantumCircuit(3)
+        qc.cp(np.pi/4, 0, 1, None, "0")
+        expected_gate = np.array(Operator(qc))
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+
+    def test_mcp(self,):
+        circ = StateVectorCircuit(3)
+        lambda_ = np.pi/4
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _p([lambda_]),
+            control_qubit=[2, 1], target_qubit=[0], control_value=[1,1])
+
+        qc = QuantumCircuit(3)
+        qc.mcp(np.pi/4, [0, 1], 2)
+        expected_gate = np.array(Operator(qc))
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
+

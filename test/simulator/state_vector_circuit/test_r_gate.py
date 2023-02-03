@@ -2,16 +2,19 @@ import unittest
 
 import numpy as np
 
+from qiskit import QuantumCircuit
+from qiskit.quantum_info.operators import Operator
+
 from quantestpy import StateVectorCircuit
 from quantestpy.simulator.state_vector_circuit import _r
 
 
-class TestStateVectorCircuitCRGate(unittest.TestCase):
+class TestStateVectorCircuitRGate(unittest.TestCase):
     """
     How to execute this test:
     $ pwd
     {Your directory where you git-cloned quantestpy}/quantestpy
-    $ python -m unittest test.simulator.state_vector_circuit.test_cr_gate
+    $ python -m unittest test.simulator.state_vector_circuit.test_r_gate
     ......
     ----------------------------------------------------------------------
     Ran 6 tests in 0.020s
@@ -137,3 +140,20 @@ class TestStateVectorCircuitCRGate(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(gate_0, np.matmul(gate_1_0, gate_1_1)))
+
+    def test_r(self,):
+        theta = np.pi/4
+        phi = np.pi/8
+        parameter = [theta, phi]
+        circ = StateVectorCircuit(3)
+        actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
+            _r(parameter), 
+            control_qubit=[], target_qubit=[2], control_value=[]
+        )
+
+        qc = QuantumCircuit(3)
+        qc.r(theta, phi, 0)
+        expected_gate = np.array(Operator(qc))
+
+        self.assertIsNone(
+            np.testing.assert_allclose(actual_gate, expected_gate))
