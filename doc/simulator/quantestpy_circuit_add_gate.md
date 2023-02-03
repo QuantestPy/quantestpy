@@ -102,7 +102,7 @@ qc.add_gate({
 qc.draw()
 :
 0 ─[X]─ 0
-    │
+
 1 ─[X]─ 1
 ```
 CCRz gate, conditional on the first control qubit being set to 1 and the second control qubit to 0:
