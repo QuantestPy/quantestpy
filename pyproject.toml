@@ -1,10 +1,9 @@
 [build-system]
-requires = ["wheel", "setuptools"]
+requires = ["wheel", "setuptools", "setuptools_scm[toml]"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantestpy"
-version = "0.1.0"
 license = { text = "Apache 2.0"}
 description = "Software for testing quantum computing programs."
 authors = [{name="Quantestpy Development Team"}]
@@ -12,6 +11,8 @@ requires-python = ">=3.7"
 dependencies = [
   "numpy == 1.*"
 ]
+dynamic = ["version"]
+readme = "README.md"
 
 [project.urls]
 homepage ="https://github.com/QuantestPy/quantestpy"
@@ -31,6 +32,14 @@ qiskit = [
 include-package-data = true
 zip-safe = false
 packages = ["quantestpy"]
+
+[tool.setuptools.dynamic]
+version = {attr = "quantestpy._version.__version__"}
+
+[tool.setuptools_scm]
+write_to = "quantestpy/_version.py"
+version_scheme = "release-branch-semver"
+local_scheme = "no-local-version"
 
 [tool.flake8]
 per-file-ignores = "__init__.py:F401"
