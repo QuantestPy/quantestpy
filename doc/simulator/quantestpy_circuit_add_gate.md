@@ -1,6 +1,6 @@
-# quantestpy.TestCircuit.add_gate
+# quantestpy.QuantestPyCircuit.add_gate
 
-## TestCircuit.add_gate(gate)
+## QuantestPyCircuit.add_gate(gate)
 Adds a gate in the circuit.
 
 ### Parameters
@@ -43,80 +43,83 @@ name | description | parameter | matrix representation
 ### Examples
 X gate:
 ```py
-     ┌───┐
-q_0: ┤ X ├
-     └───┘
-q_1: ─────
-tc = TestCircuit(2)
-tc.add_gate({
+qc = QuantestPyCircuit(2)
+qc.add_gate({
     "name": "x",
-    "target_qubit": [0]
+    "target_qubit": [0],
     "control_qubit": [],
     "control_value": [],
     "parameter": []
 })
+qc.draw()
+:
+0 ─[X]─ 0
+
+1 ───── 1
 ```
 CX gate, conditional on the control qubit being set to 1:
 ```py
-q_0: ──■──
-     ┌─┴─┐
-q_1: ┤ X ├
-     └───┘
-tc = TestCircuit(2)
-tc.add_gate({
+qc = QuantestPyCircuit(2)
+qc.add_gate({
     "name": "x",
-    "target_qubit": [1]
+    "target_qubit": [1],
     "control_qubit": [0],
     "control_value": [1],
     "parameter": []
 })
+qc.draw()
+:
+0 ──■── 0
+    │
+1 ─[X]─ 1
 ```
 CX gate, conditional on the control qubit being set to 0:
 ```py
-q_0: ──O──
-     ┌─┴─┐
-q_1: ┤ X ├
-     └───┘
-tc = TestCircuit(2)
-tc.add_gate({
+qc = QuantestPyCircuit(2)
+qc.add_gate({
     "name": "x",
-    "target_qubit": [1]
+    "target_qubit": [1],
     "control_qubit": [0],
     "control_value": [0],
     "parameter": []
 })
+qc.draw()
+:
+0 ──o── 0
+    │
+1 ─[X]─ 1
 ```
 XX gate:
 ```py
-     ┌───┐
-q_0: ┤ X ├
-     ├───┤
-q_1: ┤ X ├
-     └───┘
-tc = TestCircuit(2)
-tc.add_gate({
+qc = QuantestPyCircuit(2)
+qc.add_gate({
     "name": "x",
-    "target_qubit": [0, 1]
+    "target_qubit": [0, 1],
     "control_qubit": [],
     "control_value": [],
     "parameter": []
 })
+qc.draw()
+:
+0 ─[X]─ 0
+
+1 ─[X]─ 1
 ```
 CCRz gate, conditional on the first control qubit being set to 1 and the second control qubit to 0:
 ```py
-q_0: ──────■──────
-           │
-q_1: ──────O──────
-     ┌─────┴─────┐
-q_2: ┤ Rz(π/128) ├
-     └───────────┘
-tc = TestCircuit(3)
-tc.add_gate({
+qc = QuantestPyCircuit(3)
+qc.add_gate({
     "name": "rz",
-    "target_qubit": [2]
+    "target_qubit": [2],
     "control_qubit": [0, 1],
     "control_value": [1, 0],
     "parameter": [np.pi/128]
 })
+qc.draw()
+:
+0 ───■─── 0
+     │
+1 ───o─── 1
+     │
+2 ─[R_z]─ 2
 ```
-The circuit diagrams above are drawn with the help of `qiskit`.
