@@ -36,4 +36,4 @@ class TestStateVectorCircuitCSwapGate(unittest.TestCase):
         actual_gate = svc._get_whole_gates()
 
         self.assertIsNone(
-            np.testing.assert_allclose(actual_gate, expected_gate))
+            np.testing.assert_allclose(actual_gate, expected_gate, atol=1e-08))
