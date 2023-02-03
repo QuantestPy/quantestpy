@@ -1,6 +1,6 @@
-# quantestpy.state_vector.assert_is_normalized
+# quantestpy.assert_normalized_state_vector
 
-## state_vector.assert_is_normalized(state_vector_subject_to_test, atol=1e-8, msg=None)
+## assert_normalized_state_vector(state_vector_subject_to_test, atol=1e-8, msg=None)
 
 Raises a QuantestPyAssertionError if the state vector is not normalized up to desired tolerance.
 
@@ -29,7 +29,7 @@ The message to be added to the error message on failure.
 ...:                [1j, 0., 1., 0.],
 ...:                [0., -1., -1j, 0.]])
 >>>> vec = np.matmul(op, vec_ini)
->>>> qp.state_vector.assert_is_normalized(vec)
+>>>> qp.assert_normalized_state_vector(vec)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: The state vector is not normalized.
