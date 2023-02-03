@@ -1,12 +1,11 @@
 import unittest
 
 import numpy as np
-
 from qiskit import QuantumCircuit
 from qiskit.quantum_info.operators import Operator
 
 from quantestpy import StateVectorCircuit
-from quantestpy.simulator.state_vector_circuit import _rz, _p
+from quantestpy.simulator.state_vector_circuit import _p, _rz
 
 
 class TestStateVectorCircuitRyGate(unittest.TestCase):

@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-
 from qiskit import QuantumCircuit
 from qiskit.quantum_info.operators import Operator
 
