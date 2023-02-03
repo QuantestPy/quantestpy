@@ -1,6 +1,6 @@
-# quantestpy.circuit.assert_is_zero
+# quantestpy.assert_qubit_reset_to_zero_state
 
-## circuit.assert_is_zero(circuit, qubits=None, atol=1e-8, msg=None)
+## assert_qubit_reset_to_zero_state(circuit, qubits=None, atol=1e-8, msg=None)
 
 Raises a QuantestPyAssertionError if qubits of the circuit are either not 0 or entangled with other qubits up to desired tolerance.
 
@@ -11,10 +11,10 @@ abs(corresponding element(s) of the final state_vector) <= atol
 
 ### Parameters
 
-#### circuit: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
-The circuit to test. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
+#### circuit : \{quantestpy.QuantestPyCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
+The circuit to test. [quantestpy.QuantestPyCircuit](../simulator/quantestpy_circuit.md) is a circuit class developed in this project.
 
-#### qubits: \{None, list(int)\}, optional
+#### qubits : \{None, list(int)\}, optional
 The qubit(s) desired to be 0. If None, all qubits are chosen.
 
 #### atol : float, optional
@@ -28,7 +28,7 @@ The message to be added to the error message on failure.
 ```py
 >>>> qc = qiskit.QuantumCircuit(3)
 >>>> qc.x(2)  # qubit 2 is no longer 0
->>>> qp.circuit.assert_is_zero(qc, qubits=[0, 2])
+>>>> qp.assert_qubit_reset_to_zero_state(qc, qubits=[0, 2])
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: qubit(s) [2] are either non-zero or entangled with other qubits.

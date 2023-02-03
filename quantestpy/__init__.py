@@ -23,3 +23,5 @@ from .assertion.assert_equivalent_state_vectors import \
 from .assertion.assert_unitary_operator import assert_unitary_operator
 from .assertion.assert_equivalent_operators import \
     assert_equivalent_operators
+
+from ._version import __version__, __version_tuple__

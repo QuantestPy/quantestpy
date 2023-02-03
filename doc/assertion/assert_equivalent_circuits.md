@@ -1,6 +1,6 @@
-# quantestpy.circuit.assert_equal
+# quantestpy.assert_equivalent_circuits
 
-## circuit.assert_equal_to_operator(circuit_a, circuit_b, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
+## assert_equivalent_circuits(circuit_a, circuit_b, rtol=0, atol=1e-8, up_to_global_phase=False, matrix_norm_type=None, msg=None)
 
 Raises a QuantestPyAssertionError if the two circuits are not equal up to desired tolerance.
 
@@ -16,8 +16,8 @@ where `operator_from_circuit_a` and `operator_from_circuit_b` denote the operato
 
 ### Parameters
 
-#### circuit_a, circuit_b: \{quantestpy.TestCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
-The circuits to compare. [quantestpy.TestCircuit](./test_circuit.md) is a circuit class developed in this project.
+#### circuit_a, circuit_b : \{quantestpy.QuantestPyCircuit, qiskit.QuantumCircuit, OpenQASM 2.0 string\}
+The circuits to compare. [quantestpy.QuantestPyCircuit](../simulator/quantestpy_circuit.md) is a circuit class developed in this project.
 
 #### rtol : float, optional
 Relative tolerance.
@@ -40,8 +40,8 @@ The message to be added to the error message on failure.
 >>>> qc_desired = qiskit.QuantumCircuit(1)
 ...: qc_desired.rz(phi=np.pi/128, qubit=0)
 >>>> gridsynth_output = "HTHTSHTHTSHTHTHTHTSHTSHTHTSHTHTSHTHTSHTHTSHTHTSHTSHTHTHTHTSHTHTSHTHTSW"
-...: qc_approx = cvt_gridsynth_to_qiskit_circuit(gridsynth_output)
->>>> qp.circuit.assert_equal(qc_approx, qc_desired)
+...: qc_approx = cvt_gridsynth_to_qiskit_circuit(gridsynth_output)  # a private function
+>>>> qp.assert_equivalent_circuits(qc_approx, qc_desired)
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError:
@@ -58,7 +58,7 @@ Max relative difference: 0.00092242
 
 Chosing the matrix norm option:
 ```py
->>>> qp.circuit.assert_equal(qc_approx, qc_desired, matrix_norm_type="operator_norm_2")
+>>>> qp.assert_equivalent_circuits(qc_approx, qc_desired, matrix_norm_type="operator_norm_2")
 Traceback (most recent call last):
      ...
 QuantestPyAssertionError: matrix norm ||A-B|| 0.000970126226409132 is larger than (atol + rtol*||B||) 1e-08.
