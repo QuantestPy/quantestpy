@@ -16,6 +16,8 @@ _S = np.array([[1, 0], [0, 1j]])
 _Sdg = np.array([[1, 0], [0, -1j]])
 _T = np.array([[1, 0], [0, np.exp(1j*np.pi/4)]])
 _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
+_SX = np.array([[1+1j, 1-1j], [1-1j, 1+1j]])/2.
+_SXdg = np.array([[1-1j, 1+1j], [1+1j, 1-1j]])/2.
 
 
 def _u(parameter: list) -> np.ndarray:
@@ -60,10 +62,9 @@ def _scalar(parameter: list) -> np.ndarray:
 
 
 # gates lists
-_IMPLEMENTED_GATES_WITHOUT_PARAM = [
-    "id", "x", "y", "z", "h", "s", "sdg", "t", "tdg", "swap", "iswap"]
-_IMPLEMENTED_GATES_WITH_ONE_PARAM = [
-    "rx", "ry", "rz", "p", "scalar"]
+_IMPLEMENTED_GATES_WITHOUT_PARAM = ["id", "x", "y", "z", "h", "s", "sdg",
+                                    "t", "tdg", "swap", "iswap", "sx", "sxdg"]
+_IMPLEMENTED_GATES_WITH_ONE_PARAM = ["rx", "ry", "rz", "p", "scalar"]
 _IMPLEMENTED_GATES_WITH_TWO_PARAM = ["r"]
 _IMPLEMENTED_GATES_WITH_FOUR_PARAM = ["u"]
 _IMPLEMENTED_GATES_WITH_PARAM = _IMPLEMENTED_GATES_WITH_ONE_PARAM \
@@ -285,10 +286,11 @@ class StateVectorCircuit(QuantestPyCircuit):
                 whole_gates = np.matmul(all_qubit_gate5, whole_gates)
                 whole_gates = np.matmul(all_qubit_gate6, whole_gates)
             else:
-                if gate["name"] in ("id", "x", "y", "z", "h", "s", "t"):
+                if gate["name"] in ("id", "x", "y", "z", "h", "s", "t", "sx"):
                     original_qubit_gate = eval("_" + gate["name"].upper())
-                elif gate["name"] in ("sdg", "tdg"):
-                    original_qubit_gate = eval("_" + gate["name"].capitalize())
+                elif gate["name"] in ("sdg", "tdg", "sxdg"):
+                    original_qubit_gate = \
+                        eval("_" + gate["name"][:-2].upper() + "dg")
                 elif gate["name"] in (
                         "rx", "ry", "rz", "r", "u", "p", "scalar"):
                     original_qubit_gate = eval("_" + gate["name"]
