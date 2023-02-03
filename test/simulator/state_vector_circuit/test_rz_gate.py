@@ -206,7 +206,7 @@ class TestStateVectorCircuitRyGate(unittest.TestCase):
         parameter = [np.pi/4]
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _rz(parameter), 
+            _rz(parameter),
             control_qubit=[], target_qubit=[2], control_value=[]
         )
 
@@ -217,15 +217,15 @@ class TestStateVectorCircuitRyGate(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    # qiskit.mcrz is multi-controlled Z rotation up to a global phase, 
+    # qiskit.mcrz is multi-controlled Z rotation up to a global phase,
     # which means that qiskit.mcrz coincides with multi-controlled p gate.
     # (Namely, qiskit.mcrz is same as qiskit.mcp.)
     def test_mcrz(self,):
         parameter = [np.pi/4]
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _p(parameter), 
-            control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _p(parameter),
+            control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)

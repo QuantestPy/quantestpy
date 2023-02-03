@@ -197,7 +197,7 @@ class TestStateVectorCircuitRyGate(unittest.TestCase):
         parameter = [np.pi/4]
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _ry(parameter), 
+            _ry(parameter),
             control_qubit=[], target_qubit=[2], control_value=[]
         )
 
@@ -212,8 +212,8 @@ class TestStateVectorCircuitRyGate(unittest.TestCase):
         parameter = [np.pi/4]
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _ry(parameter), 
-            control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _ry(parameter),
+            control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)

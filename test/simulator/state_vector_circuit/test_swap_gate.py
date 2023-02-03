@@ -7,6 +7,7 @@ from qiskit.quantum_info.operators import Operator
 
 from quantestpy import StateVectorCircuit
 
+
 class TestStateVectorCircuitSwapGate(unittest.TestCase):
     """
     How to execute this test:
@@ -23,9 +24,9 @@ class TestStateVectorCircuitSwapGate(unittest.TestCase):
 
     def test_cswap_control_value_1(self,):
         circ = StateVectorCircuit(3)
-        circ.add_gate({"name": "swap", 
-                        "target_qubit": [0, 1], "control_qubit": [2],
-                        "control_value": [1], "parameter": []})
+        circ.add_gate({"name": "swap",
+                       "target_qubit": [0, 1], "control_qubit": [2],
+                       "control_value": [1], "parameter": []})
 
         actual_gate = circ._get_whole_gates()
 
@@ -38,9 +39,9 @@ class TestStateVectorCircuitSwapGate(unittest.TestCase):
 
     def test_cswap_control_value_0(self,):
         circ = StateVectorCircuit(3)
-        circ.add_gate({"name": "swap", 
-                        "target_qubit": [0, 1], "control_qubit": [2],
-                        "control_value": [0], "parameter": []})
+        circ.add_gate({"name": "swap",
+                       "target_qubit": [0, 1], "control_qubit": [2],
+                       "control_value": [0], "parameter": []})
 
         actual_gate = circ._get_whole_gates()
 
@@ -53,9 +54,9 @@ class TestStateVectorCircuitSwapGate(unittest.TestCase):
 
     def test_fredkin(self,):
         circ = StateVectorCircuit(3)
-        circ.add_gate({"name": "swap", 
-                        "target_qubit": [0, 1], "control_qubit": [2],
-                        "control_value": [1], "parameter": []})
+        circ.add_gate({"name": "swap",
+                       "target_qubit": [0, 1], "control_qubit": [2],
+                       "control_value": [1], "parameter": []})
 
         actual_gate = circ._get_whole_gates()
 
@@ -65,4 +66,3 @@ class TestStateVectorCircuitSwapGate(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
-

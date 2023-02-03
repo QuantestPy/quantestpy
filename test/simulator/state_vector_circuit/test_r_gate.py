@@ -147,7 +147,7 @@ class TestStateVectorCircuitRGate(unittest.TestCase):
         parameter = [theta, phi]
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _r(parameter), 
+            _r(parameter),
             control_qubit=[], target_qubit=[2], control_value=[]
         )
 

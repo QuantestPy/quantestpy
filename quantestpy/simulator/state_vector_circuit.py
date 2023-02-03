@@ -19,6 +19,7 @@ _Tdg = np.array([[1, 0], [0, np.exp(-1j*np.pi/4)]])
 _SX = np.array([[1+1j, 1-1j], [1-1j, 1+1j]])/2.
 _SXdg = np.array([[1-1j, 1+1j], [1+1j, 1-1j]])/2.
 
+
 def _u(parameter: list) -> np.ndarray:
     theta, phi, lambda_, gamma = parameter
     return np.array([
@@ -61,7 +62,7 @@ def _scalar(parameter: list) -> np.ndarray:
 
 
 # gates lists
-_IMPLEMENTED_GATES_WITHOUT_PARAM = ["id", "x", "y", "z", "h", "s", "sdg", 
+_IMPLEMENTED_GATES_WITHOUT_PARAM = ["id", "x", "y", "z", "h", "s", "sdg",
                                     "t", "tdg", "swap", "iswap", "sx", "sxdg"]
 _IMPLEMENTED_GATES_WITH_ONE_PARAM = ["rx", "ry", "rz", "p", "scalar"]
 _IMPLEMENTED_GATES_WITH_TWO_PARAM = ["r"]

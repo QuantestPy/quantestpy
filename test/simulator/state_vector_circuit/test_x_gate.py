@@ -9,7 +9,6 @@ from quantestpy import StateVectorCircuit
 from quantestpy.simulator.state_vector_circuit import _X
 
 
-
 class TestStateVectorCircuitXGate(unittest.TestCase):
     """
     How to execute this test:
@@ -214,7 +213,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_mct(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)
@@ -227,7 +226,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_mcx(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)
@@ -240,7 +239,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_ccx_control_value_11(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)
@@ -253,7 +252,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_ccx_control_value_00(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[0,0]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[0, 0]
         )
 
         qc = QuantumCircuit(3)
@@ -266,7 +265,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_ccx_control_value_01(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[1,0]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 0]
         )
 
         qc = QuantumCircuit(3)
@@ -279,7 +278,7 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
     def test_ccx_control_value_10(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[0,1]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[0, 1]
         )
 
         qc = QuantumCircuit(3)
@@ -289,10 +288,10 @@ class TestStateVectorCircuitXGate(unittest.TestCase):
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
 
-    def test_toffoli(self,):
+    def test_toffoli_2(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _X, control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _X, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)

@@ -9,7 +9,6 @@ from quantestpy import StateVectorCircuit
 from quantestpy.simulator.state_vector_circuit import _Z
 
 
-
 class TestStateVectorCircuitZGate(unittest.TestCase):
     """
     How to execute this test:
@@ -167,7 +166,7 @@ class TestStateVectorCircuitZGate(unittest.TestCase):
     def test_ccz_control_value_11(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _Z, control_qubit=[2,1], target_qubit=[0], control_value=[1,1]
+            _Z, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1]
         )
 
         qc = QuantumCircuit(3)
@@ -180,7 +179,7 @@ class TestStateVectorCircuitZGate(unittest.TestCase):
     def test_ccz_control_value_00(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _Z, control_qubit=[2,1], target_qubit=[0], control_value=[0,0]
+            _Z, control_qubit=[2, 1], target_qubit=[0], control_value=[0, 0]
         )
 
         qc = QuantumCircuit(3)
@@ -193,7 +192,7 @@ class TestStateVectorCircuitZGate(unittest.TestCase):
     def test_ccz_control_value_01(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _Z, control_qubit=[2,1], target_qubit=[0], control_value=[1,0]
+            _Z, control_qubit=[2, 1], target_qubit=[0], control_value=[1, 0]
         )
 
         qc = QuantumCircuit(3)
@@ -206,7 +205,7 @@ class TestStateVectorCircuitZGate(unittest.TestCase):
     def test_ccz_control_value_10(self,):
         circ = StateVectorCircuit(3)
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
-            _Z, control_qubit=[2,1], target_qubit=[0], control_value=[0,1]
+            _Z, control_qubit=[2, 1], target_qubit=[0], control_value=[0, 1]
         )
 
         qc = QuantumCircuit(3)

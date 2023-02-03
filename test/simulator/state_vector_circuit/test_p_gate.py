@@ -205,7 +205,7 @@ class TestStateVectorCircuitPGate(unittest.TestCase):
         lambda_ = np.pi/4
         actual_gate = circ._create_all_qubit_gate_from_original_qubit_gate(
             _p([lambda_]),
-            control_qubit=[2, 1], target_qubit=[0], control_value=[1,1])
+            control_qubit=[2, 1], target_qubit=[0], control_value=[1, 1])
 
         qc = QuantumCircuit(3)
         qc.mcp(np.pi/4, [0, 1], 2)
@@ -213,4 +213,3 @@ class TestStateVectorCircuitPGate(unittest.TestCase):
 
         self.assertIsNone(
             np.testing.assert_allclose(actual_gate, expected_gate))
-

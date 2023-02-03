@@ -7,6 +7,7 @@ from qiskit.quantum_info.operators import Operator
 
 from quantestpy import StateVectorCircuit
 
+
 class TestStateVectorCircuitCSwapGate(unittest.TestCase):
     """
     How to execute this test:
@@ -23,9 +24,9 @@ class TestStateVectorCircuitCSwapGate(unittest.TestCase):
 
     def test_iswap_control_value_1(self,):
         circ = StateVectorCircuit(3)
-        circ.add_gate({"name": "iswap", 
-                        "target_qubit": [2, 1], "control_qubit": [],
-                        "control_value": [], "parameter": []})
+        circ.add_gate({"name": "iswap",
+                       "target_qubit": [2, 1], "control_qubit": [],
+                       "control_value": [], "parameter": []})
 
         actual_gate = circ._get_whole_gates()
 
