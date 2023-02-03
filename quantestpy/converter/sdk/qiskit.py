@@ -21,7 +21,6 @@ def _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit) -> QuantestPyCircuit:
 
     _raise_error_if_not_qiskit_installed()
 
-    qiskit_circuit = qiskit_circuit.decompose()
     qobj = assemble(qiskit_circuit)
     qobj_dict = qobj.to_dict()
     experiments = qobj_dict["experiments"][0]  # [0] changes list into dict.
