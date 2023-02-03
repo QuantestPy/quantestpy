@@ -16,22 +16,21 @@ def test_5_bit_adder(circuit):
 
     for decimal_a in range(2**5):
         for decimal_b in range(2**5):
-            bitstring_a = ("0" * 5 + bin(decimal_a)[2:])[-5:]
-            bitstring_b = ("0" * 5 + bin(decimal_b)[2:])[-5:]
             decimal_c = decimal_a + decimal_b
             if decimal_c > 31:
                 continue
+            bitstring_a = ("0" * 5 + bin(decimal_a)[2:])[-5:]
+            bitstring_b = ("0" * 5 + bin(decimal_b)[2:])[-5:]
             bitstring_c = ("0" * 5 + bin(decimal_c)[2:])[-5:]
-            # print(decimal_a, decimal_b, decimal_c)
 
             assert_circuit_equivalent_to_output_qubit_state(
                 circuit=circuit,
-                # input_reg = reg. for b + reg. for a
-                input_reg=[13, 10, 7, 4, 1, 12, 9, 6, 3, 0],
+                # input_reg = reg. for a + reg. for b
+                input_reg=[12, 9, 6, 3, 0, 13, 10, 7, 4, 1],
                 output_reg=[13, 10, 7, 4, 1],  # output_reg = reg. for c
                 input_to_output={
-                    bitstring_b + bitstring_a: bitstring_c
-                },
+                    bitstring_a + bitstring_b: bitstring_c
+                },  # input (= a + b) : output (= c)
                 draw_circuit=True
             )
 
