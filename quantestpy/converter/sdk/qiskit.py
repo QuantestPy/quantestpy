@@ -214,13 +214,13 @@ def _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit) -> QuantestPyCircuit:
             target_qubit = gate["qubits"][-1:]
             control_qubit = gate["qubits"][:-1]
             control_value = [1]
-            parameter = gate["params"] + [0]
+            parameter = gate["params"]
         if gate["name"] == "cu_o0":
             name = "u"
             target_qubit = gate["qubits"][-1:]
             control_qubit = gate["qubits"][:-1]
             control_value = [0]
-            parameter = gate["params"] + [0]
+            parameter = gate["params"]
 
         # cx gate
         if gate["name"] == "cx":
@@ -342,7 +342,7 @@ def _cvt_qiskit_to_quantestpy_circuit(qiskit_circuit) -> QuantestPyCircuit:
             target_qubit = gate["qubits"][-1:]
             control_qubit = []
             control_value = []
-            parameter = gate["params"] + [0]
+            parameter = gate["params"]
 
         # x, y, z gate
         if gate["name"] in ["x", "y", "z"]:
