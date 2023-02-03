@@ -1,5 +1,4 @@
 import copy
-import itertools
 
 from quantestpy.simulator.quantestpy_circuit import QuantestPyCircuit
 from quantestpy.visualization.exceptions import QuantestPyVisualizationError
@@ -215,13 +214,13 @@ class QuantestPyCircuitDrawer:
          │
         """
         gate = self._qc.gates[gate_id]
-        tgt_ctrl_qubit = gate["target_qubit"] + gate["control_qubit"]
         inter_line_id = list()
-        for qubit_id_0, qubit_id_1 in \
-                itertools.combinations(tgt_ctrl_qubit, 2):
-            line_id_0 = self._qubit_id_to_line_id[qubit_id_0]
-            line_id_1 = self._qubit_id_to_line_id[qubit_id_1]
-            inter_line_id += self.get_inter_line_id(line_id_0, line_id_1)
+        for ctrl_qubit_id in gate["control_qubit"]:
+            for tg_qubit_id in gate["target_qubit"]:
+                ctrl_line_id = self._qubit_id_to_line_id[ctrl_qubit_id]
+                tg_line_id = self._qubit_id_to_line_id[tg_qubit_id]
+                inter_line_id += self.get_inter_line_id(
+                    ctrl_line_id, tg_line_id)
 
         for line_id in set(inter_line_id):
             # only when not occupied yet
