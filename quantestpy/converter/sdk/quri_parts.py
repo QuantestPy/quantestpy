@@ -8,7 +8,8 @@ try:
                                     NonParametricQuantumCircuit)
 
 except ModuleNotFoundError:
-    def _is_instance_of_quri_parts_quantumcircuit(_) -> bool:
+    def _is_instance_of_quri_parts_quantumcircuit(circuit) -> bool:
+        # pylint: disable=unused-argument
         # since package quri_parts does not exists,
         # input circuit is always not related to quri_parts.
         return False
