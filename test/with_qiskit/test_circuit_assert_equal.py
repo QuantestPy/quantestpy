@@ -47,8 +47,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
-            print(actual_error_msg)
-            print(expected_error_msg)
+
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_msg_from_wrong_input_type_for_circuit_b(self,):
@@ -77,7 +76,7 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
-            print(actual_error_msg)
+
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_exact_equal(self,):
