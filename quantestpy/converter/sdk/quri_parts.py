@@ -20,7 +20,11 @@ def _raise_error_if_not_quri_parts_installed():
         )
 
 
-def _cvt_quri_parts_circuit_to_quantestpy_circuit(quri_parts_circuit: Union[NonParametricQuantumCircuit, ImmutableBoundParametricQuantumCircuit]) -> QuantestPyCircuit:
+def _cvt_quri_parts_circuit_to_quantestpy_circuit(
+    quri_parts_circuit: Union[
+        NonParametricQuantumCircuit,
+        ImmutableBoundParametricQuantumCircuit
+        ]) -> QuantestPyCircuit:
     _raise_error_if_not_quri_parts_installed()
     num_qubits = quri_parts_circuit.qubit_count
     circuit = QuantestPyCircuit(num_qubits)
@@ -92,4 +96,5 @@ def _cvt_quri_parts_circuit_to_quantestpy_circuit(quri_parts_circuit: Union[NonP
 
 def _is_instance_of_quri_parts_quantumcircuit(circuit) -> bool:
     _raise_error_if_not_quri_parts_installed()
-    return isinstance(circuit, NonParametricQuantumCircuit) or isinstance(circuit, ImmutableBoundParametricQuantumCircuit)
+    return (isinstance(circuit, NonParametricQuantumCircuit) or
+            isinstance(circuit, ImmutableBoundParametricQuantumCircuit))

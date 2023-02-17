@@ -23,12 +23,16 @@ def cvt_input_circuit_to_quantestpy_circuit(circuit) -> QuantestPyCircuit:
         quantestpy_circuit = _cvt_qiskit_to_quantestpy_circuit(circuit)
 
     elif _is_instance_of_quri_parts_quantumcircuit(circuit):
-        quantestpy_circuit = _cvt_quri_parts_circuit_to_quantestpy_circuit(circuit)
+        quantestpy_circuit = _cvt_quri_parts_circuit_to_quantestpy_circuit(
+            circuit)
 
     else:
         raise QuantestPyError(
             "Input circuit must be one of the following: "
-            "qasm, qiskit.QuantumCircuit and QuantestPyCircuit."
+            "qasm, qiskit.QuantumCircuit,"
+            "quri_parts.circuit.NonParametricQuantumCircuit,"
+            "quri_parts.circuit.ImmutableBoundParametricQuantumCircuit,"
+            "and QuantestPyCircuit."
         )
 
     return quantestpy_circuit
