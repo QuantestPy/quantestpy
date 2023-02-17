@@ -2,7 +2,7 @@ from quantestpy import QuantestPyCircuit
 from quantestpy.converter.sdk.qasm import _cvt_openqasm_to_quantestpy_circuit
 from quantestpy.converter.sdk.qiskit import (
     _cvt_qiskit_to_quantestpy_circuit, _is_instance_of_qiskit_quantumcircuit)
-from quantestpy.converter.sdk.quriparts import (
+from quantestpy.converter.sdk.quri_parts import (
     _cvt_quri_parts_circuit_to_quantestpy_circuit,
     _is_instance_of_quri_parts_quantumcircuit)
 from quantestpy.exceptions import QuantestPyError
