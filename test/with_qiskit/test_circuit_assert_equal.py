@@ -36,10 +36,12 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = "Input circuit must be one of the following: " \
+            expected_error_msg = "Input circuit must be one of " \
+                + "the following: " \
                 + "qasm, qiskit.QuantumCircuit," \
                 + "quri_parts.circuit.NonParametricQuantumCircuit," \
-                + "quri_parts.circuit.ImmutableBoundParametricQuantumCircuit," \
+                + "quri_parts.circuit." \
+                + "ImmutableBoundParametricQuantumCircuit," \
                 + "and QuantestPyCircuit."
 
             actual_error_msg = \
@@ -62,10 +64,12 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = "Input circuit must be one of the following: " \
+            expected_error_msg = "Input circuit must be one of " \
+                + "the following: " \
                 + "qasm, qiskit.QuantumCircuit," \
                 + "quri_parts.circuit.NonParametricQuantumCircuit," \
-                + "quri_parts.circuit.ImmutableBoundParametricQuantumCircuit," \
+                + "quri_parts.circuit." \
+                + "ImmutableBoundParametricQuantumCircuit," \
                 + "and QuantestPyCircuit."
 
             actual_error_msg = \
