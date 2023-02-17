@@ -36,17 +36,19 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = "Input circuit must be one of " \
+            expected_error_msg = "quantestpy.exceptions.QuantestPyError: " \
+                + "Input circuit must be one of " \
                 + "the following: " \
                 + "qasm, qiskit.QuantumCircuit," \
                 + "quri_parts.circuit.NonParametricQuantumCircuit," \
                 + "quri_parts.circuit." \
                 + "ImmutableBoundParametricQuantumCircuit," \
-                + "and QuantestPyCircuit."
+                + "and QuantestPyCircuit.\n"
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
-
+            print(actual_error_msg)
+            print(expected_error_msg)
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_msg_from_wrong_input_type_for_circuit_b(self,):
@@ -64,17 +66,18 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = "Input circuit must be one of " \
+            expected_error_msg = "quantestpy.exceptions.QuantestPyError: " \
+                + "Input circuit must be one of " \
                 + "the following: " \
                 + "qasm, qiskit.QuantumCircuit," \
                 + "quri_parts.circuit.NonParametricQuantumCircuit," \
                 + "quri_parts.circuit." \
                 + "ImmutableBoundParametricQuantumCircuit," \
-                + "and QuantestPyCircuit."
+                + "and QuantestPyCircuit.\n"
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
-
+            print(actual_error_msg)
             self.assertEqual(expected_error_msg, actual_error_msg)
 
     def test_exact_equal(self,):
