@@ -8,10 +8,10 @@ try:
                                     NonParametricQuantumCircuit)
 
 except ModuleNotFoundError:
-    def _is_instance_of_quri_parts_quantumcircuit(circuit) -> bool:
-        raise QuantestPyError(
-            "QURI Parts is missing. Please install it."
-        )
+    def _is_instance_of_quri_parts_quantumcircuit(_) -> bool:
+        # since package quri_parts does not exists,
+        # input circuit is always not related to quri_parts.
+        return False
 
     def _cvt_quri_parts_circuit_to_quantestpy_circuit(quri_parts_circuit
                                                       ) -> QuantestPyCircuit:
