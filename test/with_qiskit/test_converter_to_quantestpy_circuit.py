@@ -40,7 +40,10 @@ class TestConverterToQuantestPyCircuit(unittest.TestCase):
     def test_cvt_others(self,):
         input_circuit = np.array([0, 1])
         expected_error_msg = "Input circuit must be one of the following: " \
-            + "qasm, qiskit.QuantumCircuit and QuantestPyCircuit."
+            + "qasm, qiskit.QuantumCircuit," \
+            + "quri_parts.circuit.NonParametricQuantumCircuit," \
+            + "quri_parts.circuit.ImmutableBoundParametricQuantumCircuit," \
+            + "and QuantestPyCircuit."
 
         with self.assertRaises(QuantestPyError) as cm:
             _ = cvt_input_circuit_to_quantestpy_circuit(input_circuit)

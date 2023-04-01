@@ -27,6 +27,12 @@ ci = [
 qiskit = [
   "qiskit == 0.*"
 ]
+quri_parts = [
+  "quri_parts == 0.*"
+]
+quri_parts_with_qulacs = [
+  "quri_parts[qulacs] == 0.*"
+]
 
 [tool.setuptools]
 include-package-data = true

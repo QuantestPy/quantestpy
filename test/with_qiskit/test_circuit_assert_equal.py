@@ -36,10 +36,14 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = \
-                "quantestpy.exceptions.QuantestPyError: " \
-                + "Input circuit must be one of the following: " \
-                + "qasm, qiskit.QuantumCircuit and QuantestPyCircuit.\n"
+            expected_error_msg = "quantestpy.exceptions.QuantestPyError: " \
+                + "Input circuit must be one of " \
+                + "the following: " \
+                + "qasm, qiskit.QuantumCircuit," \
+                + "quri_parts.circuit.NonParametricQuantumCircuit," \
+                + "quri_parts.circuit." \
+                + "ImmutableBoundParametricQuantumCircuit," \
+                + "and QuantestPyCircuit.\n"
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
@@ -61,10 +65,14 @@ class TestCircuitAssertEqual(unittest.TestCase):
 
         except QuantestPyError as e:
 
-            expected_error_msg = \
-                "quantestpy.exceptions.QuantestPyError: " \
-                + "Input circuit must be one of the following: " \
-                + "qasm, qiskit.QuantumCircuit and QuantestPyCircuit.\n"
+            expected_error_msg = "quantestpy.exceptions.QuantestPyError: " \
+                + "Input circuit must be one of " \
+                + "the following: " \
+                + "qasm, qiskit.QuantumCircuit," \
+                + "quri_parts.circuit.NonParametricQuantumCircuit," \
+                + "quri_parts.circuit." \
+                + "ImmutableBoundParametricQuantumCircuit," \
+                + "and QuantestPyCircuit.\n"
 
             actual_error_msg = \
                 traceback.format_exception_only(type(e), e)[0]
