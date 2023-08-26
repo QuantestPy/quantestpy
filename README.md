@@ -38,6 +38,7 @@ Method | Checks that
 [assert_equivalent_circuits(circuit_a, circuit_b)](./doc/assertion/assert_equivalent_circuits.md) | `circuit_a == circuit_b`
 [assert_unary_iteration(circuit, input_to_output)](./doc/assertion/assert_unary_iteration.md) | `circuit is the expected indexed operation`
 [assert_circuit_equivalent_to_output_qubit_state(circuit, input_to_output)](./doc/assertion/assert_circuit_equivalent_to_output_qubit_state.md) | `circuit's output for the input is as expected`
+[assert_equivalent_counts(counts_a, counts_b)](./doc/assertion/assert_equivalent_counts.md) | `counts_a == counts_b`
 
 The hyperlinks bring you to details of the methods.
 
