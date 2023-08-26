@@ -25,7 +25,7 @@ ci = [
   "flake8-pyproject"
 ]
 qiskit = [
-  "qiskit == 0.*"
+  "qiskit == 0.22.*"
 ]
 quri_parts = [
   "quri_parts == 0.*"
